@@ -16,11 +16,6 @@ class cnc_plot
         cnc_plot(){};
         ~cnc_plot(){};
 
-    void test_port(void);
-
-    void aux_on(unsigned int);
-    void aux_off(unsigned int);
-
     void gen_pules(vector<int>*, int, int);
 
     void gen_3d_pules(vector<vec3>*, int, int);
@@ -31,10 +26,7 @@ class cnc_plot
                         int);
 
 
-    void load_config_file(char*);
-
-    void send_pulses(vector<vec3>*);
-    void read_limits(vec3*);
+    //void load_config_file(char*);
 
 };
 

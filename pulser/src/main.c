@@ -48,7 +48,8 @@ void run_cncplot(double f_x,
 
     if(DEBUG==false)
     {
-        plot.send_pulses(pt_pulsetrain);
+       //moved to IO DEBUG   
+       // plot.send_pulses(pt_pulsetrain);
     }
 
 }
