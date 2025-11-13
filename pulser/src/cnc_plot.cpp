@@ -28,7 +28,7 @@ void cnc_plot::gen_pules(vector<int>* pt_pulsetrain, int size, int num)
     
     if(num>size)
     {
-        cout << "# gen_pules: size arg may not exceed number \n";
+        std::cout << "# gen_pules: size arg may not exceed number \n";
 
         exit(1);
     }
@@ -133,7 +133,7 @@ void cnc_plot::calc_3d_pulses(vector<vec3>* pt_pulsetrain,
             
             //double gran    = 0;  //granularity 
             //double thresh  = 0;  //threshold 
-            //cout << mag <<"\n";
+            //std::cout << mag <<"\n";
             
             int xp=0;int yp=0;int zp=0;
 
@@ -170,22 +170,22 @@ void cnc_plot::calc_3d_pulses(vector<vec3>* pt_pulsetrain,
             int num_pul_z = pp_luz*abs(delta_z); 
 
             if (debug)
-                cout << "# num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
+                std::cout << "# num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
 
             // get the absolute highest number of pulses (on any axis) to calculate 
             int tmp[] = {num_pul_x, num_pul_y, num_pul_z};
-            //cout << "before: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
+            //std::cout << "before: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
             std::sort(std::begin(tmp), std::end(tmp)  );
-            //cout << "after: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
+            //std::cout << "after: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
             int most = tmp[2];
               
 
             ////////////////////////////////////              
             if (debug)
             {            
-                cout << "# most   " << most << " "<< numdivs << " " <<"\n";  
-                cout << "# numpts " << num_pul_x <<" " << num_pul_y <<" " << num_pul_z <<"\n"; 
-                cout << "#####\n";
+                std::cout << "# most   " << most << " "<< numdivs << " " <<"\n";  
+                std::cout << "# numpts " << num_pul_x <<" " << num_pul_y <<" " << num_pul_z <<"\n"; 
+                std::cout << "#####\n";
             }
 
             cnc_plot plot;
@@ -255,7 +255,7 @@ void cnc_plot::calc_3d_pulses(vector<vec3>* pt_pulsetrain,
             double mag     = length(between);
             double gran    = 0;  //granularity 
             double thresh  = 0;  //threshold 
-            //cout << mag <<"\n";
+            //std::cout << mag <<"\n";
             
             int xp=0;int yp=0;int zp=0;
 
@@ -292,13 +292,13 @@ void cnc_plot::calc_3d_pulses(vector<vec3>* pt_pulsetrain,
             int num_pul_z = (mag*pp_luz)*abs(delta_z);            
 
             if (debug)
-                cout << "# num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
+                std::cout << "# num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
 
             // get the absolute highest number of pulses (on any axis) to calculate 
             int tmp[] = {num_pul_x, num_pul_y, num_pul_z};
-            //cout << "before: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
+            //std::cout << "before: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
             std::sort(std::begin(tmp), std::end(tmp)  );
-            //cout << "after: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
+            //std::cout << "after: "<<tmp[0] << " "<< tmp[1] <<" "<< tmp[2] <<"\n";
             int most = tmp[2];
                                  
             // get the smallest division to use for sampling (granularity) 

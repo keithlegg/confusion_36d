@@ -5,8 +5,6 @@
 
 #include "math_op.h"
 
-using namespace std;
-
 //coordinate to a pixel in the scancache 
 struct pix_coord {
     int x;
@@ -27,14 +25,14 @@ class pointgen
 
         ~pointgen(){};
 
-    void locate_pt_along3d(vector<vec3>* output,
+    void locate_pt_along3d(std::vector<vec3>* output,
                            vec3 fpos, 
                            vec3 spos, 
                            int num);
 
 
-    void cubic_bezier(vector<vec3>* output, 
-                      vector<vec3>* colors,
+    void cubic_bezier(std::vector<vec3>* output, 
+                      std::vector<vec3>* colors,
                       int* numvecs,
                       int draw_steps, 
                       vec3 start, 

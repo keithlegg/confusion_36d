@@ -35,9 +35,9 @@ endif
 
 
 
-SOURCES  := $(wildcard $(SRCDIR)/*.c)
+SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
 
-OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 rm       = rm -f
 
 
@@ -45,7 +45,7 @@ $(TARGET): $(OBJECTS)
 	@$(LINKER) $(OBJECTS) $(LFLAGS) -o $@
 	@echo "Linking complete!"
 
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compiled "$<" successfully!"
 
@@ -69,3 +69,24 @@ remove: clean
 	@$(rm) $(OBJDIR)/*.o
 	@echo "Executable removed!"
 	 
+
+
+
+
+## OBJ = main.o
+## INC = -I "inc"
+## confusion36d:$(OBJ)
+## 	# -std=c++11 added for OSX to handle vectors properly  
+## 	g++ -std=c++17 -o confusion36d main.cpp cnc_globals.cpp cnc_io.cpp cnc_plot.cpp math_op.cpp point_op.cpp 
+## 	# -g is for debugging flags with GDB 
+## 	#g++ -g -o confusion36d main.cpp Matrices.cpp model.cpp framebuffer.cpp render.cpp
+## 	rm -f $(OBJ)
+## clean:
+## 	rm -f $(OBJ) confusion36d
+## 	rm -f *.o 
+## 	rm -f *.bmp	
+## copy:
+## 	#cp ./point_ops.obj ../3d_obj/point_ops.obj
+## 	cp ./*.obj ../3d_obj
+
+

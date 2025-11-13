@@ -11,8 +11,22 @@
 #include "point_op.h"         
 #include "cnc_plot.h"         
 
+#include "cnc_globals.h"
+
 //#include "gl_setup.h"     // common to all - moved to reduce size 
 //char* obj_filepath;  
+
+
+
+
+/* 
+extern int PARPORT1_ADDR;
+extern int PARPORT2_ADDR;
+extern int PP1_PULSE_DLY_US;
+extern int PP1_STEPS_PER_UNIT_X;
+extern int PP1_STEPS_PER_UNIT_Y;
+extern int PP1_STEPS_PER_UNIT_Z;
+*/ 
 
 
 /******************************************/

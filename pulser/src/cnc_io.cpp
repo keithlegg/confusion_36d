@@ -26,7 +26,7 @@ int pulse_del = 1000;
 //#define LPT1 0x0378
 
 
-#define HEX(x) setw(2) << setfill('0') << hex << (int)( x )
+#define HEX(x) std::setw(2) << std::setfill('0') << std::hex << (int)( x )
 
 
 
@@ -92,7 +92,7 @@ void cnc_io::test_port(void)
             outb(0x00,LPT1); 
             usleep(500000); 
             send_byte = send_byte << 1;
-            cout <<"bit "<< a <<" value: "<< HEX(send_byte) <<"\n";
+            std::cout <<"bit "<< a <<" value: "<< HEX(send_byte) <<"\n";
 
         }
     //}
@@ -140,21 +140,21 @@ void cnc_io::read_limits(vec3* pt_limit_switch_data)
     //X
     if ((data_read & pin_10_mask)==pin_10_mask)
     {
-        cout << "X limit triggered (p10) \n";  
+        std::cout << "X limit triggered (p10) \n";  
         pt_limit_switch_data->x =1;
     };
 
     //Z
     if ((data_read & pin_12_mask)==pin_12_mask)
     {
-        cout << "Z limit triggered (p12) \n";  
+        std::cout << "Z limit triggered (p12) \n";  
         pt_limit_switch_data->z =1;
     };
 
     //Y 
     if ((data_read & pin_13_mask)==pin_13_mask)
     {
-        cout << "Y limit triggered (p13) \n";  
+        std::cout << "Y limit triggered (p13) \n";  
         pt_limit_switch_data->y =1;        
     };
 
@@ -190,7 +190,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
     unsigned char send_byte = 0x00;
     int send_it = 1; 
 
-    cout << "# we have pulses! count: " << pt_pulsetrain->size() << "\n";
+    std::cout << "# we have pulses! count: " << pt_pulsetrain->size() << "\n";
 
     if(send_it==1)
     {
@@ -198,7 +198,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
         { 
             fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
         }
-        cout << "# transmitting pulses to LPT port \n";
+        std::cout << "# transmitting pulses to LPT port \n";
     }
 
     //**************************//
@@ -209,7 +209,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
 
     if(send_it==0)
     {
-        cout <<"# debug - direction "<< dirpulses.x<<" " << dirpulses.y<<" " << dirpulses.z <<"\n";
+        std::cout <<"# debug - direction "<< dirpulses.x<<" " << dirpulses.y<<" " << dirpulses.z <<"\n";
     }
 
     if(send_it==1)
@@ -279,7 +279,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
 
         if(send_it==0)
         {
-            cout<< pt_pulsetrain->at(x).x<<" " << pt_pulsetrain->at(x).y<<" " << pt_pulsetrain->at(x).z <<"\n";
+            std::cout<< pt_pulsetrain->at(x).x<<" " << pt_pulsetrain->at(x).y<<" " << pt_pulsetrain->at(x).z <<"\n";
         }
 
         if(send_it==1)
@@ -289,7 +289,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
             (*this).read_limits(&limit_switches);
             
             if(limit_switches.x==1 || limit_switches.y==1 || limit_switches.z==1){
-                cout << "machine has crashed. Condolences. pulsing aborted. ";
+                std::cout << "machine has crashed. Condolences. pulsing aborted. ";
             }
             else
             {
@@ -343,7 +343,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
 
     if(send_it==1)
     {
-        cout << "finished transmitting pulses.\n";
+        std::cout << "finished transmitting pulses.\n";
     }
 
 

@@ -5,7 +5,7 @@
 //#include <math.h>
 
 #include <vector>
-using std::vector; //point_op did not make me do this!!?? WHY?
+using std::vector;  
 
 #include "math_op.h"
 
@@ -16,11 +16,11 @@ class cnc_plot
         cnc_plot(){};
         ~cnc_plot(){};
 
-    void gen_pules(vector<int>*, int, int);
+    void gen_pules(std::vector<int>*, int, int);
 
-    void gen_3d_pules(vector<vec3>*, int, int);
+    void gen_3d_pules(std::vector<vec3>*, int, int);
 
-    void calc_3d_pulses(vector<vec3>*,
+    void calc_3d_pulses(std::vector<vec3>*,
                         vec3, 
                         vec3,
                         int);
