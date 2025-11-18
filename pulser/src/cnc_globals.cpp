@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 
 #include <string>
@@ -37,55 +38,6 @@ bool ENABLE_LIMIT_SWITCHES  = false;
 bool ENABLE_MOTOR_DRIVE     = false;
 
 
-
-
-// ####################################
-// #MACHINE PROPERTIES 
-// ####################################
-
-//##INTERFACE 1 (motion)
-//# address of the parallel port 
-
-int PARPORT1_ADDR = 0xc010;
-int PARPORT2_ADDR = 0xc010;
-
-
-int PP1_PULSE_DLY_US = 10;
-int PP1_STEPS_PER_UNIT_X = 100;
-int PP1_STEPS_PER_UNIT_Y = 100;
-int PP1_STEPS_PER_UNIT_Z = 100;
-
-// ####################################
-// ##INTERFACE 2 (data)
-// PP2_LATENCY_US 10
-// PP2_BYTES_PER_FRAME 4
-// PP2_MODE_INOUT INOUT 
-
-// ####################################
-// # OUTPUTS 
-// ####################################
-// # PIN MAPPING - I.E. wchich pin controls which motor 
-// PP1_XDIR  DB25_1 
-// PP1_XSTEP DB25_2 
-// PP1_YDIR  DB25_3 
-// PP1_YSTEP DB25_4 
-// PP1_ZDIR  DB25_5 
-// PP1_ZSTEP DB25_6 
-// #A axis is theta for head!
-// PP1_ADIR  DB25_5 
-// PP1_ASTEP DB25_6 
-// # PP1_INV_XDIR DB25_7 
-// # PP1_INV_YDIR DB25_8 
-// # PP1_INV ZDIR DB25_9
-
-// ####################################
-// # INPUTS 
-// ####################################
-// X_LIMIT
-// Y_LIMIT 
-// Z_LIMIT 
-
- 
 
 
 
@@ -155,7 +107,18 @@ const int MAX_TOKENS_PER_LINE = 20;
 
 //extern obj_model pt_model_buffer;
 
-
+/*
+  std::cout
+    << std::left
+    << std::showbase
+    << std::hex
+    << std::uppercase
+    << std::setfill('0')
+    << std::setw(std::numeric_limits<decltype(ia)>::digits / 4)
+    << ia
+    << std::endl;
+  std::cout.flags(save_flags);
+*/
 
 /**********************************/
 void cncglobals::show( void )
@@ -163,6 +126,21 @@ void cncglobals::show( void )
     std::cout << " #### CNC GLOBALS #### " << "\n";
     std::cout << " parport1_addr : " << (*this).parport1_addr << "\n";
     std::cout << " parport2_addr : " << (*this).parport2_addr << "\n";
+
+    /*
+    std::cout
+        << std::left
+        << std::showbase
+        << std::hex
+        << std::uppercase
+        //<< std::setfill('0')
+        //<< std::setw(std::numeric_limits<decltype((*this).parport1_addr)>::digits / 4)
+        << (*this).parport1_addr
+        << std::endl;
+    */
+
+    // std::printf( "{:0<#{}X}\n", (*this).parport1_addr, std::numeric_limits<decltype( ia )>::digits / 4 );
+
     std::cout <<"\n";
 
     std::cout << " : " << "# machine travel size in 3D  " << "\n";  
@@ -209,7 +187,7 @@ void cncglobals::show( void )
 
 
 
-void cncglobals::load_file( char* filepath )
+void cncglobals::load_cfg_file( char* filepath )
 {
     std::cout << "cncglobals loading file "<< filepath << "\n";
 
@@ -250,12 +228,12 @@ void cncglobals::load_file( char* filepath )
             //-- MACHINE HARDWARE SETUP --------------
             if (!strcmp(token[0],"PARPORT1_ADDR"))
             {        
-                strcpy( parport1_addr, token[1]);
+                //strcpy( parport1_addr, token[1]);
             }
             //-------------------------------------------
             if (!strcmp(token[0],"PARPORT2_ADDR"))
             {        
-                strcpy( parport2_addr, token[1]);
+                //strcpy( parport2_addr, token[1]);
             }
 
             //-------------------------------------------

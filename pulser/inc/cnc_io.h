@@ -9,6 +9,8 @@ using std::vector; //point_op did not make me do this!!?? WHY?
 
 #include "math_op.h"
 
+#include "cnc_globals.h"
+
 
 class cnc_io
 {
@@ -16,12 +18,13 @@ class cnc_io
          cnc_io(){};
         ~cnc_io(){};
 
-    void test_port(void);
+    void test_port(cncglobals*);
 
-    void aux_on(unsigned int);
-    void aux_off(unsigned int);
-    void send_pulses(vector<vec3>*);
-    void read_limits(vec3*);
+    void aux_on(cncglobals*, unsigned int);
+    void aux_off(cncglobals*, unsigned int);
+
+    void send_pulses(cncglobals*, vector<vec3>*);
+    void read_limits(cncglobals*, vec3*);
 
 };
 

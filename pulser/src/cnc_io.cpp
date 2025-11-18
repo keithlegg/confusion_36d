@@ -11,9 +11,12 @@
 #include <algorithm>
 #include <vector>
 
+
 #include "math_op.h"
 #include "point_op.h"
 
+
+#include "cnc_globals.h"
 #include "cnc_plot.h"
 #include "cnc_io.h"
 
@@ -22,8 +25,7 @@
 // µs (microsecond) duration between pulses 
 // gecko docs say minimun pulse with is 2.5µs per pulse - seems way too fast for me 
 int pulse_del = 1000;
-#define LPT1 0xc010
-//#define LPT1 0x0378
+
 
 
 #define HEX(x) std::setw(2) << std::setfill('0') << std::hex << (int)( x )
@@ -31,18 +33,18 @@ int pulse_del = 1000;
 
 
 /******************************************/
-void cnc_io::aux_on(unsigned int pin)
+void cnc_io::aux_on(cncglobals* cg, unsigned int pin)
 {
-    if(ioperm(LPT1,1,1))
+    if(ioperm(cg->parport1_addr,1,1))
     { 
         fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
     
     }
 
     unsigned char data_read;
-    data_read = inb(LPT1);
+    data_read = inb(cg->parport1_addr);
     data_read = data_read |= (1 << pin);
-    outb(data_read, LPT1);            
+    outb(data_read, cg->parport1_addr);            
 
 
 }
@@ -50,18 +52,18 @@ void cnc_io::aux_on(unsigned int pin)
 
 
 /******************************************/
-void cnc_io::aux_off(unsigned int pin)
+void cnc_io::aux_off(cncglobals* cg, unsigned int pin)
 {
-    if(ioperm(LPT1,1,1))
+    if(ioperm(cg->parport1_addr,1,1))
     { 
         fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
     
     }
 
     unsigned char data_read;
-    data_read = inb(LPT1);
+    data_read = inb(cg->parport1_addr);
     data_read = data_read &= ~(1 << pin);
-    outb(data_read, LPT1);    
+    outb(data_read, cg->parport1_addr);    
 
 }
 
@@ -69,9 +71,9 @@ void cnc_io::aux_off(unsigned int pin)
 
 /******************************************/
 
-void cnc_io::test_port(void)
+void cnc_io::test_port(cncglobals* cg)
 {
-    if(ioperm(LPT1,1,1))
+    if(ioperm(cg->parport1_addr,1,1))
     { 
         fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
     
@@ -80,16 +82,16 @@ void cnc_io::test_port(void)
     unsigned char send_byte = 0x00;
     int a=0;int b=0;
 
-    outb(0x00,LPT1); 
+    outb(0x00,cg->parport1_addr); 
     //for(b=0;b<4;b++)
     //{
         send_byte = 0x01;
         for(a<0;a<8;a++)
         {
-            outb(send_byte,LPT1);
+            outb(send_byte,cg->parport1_addr);
             usleep(500000); 
                        
-            outb(0x00,LPT1); 
+            outb(0x00,cg->parport1_addr); 
             usleep(500000); 
             send_byte = send_byte << 1;
             std::cout <<"bit "<< a <<" value: "<< HEX(send_byte) <<"\n";
@@ -119,10 +121,10 @@ void cnc_io::test_port(void)
                             
 */
 
-void cnc_io::read_limits(vec3* pt_limit_switch_data)
+void cnc_io::read_limits(cncglobals* cg, vec3* pt_limit_switch_data)
 {
 
-    if(ioperm(LPT1+1,1,1))
+    if(ioperm(cg->parport1_addr+1,1,1))
     { 
         fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
     
@@ -133,7 +135,7 @@ void cnc_io::read_limits(vec3* pt_limit_switch_data)
     unsigned char pin_13_mask = 0b00010000;
 
     unsigned char data_read;
-    data_read = inb(LPT1+1); 
+    data_read = inb(cg->parport1_addr+1); 
     
     //printf("Data read from parallel port: 0x%x\n", data_read);
 
@@ -185,7 +187,7 @@ void cnc_io::read_limits(vec3* pt_limit_switch_data)
 
 */
 
-void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
+void cnc_io::send_pulses(cncglobals* cg, vector<vec3>* pt_pulsetrain)
 {
     unsigned char send_byte = 0x00;
     int send_it = 1; 
@@ -194,7 +196,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
 
     if(send_it==1)
     {
-        if(ioperm(LPT1,1,1))
+        if(ioperm(cg->parport1_addr,1,1))
         { 
             fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
         }
@@ -216,13 +218,13 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
     {   
         //x direction high 
         if (dirpulses.x>1){
-            //outb(0x02, LPT1);
+            //outb(0x02, cg->parport1_addr);
             send_byte = send_byte |= (1 << 1);
-            outb(send_byte, LPT1);            
+            outb(send_byte, cg->parport1_addr);            
         }else{
-             //outb(0x00, LPT1);  
+             //outb(0x00, cg->parport1_addr);  
             send_byte = send_byte &= ~(1 << 1);
-            outb(send_byte, LPT1);               
+            outb(send_byte, cg->parport1_addr);               
         }
 
         /*****/
@@ -230,20 +232,20 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
         //y direction high 
         if (dirpulses.y>1){
             send_byte = send_byte |= (1 << 3);
-            outb(send_byte, LPT1);  
+            outb(send_byte, cg->parport1_addr);  
             
             //!! THIS IS EXTRA FOR A GANTRY MACHINE INVERTED Z AXIS
             //send_byte = send_byte &= ~(1 << 5);   
-            //outb(send_byte, LPT1); 
+            //outb(send_byte, cg->parport1_addr); 
 
         }else{
             //y direction low         
             send_byte = send_byte &= ~(1 << 3);
-            outb(send_byte, LPT1);   
+            outb(send_byte, cg->parport1_addr);   
 
             //!! THIS IS EXTRA FOR A GANTRY MACHINE INVERTED Z AXIS
             //send_byte = send_byte |= (1 << 5);
-            //outb(send_byte, LPT1);                          
+            //outb(send_byte, cg->parport1_addr);                          
 
         }
 
@@ -254,10 +256,10 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
         //z direction high 
         if (dirpulses.z>1){
             send_byte = send_byte |= (1 << 5);
-            outb(send_byte, LPT1);               
+            outb(send_byte, cg->parport1_addr);               
         }else{
             send_byte = send_byte &= ~(1 << 5);   
-            outb(send_byte, LPT1);                   
+            outb(send_byte, cg->parport1_addr);                   
         }
         
         
@@ -286,7 +288,7 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
         {
             
             // watch the limit switches - if triggered, switch off motors NOW!
-            (*this).read_limits(&limit_switches);
+            (*this).read_limits(cg, &limit_switches);
             
             if(limit_switches.x==1 || limit_switches.y==1 || limit_switches.z==1){
                 std::cout << "machine has crashed. Condolences. pulsing aborted. ";
@@ -296,38 +298,38 @@ void cnc_io::send_pulses(vector<vec3>* pt_pulsetrain)
                 //X channel 
                 if(pt_pulsetrain->at(x).x==1){
                     send_byte = send_byte |= (1 << 0);
-                    outb(send_byte, LPT1); 
+                    outb(send_byte, cg->parport1_addr); 
                 }else{
                     send_byte = send_byte &= ~ (1 << 0);
-                    outb(send_byte, LPT1);  
+                    outb(send_byte, cg->parport1_addr);  
                 }
                     
                 //Y channel
                 if(pt_pulsetrain->at(x).y==1){
                     send_byte = send_byte |= (1 << 2);
-                    outb(send_byte, LPT1);    
+                    outb(send_byte, cg->parport1_addr);    
 
                     //!! THIS IS ALSO RUNNING Z AXIS (INVERTED DIR) FOR A GANTRY 
                     //send_byte = send_byte |= (1 << 4);
-                    //outb(send_byte, LPT1);    
+                    //outb(send_byte, cg->parport1_addr);    
 
                 }else{
                     send_byte = send_byte &= ~(1 << 2);
-                    outb(send_byte, LPT1);           
+                    outb(send_byte, cg->parport1_addr);           
 
                     //!! THIS IS ALSO RUNNING Z AXIS (INVERTED DIR) FOR A GANTRY 
                     //send_byte = send_byte &= ~(1 << 4);
-                    //outb(send_byte, LPT1);                    
+                    //outb(send_byte, cg->parport1_addr);                    
                 }
 
                   
                 //standard Z channel
                 if(pt_pulsetrain->at(x).z==1){
                     send_byte = send_byte |= (1 << 4);
-                    outb(send_byte, LPT1);   
+                    outb(send_byte, cg->parport1_addr);   
                 }else{
                     send_byte = send_byte &= ~(1 << 4);
-                    outb(send_byte, LPT1);                 
+                    outb(send_byte, cg->parport1_addr);                 
                 }
             
 
