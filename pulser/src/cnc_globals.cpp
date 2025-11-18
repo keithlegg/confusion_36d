@@ -144,37 +144,35 @@ void cncglobals::show( void )
     std::cout <<"\n";
 
     std::cout << " : " << "# machine travel size in 3D  " << "\n";  
-    std::cout << " : " << (*this).x_xtntx<< "\n";
-    std::cout << " : " << (*this).y_xtntx<< "\n";
-    std::cout << " : " << (*this).z_xtntx<< "\n";
+    std::cout << " x_xtntx : " << (*this).x_xtntx<< "\n";
+    std::cout << " y_xtntx : " << (*this).y_xtntx<< "\n";
+    std::cout << " z_xtntx : " << (*this).z_xtntx<< "\n";
     std::cout <<"\n";
 
     std::cout << " : " << "#waveform generation parameters " << "\n";  
-    std::cout << " : " << (*this).pp1_pulse_x_dly_us << "\n";
-    std::cout << " : " << (*this).pp1_pulse_y_dly_us << "\n";
-    std::cout << " : " << (*this).pp1_pulse_z_dly_us << "\n";
+    std::cout << " pp1_pulse_dly_us : " << (*this).pp1_pulse_dly_us << "\n";
     std::cout <<"\n";
 
     std::cout << " : " << "# 3d pulses per linear unit " << "\n";        
-    std::cout << " : " << (*this).pp1lu_x << "\n";
-    std::cout << " : " << (*this).pp1lu_x << "\n";
-    std::cout << " : " << (*this).pp1lu_x << "\n";
+    std::cout << " pp1u_x : " << (*this).pp1u_x << "\n";
+    std::cout << " pp1u_y : " << (*this).pp1u_y << "\n";
+    std::cout << " pp1u_z : " << (*this).pp1u_z << "\n";
     std::cout <<"\n";
 
     std::cout << " : " << "# pin assignments " << "\n";  
-    std::cout << " : " << (*this).parprt1_dir_x  << "\n";
-    std::cout << " : " << (*this).parprt1_step_x << "\n";
-    std::cout << " : " << (*this).parprt1_dir_y  << "\n";
-    std::cout << " : " << (*this).parprt1_step_y << "\n";
-    std::cout << " : " << (*this).parprt1_dir_z  << "\n";
-    std::cout << " : " << (*this).parprt1_step_z << "\n";
-    std::cout << " : " << (*this).parprt1_dir_a  << "\n";
-    std::cout << " : " << (*this).parprt1_step_z << "\n";
+    std::cout << " parprt1_dir_x  : " << (*this).parprt1_dir_x  << "\n";
+    std::cout << " parprt1_step_x : " << (*this).parprt1_step_x << "\n";
+    std::cout << " parprt1_dir_y  : " << (*this).parprt1_dir_y  << "\n";
+    std::cout << " parprt1_step_y : " << (*this).parprt1_step_y << "\n";
+    std::cout << " parprt1_dir_z  : " << (*this).parprt1_dir_z  << "\n";
+    std::cout << " parprt1_step_z : " << (*this).parprt1_step_z << "\n";
+    std::cout << " parprt1_dir_a  : " << (*this).parprt1_dir_a  << "\n";
+    std::cout << " parprt1_step_a : " << (*this).parprt1_step_a << "\n";
     std::cout <<"\n";
 
-    std::cout << " : " << (*this).x_limit_pin << "\n";
-    std::cout << " : " << (*this).y_limit_pin << "\n";
-    std::cout << " : " << (*this).z_limit_pin << "\n";
+    std::cout << " x_limit_pin : " << (*this).x_limit_pin << "\n";
+    std::cout << " y_limit_pin : " << (*this).y_limit_pin << "\n";
+    std::cout << " z_limit_pin : " << (*this).z_limit_pin << "\n";
     
     //std::cout << " : " << (*this). << "\n";
     //std::cout << " : " << (*this). << "\n";    
@@ -258,10 +256,8 @@ void cncglobals::load_cfg_file( char* filepath )
             {        
                 // // strcpy( parport2_addr, token[1]);
             }
-            if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
+
+            // if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
 
             //-------------------------------------------
             //-- 3D SPATIAL DIVISIONS ----------

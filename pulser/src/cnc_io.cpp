@@ -24,7 +24,7 @@
 
 // µs (microsecond) duration between pulses 
 // gecko docs say minimun pulse with is 2.5µs per pulse - seems way too fast for me 
-int pulse_del = 1000;
+//int pulse_del = 1000;
 
 
 
@@ -261,14 +261,8 @@ void cnc_io::send_pulses(cncglobals* cg, vector<vec3>* pt_pulsetrain)
             send_byte = send_byte &= ~(1 << 5);   
             outb(send_byte, cg->parport1_addr);                   
         }
-        
-        
-        
 
-
-
-
-    }
+    }//end send pulses 
 
 
     //**************************//
@@ -335,10 +329,7 @@ void cnc_io::send_pulses(cncglobals* cg, vector<vec3>* pt_pulsetrain)
 
             }
 
-
-
-
-            usleep(pulse_del); 
+            usleep(cg->pp1_pulse_dly_us); 
         }
 
     }

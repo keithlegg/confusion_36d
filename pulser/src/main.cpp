@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstring>
+#include <functional>
 
 
 
@@ -12,6 +13,7 @@
 #include "cnc_plot.h"         
 
 #include "cnc_globals.h"
+#include "../inc/asker.hpp"
 
 //#include "gl_setup.h"     // common to all - moved to reduce size 
 //char* obj_filepath;  
@@ -69,8 +71,8 @@ void run_cncplot(double f_x,
 
 }
 
-/******************************************/
 
+/******************************************/
 void parse_args(int argc, char **argv)
 {
     if (argc < 8){
@@ -99,13 +101,35 @@ void parse_args(int argc, char **argv)
 
 /******************************************/
 /******************************************/
+bool custom_validation(std::string ans) {
+  if (ans != "helloworld") return false;
+  return true;
+}
 
+
+/******************************************/
+/******************************************/
 int main(int argc, char **argv) 
 {  
+
+    /*
+    char pw[MAXLen] = {0};
+    char *p = pw;
+    FILE *fp = stdin;
+    ssize_t nchar = 0;
+
+    // confirm prompt demo
+    std::cout << "demo-1: confirm prompt" << std::endl;
+    bool exit = asker::confirm("yo! want to exit?");
+    std::cout << "wants to exit: " << exit << std::endl;
+    std::cout << std::endl;
     
-    // cncglobals cg;
-    // cg.load_cfg_file(argv[1]);
-    // cg.show();
+    */
+
+
+    cncglobals cg;
+    cg.load_cfg_file(argv[1]);
+    cg.show();
 
     //parse_args(argc, argv); 
     
@@ -115,13 +139,6 @@ int main(int argc, char **argv)
     cnc_plot plot;
     vec3 foo;
     plot.read_limits(&foo);
-    */
-
-
-    /*
-    //test of config file 
-    cnc_plot plot;
-    plot.load_config_file("testcfg.txt");
     */
 
 
