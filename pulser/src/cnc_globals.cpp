@@ -273,30 +273,38 @@ void cncglobals::load_cfg_file( char* filepath )
                 {
                     if(tokenized.size()>=1)
                     {
-                        std::cout << "DEBUG HAHAHA           " <<  tokenized.at(0) << "\n"; 
-
-                        //std::cout << tokenized.at(0) << "\n"; 
-                        //std::cout<<"\n###############\n";                        
-                        //std::cout<<line <<"\n";
-                        //std::cout<<tokenized.at(0)<<" $ " << tokenized.at(1) <<"\n";
-
                         /***************************************/ 
-                        //-- MACHINE HARDWARE SETUP --------------
-                        if (tokenized.at(0).find("PARPORT1_ADDR") )                            
-                        {     
-                            //std::cout << "DEBUG HAHAHA           " <<  tokenized.at(0) << "\n";                          
-                            //std::cout << "DEBUG PARPORT1_ADDR is " << std::stoi( tokenized.at(1) ) << "\n";
+                        //** MACHINE HARDWARE SETUP ************//
+                        if (tokenized.at(0).find("PARPORT1_ADDR") != std::string::npos )                            
+                        {   
+                            //unfinished tokenize funtion with error catching   
                             //(*this).cvt_int(tokenized.at(1));
 
-
-                            //parport1_addr = atof(tokenized.at(1));
+                            //just do this for now - no error catching 
+                            parport1_addr = std::stoi( tokenized.at(1) );
                         }
-                        //-------------------------------------------
-                        if (tokenized.at(0).find("PARPORT2_ADDR") )
+                        //***************************************/ 
+                        if (tokenized.at(0).find("PARPORT2_ADDR") != std::string::npos)
                         {        
-                            //parport2_addr = atof(tokenized.at(1));
+                            parport2_addr = std::stoi( tokenized.at(1) );
                         }
-                        /***************************************/ 
+                        
+                        //***************************************/ 
+                        //**  MACHINE PARAMETERS SETUP *********//
+
+                        if (tokenized.at(0).find("X_XTNX") != std::string::npos)
+                        {        
+                            x_xtntx = std::stof( tokenized.at(1) );                            
+                        }
+                        if (tokenized.at(0).find("Y_XTNX") != std::string::npos)
+                        {        
+                            y_xtntx = std::stof( tokenized.at(1) );  
+                        }
+                        if (tokenized.at(0).find("Z_XTNX") != std::string::npos)
+                        {        
+                            z_xtntx = std::stof( tokenized.at(1) );  
+                        }
+
 
                     }//if line has at least 2 sections and not commented 
                 }// if line is not commented
@@ -310,20 +318,7 @@ void cncglobals::load_cfg_file( char* filepath )
 
 
                     //-------------------------------------------
-                    //-- MACHINE PARAMETER SETUP --------------
 
-                    if (!strcmp(token[0],"X_XTNX"))
-                    {        
-                        //strcpy( parport2_addr, token[1]);
-                    }
-                    if (!strcmp(token[0],"Y_XTNX"))
-                    {        
-                        //strcpy( parport2_addr, token[1]);
-                    }
-                    if (!strcmp(token[0],"Z_XTNX"))
-                    {        
-                        //strcpy( parport2_addr, token[1]);
-                    }
 
                     //-------------------------------------------
                     //-- PULSE TIMING ---------------
