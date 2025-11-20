@@ -16,8 +16,13 @@ UNAME := $(shell uname)
 
 
 # compiling flags  
-#CFLAGS   = -I$(INCDIR) -Wall   
-CFLAGS   = -I$(INCDIR) -w  
+
+#all the warnings (for final compiling)
+#CFLAGS   = -I$(INCDIR) -Wall 
+
+#for just making this damn thing run 
+CFLAGS   = -I$(INCDIR) -w -fcompare-debug-second    
+
 
 LINKER   = g++
 
@@ -25,13 +30,19 @@ LINKER   = g++
 
 #Linux
 ifeq ($(UNAME), Linux)
-	LFLAGS   = -g -Wall -lglut -lGL -lGLU -lX11  -lm -lz 
+	
+	#SHOW ME ALL THE WARNINGS 
+	# LFLAGS   = -g -Wall -lglut -lGL -lGLU -lX11  -lm -lz 
+
+	#NO WARNINGS 
+	LFLAGS   = -g -w -lglut -lGL -lGLU -lX11  -lm -lz 
+
 endif
 
-#OSX
-ifeq ($(UNAME), Darwin)
-	LFLAGS   = -Wall -lm -lz -framework Glut -framework OpenGL
-endif
+# #OSX
+# ifeq ($(UNAME), Darwin)
+# 	LFLAGS   = -Wall -lm -lz -framework Glut -framework OpenGL
+# endif
 
 
 

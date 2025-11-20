@@ -143,194 +143,275 @@ void cncglobals::show( void )
 
 /**********************************/
 
+//char to string and back 
+// auto my_cstr = "Hello";        // A
+// std::string s(my_cstr);        // A
+// // ... modify 's' ...
+// auto back_to_cstr = s.c_str(); // B
 
+
+
+/* 
+// warning: untested code.
+
+std::vector<std::string> split(std::string const &input) { 
+    std::istringstream buffer(input);
+    std::vector<std::string> ret;
+
+    std::copy(std::istream_iterator<std::string>(buffer), 
+              std::istream_iterator<std::string>(),
+              std::back_inserter(ret));
+    return ret;
+}
+
+
+int splitstr(char *sentence)
+{
+  std::stringstream ss(sentence);
+  std::string to;
+
+  if (sentence != NULL)
+  {
+    while(std::getline(ss,to,'\n')){
+      std::cout << to << std::endl;
+    }
+  }
+
+return 0;
+}
+
+*/
+
+/**********************************/
+
+
+std::vector<std::string> cncglobals::tokenizer( const std::string& p_pcstStr, char delim )  {
+    std::vector<std::string> tokens;
+    std::stringstream   mySstream( p_pcstStr );
+    std::string         temp;
+    while( getline( mySstream, temp, delim ) ) {
+        tokens.push_back( temp );
+    }
+    return tokens;
+} 
+
+/**********************************/
 
 void cncglobals::load_cfg_file( char* filepath )
 {
     std::cout << "cncglobals loading file "<< filepath << "\n";
 
-    std::ifstream fin;
+    std::ifstream filein;
 
-    fin.open(filepath); // open a file
-    if (!fin.good()){ 
+    filein.open(filepath); // open a file
+    if (!filein.good()){ 
         std::cout << "scene file \""<< filepath <<"\" appears to be missing." << std::endl;
         exit (EXIT_FAILURE); // exit if file not found
     }
 
     int n = 0;
 
-    std::string line;
-
     int line_ct = 0;
-    while (!fin.eof())
-    {
-        char buf[MAX_CHARS_PER_LINE];
-        fin.getline(buf, MAX_CHARS_PER_LINE);
-          
-        const char* token[MAX_TOKENS_PER_LINE];
-        token[0] = strtok(buf, " ");
-        
-    
-        //if line has data on it ...  
+    while (!filein.eof())
+    {   
+        //26 is a sign the pin is unassigned (only 0-24 on the plug) 
+        uint parsepin = 26;
+
+        std::string line;
+        while (std::getline(filein, line)) { // Reads lines until end-of-file
+            //std::cout << "FULL LINE " << line << std::endl;
+            std::vector<std::string>  tokenized = (*this).tokenizer(line, *" ");
+
+            for (vector<std::string>::iterator t=tokenized.begin(); t!=tokenized.end(); ++t) 
+            {
+                std::cout << "TOKEN "<<*t<<std::endl;
+            }
+        }
+
+        /*
+
+        //if line has any usable data on it ...  
         if (token[0]) 
         {
+            
+            //parse the second token if it exists
+            std::string tok1(token[0]);         
+            if (token[1]) 
+            {   
+                std::cout  << "## TOKEN1 " << token[1] << "\n";
 
-            // walk the space delineated tokens 
-            for (n=1; n < MAX_TOKENS_PER_LINE; n++)
+                
+                // std::string tok2(token[1]); 
+                // if (tok2.find("DB25_") != std::string::npos)
+                // {
+                //     // parsepin = 
+                //     std::cout  << "## DB25_ DB25_ DB25_ " << token[1] << "\n";
+                //     splitstr(buf);  
+                // }
+
+            }
+
+            //DEBUG - should check the first character - this is messy  
+            if (tok1.find('#') != std::string::npos)
             {
-                token[n] = strtok(NULL, " \t\n");
-                if (!token[n]) break;  
+                //std::cout  << "## skipping line " << token[0] << "\n";
             }
+            else
+            { 
+                // walk the space delineated tokens 
+                for (n=1; n < MAX_TOKENS_PER_LINE; n++)
+                {
+                    token[n] = strtok(NULL, " \t\n");
+                    if (!token[n]) break;  
+                }
 
-            //-------------------------------------------
-            //-- MACHINE HARDWARE SETUP --------------
-            if (!strcmp(token[0],"PARPORT1_ADDR"))
-            {        
-                parport1_addr = atof(token[1]);
-            }
-            //-------------------------------------------
-            if (!strcmp(token[0],"PARPORT2_ADDR"))
-            {        
-                parport2_addr = atof(token[1]);
-            }
-
-            //-------------------------------------------
-            //-- MACHINE PARAMETER SETUP --------------
-
-            if (!strcmp(token[0],"X_XTNX"))
-            {        
-                //strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"Y_XTNX"))
-            {        
-                //strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"Z_XTNX"))
-            {        
-                //strcpy( parport2_addr, token[1]);
-            }
-
-            //-------------------------------------------
-            //-- PULSE TIMING ---------------
-            if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-
-            // if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
-
-            //-------------------------------------------
-            //-- 3D SPATIAL DIVISIONS ----------
-            if (!strcmp(token[0],"PPLU1_X"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"PPLU1_Y"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"PPLU1_Z"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-
-            //-------------------------------------------
-
-
-            //-------------------------------------------
-            //-- CONTROLLER INPUTS       ----------------
-
-            if (!strcmp(token[0],"X_LIMIT_PIN"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"Y_LIMIT_PIN"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }
-            if (!strcmp(token[0],"Z_LIMIT_PIN"))
-            {        
-                // // strcpy( parport2_addr, token[1]);
-            }                        
-
-
-            //-------------------------------------------
-            //-- CONTROLLER OUTPUTS      ----------------
-            if (!strcmp(token[0],"PARPRT1_XDIR"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }
-            if (!strcmp(token[0],"PARPRT1_XSTEP"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }
-            
-            // -----------------
-
-            if (!strcmp(token[0],"PARPRT1_YDIR"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }    
-            if (!strcmp(token[0],"PARPRT1_YSTEP"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }
-            
-            // -----------------
-
-            if (!strcmp(token[0],"PARPRT1_ZDIR"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }
-            if (!strcmp(token[0],"PARPRT1_ZSTEP"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }    
-
-            // -----------------
-            if (!strcmp(token[0],"PARPRT1_ADIR"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }
-            if (!strcmp(token[0],"PARPRT1_ASTEP"))
-            {        
-                    //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-            }  
-
-
-            //-------------------------------------------
-
-
-
-            /*
-                //----------------------
-                if (!strcmp(token[0],"cam_pos"))
+                //-------------------------------------------
+                //-- MACHINE HARDWARE SETUP --------------
+                if (!strcmp(token[0],"PARPORT1_ADDR"))
                 {        
-                    campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                    parport1_addr = atof(token[1]);
+                }
+                //-------------------------------------------
+                if (!strcmp(token[0],"PARPORT2_ADDR"))
+                {        
+                    parport2_addr = atof(token[1]);
                 }
 
-                if (!strcmp(token[0],"vtx_color"))
-                {   
-                    //std::cout << " vtx_color is " <<  atof(token[1]) << " " <<  atof(token[2]) << " " <<  atof(token[3]) << "\n";
-                    vtx_color.r = atoi(token[1]);
-                    vtx_color.g = atoi(token[2]);
-                    vtx_color.b = atoi(token[3]);                
+                //-------------------------------------------
+                //-- MACHINE PARAMETER SETUP --------------
+
+                if (!strcmp(token[0],"X_XTNX"))
+                {        
+                    //strcpy( parport2_addr, token[1]);
                 }
-                if (!strcmp(token[0],"show_lines"))
-                {   
-                    if (!strcmp(token[1],"true"))
-                    {
-                        show_lines = true;
-                    }
-                    std::cout << "show lines "<< show_lines << "\n";
+                if (!strcmp(token[0],"Y_XTNX"))
+                {        
+                    //strcpy( parport2_addr, token[1]);
+                }
+                if (!strcmp(token[0],"Z_XTNX"))
+                {        
+                    //strcpy( parport2_addr, token[1]);
+                }
+
+                //-------------------------------------------
+                //-- PULSE TIMING ---------------
+                if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+
+                // if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
+
+                //-------------------------------------------
+                //-- 3D SPATIAL DIVISIONS ----------
+                if (!strcmp(token[0],"PPLU1_X"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+                if (!strcmp(token[0],"PPLU1_Y"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+                if (!strcmp(token[0],"PPLU1_Z"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+
+                //-------------------------------------------
+
+
+                //-------------------------------------------
+                //-- CONTROLLER INPUTS       ----------------
+
+                if (!strcmp(token[0],"X_LIMIT_PIN"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+                if (!strcmp(token[0],"Y_LIMIT_PIN"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }
+                if (!strcmp(token[0],"Z_LIMIT_PIN"))
+                {        
+                    // // strcpy( parport2_addr, token[1]);
+                }                        
+
+
+                //-------------------------------------------
+                //-- CONTROLLER OUTPUTS      ----------------
+                if (!strcmp(token[0],"PARPRT1_XDIR"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }
+                if (!strcmp(token[0],"PARPRT1_XSTEP"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }
+                
+                // -----------------
+
+                if (!strcmp(token[0],"PARPRT1_YDIR"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }    
+                if (!strcmp(token[0],"PARPRT1_YSTEP"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }
+                
+                // -----------------
+
+                if (!strcmp(token[0],"PARPRT1_ZDIR"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }
+                if (!strcmp(token[0],"PARPRT1_ZSTEP"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }    
+
+                // -----------------
+                if (!strcmp(token[0],"PARPRT1_ADIR"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                }
+                if (!strcmp(token[0],"PARPRT1_ASTEP"))
+                {        
+                        //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
                 }  
-            */
 
-            //////
-            line_ct ++; 
+
+                //-------------------------------------------
+                
+                //    //----------------------
+                //    if (!strcmp(token[0],"cam_pos"))
+                //    {        
+                //        campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                //    }
+                //    if (!strcmp(token[0],"vtx_color"))
+                //    {   
+                //        //std::cout << " vtx_color is " <<  atof(token[1]) << " " <<  atof(token[2]) << " " <<  atof(token[3]) << "\n";
+                //        vtx_color.r = atoi(token[1]);
+                //        vtx_color.g = atoi(token[2]);
+                //        vtx_color.b = atoi(token[3]);                
+                //    }
+                //    if (!strcmp(token[0],"show_lines"))
+                //    {   
+                //        if (!strcmp(token[1],"true"))
+                //        {
+                //            show_lines = true;
+                //        }
+                //        std::cout << "show lines "<< show_lines << "\n";
+                //    }  
+                
+
+                //////
+                line_ct ++; 
+            }//only parse lines with no "#" in them - DEBUG its a hack 
 
         } 
-          
+        */
+
 
 
     }

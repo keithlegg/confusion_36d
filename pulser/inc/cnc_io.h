@@ -12,6 +12,20 @@ using std::vector; //point_op did not make me do this!!?? WHY?
 #include "cnc_globals.h"
 
 
+//define the way that pins get assigned in the parports 
+class cnc_bitmasks
+{
+
+    public:
+         cnc_bitmasks(){};
+        ~cnc_bitmasks(){};
+
+};
+
+
+/**************************/
+
+//handle the IO to the parports 
 class cnc_io
 {
     public:
