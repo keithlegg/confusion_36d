@@ -37,12 +37,11 @@ class cncglobals
 
         //----------
         //machine travel size in 3D 
-        //std::string linear_unit = "mm"; //"mm" or "inch" 
-        char linear_unit[20] = "mm"; //"mm" or "inch" 
+        std::string linear_unit = "mm"; //"mm" or "inch" 
 
-        uint x_xtntx = 25;
-        uint y_xtntx = 25;
-        uint z_xtntx = 25;
+        float x_xtntx = 25;
+        float y_xtntx = 25;
+        float z_xtntx = 25;
 
         //----------
         //waveform generation parameters
@@ -55,7 +54,7 @@ class cncglobals
         uint pp1u_z           = 100;
 
         //----------
-        //pin assignments
+        //pin assignments port1
         uint parprt1_dir_x    = 26;
         uint parprt1_step_x   = 26;  
         uint parprt1_dir_y    = 26;
@@ -73,6 +72,7 @@ class cncglobals
         uint parprt1_dir_a_inv   = false;
         uint parprt1_step_a_inv  = false;    
 
+        //pin assignments port2
         uint parprt2_dir_x    = 26;
         uint parprt2_step_x   = 26;  
         uint parprt2_dir_y    = 26;
@@ -90,6 +90,7 @@ class cncglobals
         bool parprt2_dir_a_inv    = false;
         bool parprt2_step_a_inv   = false;   
 
+        //pin assignments limit switches
         uint x_limitsw_pin  = 26;
         uint y_limitsw_pin  = 26;
         uint z_limitsw_pin  = 26;
@@ -99,6 +100,8 @@ class cncglobals
 
 
         /*******************/
+        char* copyString(char[]);
+
         std::vector<std::string> tokenizer( const std::string&, char);
         int cvt_int( const std::string&);
 

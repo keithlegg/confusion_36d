@@ -101,7 +101,7 @@ void cncglobals::show( void )
     std::cout <<"\n";
     
     std::cout << " ## machine params " << "\n";  
-    std::cout << " linear_unit : " << (*this).linear_unit << "\n";  
+    //std::cout << " linear_unit : " << (*this).linear_unit << "\n";  
 
     std::cout << " ## machine travel size in 3D  " << "\n";  
     std::cout << " x_xtntx : " << (*this).x_xtntx<< "\n";
@@ -131,9 +131,9 @@ void cncglobals::show( void )
     // std::cout << " parprt1_dir_a  : " << (*this).parprt1_dir_a  << "\n";
     // std::cout << " parprt1_step_a : " << (*this).parprt1_step_a << "\n";
 
-    std::cout << " x_limit_pin    : " << (*this).x_limitsw_pin << "\n" << " inverted: "<< (*this).x_limitsw_pin_inv << "\n";
-    std::cout << " y_limit_pin    : " << (*this).y_limitsw_pin << "\n" << " inverted: "<< (*this).y_limitsw_pin_inv << "\n";
-    std::cout << " z_limit_pin    : " << (*this).z_limitsw_pin << "\n" << " inverted: "<< (*this).z_limitsw_pin_inv << "\n";
+    std::cout << " x_limit_pin    : " << (*this).x_limitsw_pin << " inverted: "<< (*this).x_limitsw_pin_inv << "\n";
+    std::cout << " y_limit_pin    : " << (*this).y_limitsw_pin << " inverted: "<< (*this).y_limitsw_pin_inv << "\n";
+    std::cout << " z_limit_pin    : " << (*this).z_limitsw_pin << " inverted: "<< (*this).z_limitsw_pin_inv << "\n";
     
     //std::cout << " : " << (*this). << "\n";
     //std::cout << " : " << (*this). << "\n";    
@@ -195,6 +195,21 @@ return 0;
 // method 2
 // const char *s = "Hello, World!";
 // std::string str(s);
+
+//parse 3 floats at a time 
+//campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+
+/**************/
+
+
+char* cncglobals::copyString(char s[])
+{
+    char* s2;
+    s2 = (char*)malloc(20);
+
+    strcpy(s2, s);
+    return (char*)s2;
+}
 
 std::vector<std::string> cncglobals::tokenizer( const std::string& p_pcstStr, char delim )  {
     std::vector<std::string> tokens;
@@ -288,6 +303,18 @@ void cncglobals::load_cfg_file( char* filepath )
                 {
                     if(tokenized.size()>=1)
                     {
+                        //** MACHINE HARDWARE SETUP ************//
+                        if (tokenized.at(0).find("LINEAR_UNIT") != std::string::npos )                            
+                        {  
+                            std::string buffer;
+                            std::cout << "DEBUG parsing LINEAR_UNIT " << tokenized.at(1) << "\n";
+                            buffer = tokenized.at(1);
+                            
+                            //linear_unit = (*this).copyString(tokenized.at(1));
+                            std::cout << "DEBUG parsing LINEAR_UNIT " << linear_unit << "\n";
+                        }
+
+
                         /***************************************/ 
                         //** MACHINE HARDWARE SETUP ************//
                         if (tokenized.at(0).find("PARPORT1_ADDR") != std::string::npos )                            
@@ -321,29 +348,31 @@ void cncglobals::load_cfg_file( char* filepath )
                             z_xtntx = std::stof( tokenized.at(1) );  
                         }
 
-
                         //-------------------------------------------
                         //-- PULSE TIMING ---------------
                         if (tokenized.at(0).find("PP1_PULSE_DLY_US") != std::string::npos)
                         {    
-                            //z_xtntx = std::stof( tokenized.at(1) );      
+                            pp1_pulse_dly_us = std::stoi( tokenized.at(1) );      
                         }
 
-                        // if (!strcmp(token[0],"PP1_PULSE_DLY_US"))
+                        if (tokenized.at(0).find("PP2_PULSE_DLY_US") != std::string::npos)
+                        {    
+                            pp2_pulse_dly_us = std::stoi( tokenized.at(1) );      
+                        }
 
                         //-------------------------------------------
                         //-- 3D SPATIAL DIVISIONS ----------
-                        if (tokenized.at(0).find("PPLU1_X") != std::string::npos )
+                        if (tokenized.at(0).find("PP1_STEPS_PER_UNIT_X") != std::string::npos )
                         {        
-                             //z_xtntx = std::stof( tokenized.at(1) );   
+                            pp1u_x = std::stoi( tokenized.at(1) );   
                         }
-                        if (tokenized.at(0).find("PPLU1_Y") != std::string::npos)
+                        if (tokenized.at(0).find("PP1_STEPS_PER_UNIT_Y") != std::string::npos)
                         {        
-                            //z_xtntx = std::stof( tokenized.at(1) );   
+                            pp1u_y = std::stoi( tokenized.at(1) );   
                         }
-                        if (tokenized.at(0).find("PPLU1_Z") != std::string::npos)
+                        if (tokenized.at(0).find("PP1_STEPS_PER_UNIT_Z") != std::string::npos)
                         {        
-                            //z_xtntx = std::stof( tokenized.at(1) );   
+                            pp1u_z = std::stoi( tokenized.at(1) );   
                         }
 
                         //------------------------------------------------
@@ -364,80 +393,88 @@ void cncglobals::load_cfg_file( char* filepath )
                             //do it one more time and put it all together now
                             for (vector<std::string>::iterator t=tokenized.begin(); t!=tokenized.end(); ++t) 
                             {
-                                std::string foo = *t;
+                                std::string getdbpins = *t;
         
-                                if (foo.find("DB25_") != std::string::npos)
+                                if (getdbpins.find("DB25_") != std::string::npos)
                                 {
-                                    /******************************************/
-                                    std::vector<std::string>  tokepins = (*this).tokenizer(foo, *"_");  
-                                    if(tokepins.size()>1)
-                                    {                                  
-                                        // std::cout << "DB25_! " << tokenized.at(0) << " "<< tokepins.at(1) << " INVERTED  "<< doinvert << "\n";
-                                        //DEBUG - THESE WILL CRASH IF N.A.N. 
 
+                                    /******************************************/
+                                    std::vector<std::string>  tokepins = (*this).tokenizer(getdbpins, *"_");  
+                                    if(tokepins.size()>1)
+                                    {     
+                                        //----------------------------------------------
+                                        // std::cout << "DB25_! " << tokenized.at(0) << " "<< tokepins.at(1) << " INVERTED  "<< doinvert << "\n";
+                                        // DEBUG - THESE WILL CRASH IF N.A.N. 
+                                        // std::cout << "DEBUG DB25 PIN IS " << tokepins.at(1)             << "\n";
+                                        std::cout << "DEBUG DB25 PIN IS " << std::stoi(tokepins.at(1))  << "\n";
+
+                                        //----------------------------------------------
+
+                                          
                                         if (tokenized.at(0)=="X_LIMIT_SW")
                                         {   
-                                            x_limitsw_pin     = std::stof( tokenized.at(1));
+                                            x_limitsw_pin     = std::stoi( tokepins.at(1));
                                             x_limitsw_pin_inv = doinvert;
                                         }
 
                                         if (tokenized.at(0)=="Y_LIMIT_SW")
                                         {   
-                                            y_limitsw_pin = std::stof( tokenized.at(1));
+                                            y_limitsw_pin = std::stoi( tokepins.at(1));
                                             y_limitsw_pin_inv = doinvert;                                            
                                         }
                                         
                                         if (tokenized.at(0)=="X_LIMIT_SW")
                                         {   
-                                            z_limitsw_pin = std::stof( tokenized.at(1));
+                                            z_limitsw_pin = std::stoi( tokepins.at(1));
                                             z_limitsw_pin_inv = doinvert;                                            
                                         }
-
-                                        /*
-                                        //-------------------------------------------
-                                        //-- CONTROLLER PORT OUTPUTS      ----------------
-                                        if (tokenized.at(0).find("PARPRT1_XDIR")!= std::string::npos)
+                                       
+                                        //----------------------------------------------
+                                        //-- PARALLEL PORT1 PIN ASSIGNMENTS ------------
+                                        if (tokenized.at(0).find("PP1_XDIR")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                                            parprt1_dir_x = std::stoi( tokepins.at(1));
+                                            parprt1_dir_x_inv = doinvert;                                                
                                         }
-                                        if (tokenized.at(0).find("PARPRT1_XSTEP")!= std::string::npos)
+                                        if (tokenized.at(0).find("PP1_XSTEP")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                                            parprt1_step_x = std::stoi( tokepins.at(1));
+                                            parprt1_step_x_inv = doinvert;     
                                         }
 
-                                        // -----------------
-
-                                        if (tokenized.at(0).find("PARPRT1_YDIR")!= std::string::npos)
+                                        if (tokenized.at(0).find("PP1_YDIR")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-                                        }    
-                                        if (tokenized.at(0).find("PARPRT1_YSTEP")!= std::string::npos)
-                                        {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                                            parprt1_dir_y = std::stoi( tokepins.at(1));
+                                            parprt1_dir_y_inv = doinvert;                                                
                                         }
-                                                    
-
-                                        // -----------------
-
-                                        if (tokenized.at(0).find("PARPRT1_ZDIR")!= std::string::npos)
+                                        if (tokenized.at(0).find("PP1_YSTEP")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                                            parprt1_step_y = std::stoi( tokepins.at(1));
+                                            parprt1_step_y_inv = doinvert;     
                                         }
-                                        if (tokenized.at(0).find("PARPRT1_ZSTEP")!= std::string::npos)
-                                        {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-                                        }    
 
-                                        // -----------------
-                                        if (tokenized.at(0).find("PARPRT1_ADIR")!= std::string::npos)
+                                        if (tokenized.at(0).find("PP1_ZDIR")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+                                            parprt1_dir_z = std::stoi( tokepins.at(1));
+                                            parprt1_dir_z_inv = doinvert;                                                
                                         }
-                                        if (tokenized.at(0).find("PARPRT1_ASTEP")!= std::string::npos)
+                                        if (tokenized.at(0).find("PP1_ZSTEP")!= std::string::npos)
                                         {        
-                                                //campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-                                        }  
-                                        */
+                                            parprt1_step_z = std::stoi( tokepins.at(1));
+                                            parprt1_step_z_inv = doinvert;     
+                                        }
+
+                                        if (tokenized.at(0).find("PP1_ADIR")!= std::string::npos)
+                                        {        
+                                            parprt1_dir_a = std::stoi( tokepins.at(1));
+                                            parprt1_dir_a_inv = doinvert;                                                
+                                        }
+                                        if (tokenized.at(0).find("PP1_ASTEP")!= std::string::npos)
+                                        {        
+                                            parprt1_step_a = std::stoi( tokepins.at(1));
+                                            parprt1_step_a_inv = doinvert;     
+                                        }
+                                                                                                                        
 
                                     }//we can set all the DB25 pins in this loop 
                                     //****************************************/
