@@ -1,44 +1,24 @@
 
 /*************************************************************/
 /*
-   gnolmec.c 
+   conFUSION_36d.c 
 
-   Copyright (C) 2014-2021 Keith Legg - keithlegg23@gmail.com
+   Copyright (C) 2018-2026 Keith Legg - keithlegg23@gmail.com
 
-       make a 3D environment to view models and play in that is navigatable in the way Maya does it
-       Named Olmec - because its not Maya :) 
-
-
-       -------------------------------------------------------------------------------------
-       Maya coordinate system    |  Blender coordinate system  |    Fusion 360 Coordinate System
-                                 |                             |  
-            Y                    |        Z                    |  
-            |                    |        |                    |      
-            |                    |        |                    | 
-            ______X (look on Z)  |        ____X (look on Y)    |
-       -------------------------------------------------------------------------------------
+   -------------------------------------------------------------------------------------
+   Maya coordinate system    |  Blender coordinate system  |    Fusion 360 Coordinate System
+                             |                             |  
+        Y                    |        Z                    |  
+        |                    |        |                    |      
+        |                    |        |                    | 
+        ______X (look on Z)  |        ____X (look on Y)    |
+   -------------------------------------------------------------------------------------
     
 
     TODO:
-        - textures, line color, lighting 
-        - auto generate face/vertex normals
-        - UV map loading 
-        - test with many models 
-
-        - 3D object save 
-        - scenegraph
-
-        - FTDI driver, serial port IO  
-        - Image compositing ALA Ye olden days of Shake  
-        - widgets in GL fixed to screen region 
 
 
     IDEAS:
-
-         color :
-             3 floats 0-1 after each vertex 
-             commented out command in obj 
-
 
 
     -------------- HOTKEYS -----------------
@@ -92,18 +72,14 @@
 
 */
 /*************************************************************/
-//#include <stdlib.h>
-//#include <stdio.h>
+
 
 #include <vector>
-
 #include <iostream>
-using namespace std;
-
-
-#include <string.h>
-#include <unistd.h>      
+#include <string>
 #include <cmath>
+#include <unistd.h>      
+
 
 #include "gl_setup.h"
 
@@ -133,7 +109,7 @@ extern bool scr_full_toglr;
 
 
 
-extern vector<string>  obj_filepaths;
+extern vector<std::string>  obj_filepaths;
 
 
 // view prefs 
@@ -359,7 +335,7 @@ void load_scene(char * scenepath)
 
     if(obj_filepaths.empty()) 
     {
-        cout << "NO FILEPATHS TO LOAD!\n";
+        std::cout << "NO FILEPATHS TO LOAD!\n";
     }
 
     pt_model_buffer->clearall();
@@ -368,16 +344,16 @@ void load_scene(char * scenepath)
     {
 
         if(!obj_filepaths.empty()) {
-            cout << "# loading  " << obj_filepaths[x] <<"\n";
-            strcpy(char_array, obj_filepaths[x].c_str()); 
-            load_objfile(char_array , pt_model_buffer );
-            get_obj_info( pt_model_buffer, pt_obinfo);
+            std::cout << "# loading  " << obj_filepaths[x] <<"\n";
+            // strcpy(char_array, obj_filepaths[x].c_str()); 
+            // load_objfile(char_array , pt_model_buffer );
+            // get_obj_info( pt_model_buffer, pt_obinfo);
         };
          
     }
 
     //pt_model_buffer->calc_normals();
-    strcpy(active_filepath, char_array ); 
+    //strcpy(active_filepath, char_array ); 
 
 }
 
@@ -786,7 +762,7 @@ static void render_loop()
                 if(c1.y==0){c1.y=line_clr_g;c2.y=line_clr_g;}
                 if(c1.z==0){c1.z=line_clr_b;c2.z=line_clr_b;}
 
-                //cout << "line color is set to " << c1.x <<" "<< c1.y<< " " << c1.z << "\n";
+                //std::cout << "line color is set to " << c1.x <<" "<< c1.y<< " " << c1.z << "\n";
                 glMaterialfv(GL_FRONT, GL_EMISSION, clr_linez);
                 glColor3f(c1.x, c1.y, c1.z);   
                 glVertex3f(pt1.x, pt1.y, pt1.z);
@@ -1842,7 +1818,7 @@ static void keyPressed(unsigned char key, int x, int y)
 
     if (key == 105) //i - draw bbox
     { 
-        cout << "\n\n\n"; 
+        std::cout << "\n\n\n"; 
         get_obj_info( pt_model_buffer, pt_obinfo);        
         if (draw_bbox == TRUE){
             draw_bbox = FALSE;
@@ -1868,7 +1844,7 @@ static void keyPressed(unsigned char key, int x, int y)
             pt_model_buffer->calc_normals();
 
         }
-        //cout << "draw normals " << draw_normals << "\n"; 
+        //std::cout << "draw normals " << draw_normals << "\n"; 
     }
 
     if (key == 111) // o
@@ -1991,7 +1967,7 @@ static void keyPressed(unsigned char key, int x, int y)
     //------
     if (key == 82) //shift r
     { 
-        //cout << "PATHS " << obj_filepaths.clear() << "\n";
+        //std::cout << "PATHS " << obj_filepaths.clear() << "\n";
         num_loaded_obj = 0;
         clear_scenegeom();
         //reset_objfile uses a stupid design - thats why objinfo is passed/passed twice here 
@@ -2090,7 +2066,7 @@ void init_pycore(void){
     if (active_filepath[0]=='\0')
     {
         printf("## active fp %s is blank!!\n", active_filepath );
-        strcpy(active_filepath, "foo" ); 
+        //strcpy(active_filepath, "foo" ); 
 
     }
 

@@ -1,8 +1,13 @@
 # confusion 36d 
 
 
+7 years of hobby programming - in a stack of libraries.
 
-A combination of older tools I built. 
+
+This is my attempt to make an open source CNC controller using a bunch of graphics code I wrote for fun. 
+
+
+Contains a combination of older tools I built: 
 
 
 This tool for 3D spatial motion control 

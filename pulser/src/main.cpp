@@ -16,6 +16,8 @@
 #include "cnc_plot.h" 
 #include "gl_setup.h" 
 
+#include "demo_cube.h" 
+
 //char* obj_filepath;  
 
 
@@ -42,7 +44,23 @@ char* obj_filepath;
 GLuint texture[3]; // storage for one texture  
 
 
+
+/*******************************************************/
+
+// data for animated "pong" texture 
+unsigned int upos = 100;
+unsigned int vpos = 320;  
+unsigned int dir_u = 0;
+unsigned int dir_v = 0;
+unsigned int pong_speed = 5;
+unsigned int pong_size  = 60;
+unsigned int img_usize  = 512;
+unsigned int img_vsize  = 512;
+unsigned int use_tex = 0;
+
+
 /******************************************/
+//command line tool to generate XYZ pulses from 2 vectors 
 
 void run_cncplot(cncglobals* cg,
                  double f_x,
@@ -84,6 +102,7 @@ void run_cncplot(cncglobals* cg,
 
 
 /******************************************/
+
 void parse_args(cncglobals* cg,  int argc, char **argv)
 {
     if (argc < 8){
@@ -169,6 +188,9 @@ int main(int argc, char **argv)
 
     /*------------------*/
     //startgui();
+
+    spinningCubeDemo(&argc, argv);
+
 
     /*------------------*/
     //askerdemo();
