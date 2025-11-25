@@ -821,3 +821,55 @@ void save_matrix33(char* filepath, m33 *input ){};
 */
 
 
+
+
+
+/*****************************************************/
+/*
+void write_scenefile(char*objpath, char*cammatrixpath, char* scenefilepath )
+{
+
+    //char *object_path ="3d_obj/pycore.obj";
+    //char *camera_matrix_path = " ";
+
+    FILE * fp;
+
+    fp = fopen (scenefilepath, "w+");
+
+
+    fprintf(fp, "## Generated with Gnolmec.  ##\n\n"             );
+
+    fprintf(fp, "obj_path %s \n"            , objpath                                    );
+    fprintf(fp, "cam_matrix_path %s \n"     , cammatrixpath                              );
+    fprintf(fp, "cam_pos %f %f %f \n"       , cam_posx, cam_posy, cam_posz               );
+    fprintf(fp, "op_loadobj %s \n"          , objpath                                    );
+
+    fprintf(fp, "\n# render prefs   \n"                                                  );
+    fprintf(fp, "rendermode %s \n"          , "litshaded"                                ); 
+    fprintf(fp, "showgrid true       \n"                                                   );
+    fprintf(fp, "showgnomon false    \n"                                                   ); 
+    fprintf(fp, "gridsize 2.5        \n"                                                   );
+    fprintf(fp, "gnomonsize 1.0      \n"                                                   ); 
+    fprintf(fp, "drawlines true      \n"                                                   );
+    fprintf(fp, "drawquads true      \n"                                                   ); 
+    fprintf(fp, "drawtriangles true  \n"                                                   );
+    fprintf(fp, "drawpoints true      \n"                                                   ); 
+
+    fprintf(fp, "\n# light setup \n"                                                     );
+    fprintf(fp, "light_pos %f %f %f \n"     , light_posx, light_posy, light_posz         );
+    fprintf(fp, "light_intensity %f \n"     , light_intensity                            );
+
+    fprintf(fp, "\n# colors      \n"                                                     );
+    fprintf(fp, "bg_color %s \n"            , "20 15 15"                                 ); 
+    fprintf(fp, "line_color %s \n"          , "0 0 100"                                  ); 
+    fprintf(fp, "fill_color %d %d %d \n"    , surfce_clr_r, surfce_clr_g, surfce_clr_b   ); 
+    fprintf(fp, "vtx_color %s \n"           , "200 0 0"                                  ); 
+    fprintf(fp, "show_vtx %s \n"            , "false"                                    ); 
+    fprintf(fp, "show_lines %s \n"          , "false"                                    ); 
+
+
+    fclose(fp);
+
+};
+
+*/

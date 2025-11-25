@@ -10,12 +10,12 @@
 
 #include "math_op.h"        // general math operations
 #include "point_op.h"         
-#include "cnc_plot.h"         
-
 #include "cnc_globals.h"
 #include "../inc/asker.hpp"
 
-//#include "gl_setup.h"     // common to all - moved to reduce size 
+#include "cnc_plot.h" 
+#include "gl_setup.h" 
+
 //char* obj_filepath;  
 
 
@@ -30,6 +30,16 @@ extern int PP1_STEPS_PER_UNIT_X;
 extern int PP1_STEPS_PER_UNIT_Y;
 extern int PP1_STEPS_PER_UNIT_Z;
 */ 
+
+
+// window properties
+int window_id;      // ID if GLUT window 
+int scr_size_x      = 512;
+int scr_size_y      = 512;
+bool scr_full_toglr = true;
+char* obj_filepath;  
+
+GLuint texture[3]; // storage for one texture  
 
 
 /******************************************/
@@ -107,40 +117,76 @@ bool custom_validation(std::string ans) {
   return true;
 }
 
+void askerdemo(void)
+{
+    char pw[MAXLen] = {0};
+    char *p = pw;
+    FILE *fp = stdin;
+    ssize_t nchar = 0;
+
+    // // confirm prompt demo
+    // std::cout << "demo-1: confirm prompt" << std::endl;
+    // bool exit = asker::confirm("yo! want to exit?");
+    // std::cout << "wants to exit: " << exit << std::endl;
+    // std::cout << std::endl;
+    
+   
+    // list select demo
+    std::cout << "demo-2: select list" << std::endl;
+    std::string selection;
+    std::string options[5] = {"option-1", "op", "option-3", "option-4"};
+    selection = asker::selectList("select options:", options);
+    std::cout << "user selected: " << selection << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "demo-2: select list" << std::endl;
+    std::vector<std::string> checkSelection;
+    checkSelection = asker::checkList("select options:", options);
+    std::cout << "user selected: [";
+    for (int i = 0; i < checkSelection.size(); i++) {
+        std::cout << "{" << checkSelection[i] << "}";
+    };
+
+    std::cout << "]";
+    std::cout << std::endl;
+
+    /*
+    // basic input demo
+    std::cout << "demo-3: basic input prompt" << std::endl;
+    std::string m;  // default value
+    m = asker::input("yo! enter name:");
+    std::cout << "user entered: " << m << std::endl;
+    std::cout << std::endl;
+    */ 
+
+
+}
 
 /******************************************/
 /******************************************/
 int main(int argc, char **argv) 
 {  
 
-    /*
-    char pw[MAXLen] = {0};
-    char *p = pw;
-    FILE *fp = stdin;
-    ssize_t nchar = 0;
+    /*------------------*/
+    //startgui();
 
-    // confirm prompt demo
-    std::cout << "demo-1: confirm prompt" << std::endl;
-    bool exit = asker::confirm("yo! want to exit?");
-    std::cout << "wants to exit: " << exit << std::endl;
-    std::cout << std::endl;
-    
-    */
+    /*------------------*/
+    //askerdemo();
 
+    /*------------------*/
+    // cncglobals cg;
+    // cg.load_cfg_file(argv[1]);
+    // cg.show();
 
-    cncglobals cg;
-    cg.load_cfg_file(argv[1]);
-    cg.show();
-
+    /*------------------*/
     //parse_args(cg, argc, argv); 
     
+    /*------------------*/
+    // test of limit switch reading 
+    //cnc_plot plot;
+    //vec3 foo;
+    //plot.read_limits(&foo);
     
-    /*
-    //test of limit switch reading 
-    cnc_plot plot;
-    vec3 foo;
-    plot.read_limits(&foo);
-    */
 
 
     return 0;

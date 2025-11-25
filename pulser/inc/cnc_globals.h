@@ -154,11 +154,16 @@ class cncglobals
         void load_cfg_file( char*);
         void show( void );
 
-        //check that all axis are set after running  
+        // check that all axis are set after running  
         //void verify_axis_set( void );
 
-        //build bitmasks from loded parameters  
-        //void verify_axis_set( void );                
+        // build bitmasks from loded parameters  
+        //void build_xlimit_inputs ( void );                
+        //void build_ylimit_inputs ( void );  
+        //void build_zlimit_inputs ( void );  
+        //void build_xlimit_inputs ( void );                
+        //void build_ylimit_inputs ( void );  
+        //void build_zlimit_inputs ( void );  
 
 
 };
