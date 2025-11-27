@@ -14,8 +14,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "obj_model.h"
 
+
+#include "obj_model.h"
 #include "gl_setup.h"
 
 

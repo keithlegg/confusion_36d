@@ -538,7 +538,36 @@ void cncglobals::load_cfg_file( char* filepath )
                                         }
                                         */
                                     }//we can set all the DB25 pins in this loop 
+                                    
                                     //****************************************/
+                                    //RUN SCRIPT OPERATORS IN HERE
+                                    //****************************************/                                    
+                                    if (tokenized.at(0).find("op_loadobj")!= std::string::npos)
+                                    {   
+                                        std::cout << "LOAD OPERATOR ! " << "\n";
+
+                                        /*
+                                        strcpy (cmd_str, line);
+                                        //walk the tokens on the line (a copy of it)
+                                        char* tok_line = strtok(NULL, " \t\n");
+                                        int tidx = 0;
+                                        while (tok_line) 
+                                        {
+                                            if(tidx==0)
+                                            {
+                                                //cout << "#object found " << tok_line << "\n";
+                                                if (find(obj_filepaths.begin(), obj_filepaths.end(), tok_line) == obj_filepaths.end())
+                                                {
+                                                    obj_filepaths.push_back(tok_line);
+                                                    num_loaded_obj++;
+                                                }
+                                            }
+                                            tidx++;                                        
+                                            tok_line = strtok(NULL, " \t\n");
+                                        }*/
+
+                                    }
+
                                 }
 
                             }
@@ -577,7 +606,7 @@ void write_scenefile(char*objpath, char*cammatrixpath, char* scenefilepath ){};
     fp = fopen (scenefilepath, "w+");
 
 
-    fprintf(fp, "## Generated with Gnolmec.  ##\n\n"             );
+    fprintf(fp, "## Generated with CNCPulser.  ##\n\n"             );
 
     fprintf(fp, "obj_path %s \n"            , objpath                                    );
     fprintf(fp, "cam_matrix_path %s \n"     , cammatrixpath                              );
@@ -840,7 +869,7 @@ void write_scenefile(char*objpath, char*cammatrixpath, char* scenefilepath )
     fp = fopen (scenefilepath, "w+");
 
 
-    fprintf(fp, "## Generated with Gnolmec.  ##\n\n"             );
+    fprintf(fp, "## Generated with CNCPulser.  ##\n\n"             );
 
     fprintf(fp, "obj_path %s \n"            , objpath                                    );
     fprintf(fp, "cam_matrix_path %s \n"     , cammatrixpath                              );

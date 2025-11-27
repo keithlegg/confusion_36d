@@ -2,13 +2,16 @@
 #define GLSETUP_H
 
 
-//DEBUG replacve with lowercase versions 
+//DEBUG replace with lowercase versions 
 #define TRUE 1
 #define FALSE 0
 
+//#include <stdint.h>
 
 #include <vector>
 using std::vector; 
+
+
 
 #include "math_op.h"
 #include "obj_model.h"
@@ -18,9 +21,9 @@ using std::vector;
 //consolidated from gnolmec framebuffer.h 
 //24 bit color 
 typedef struct{
-    uint r=0;
-    uint g=0;
-    uint b=0;
+    unsigned int r=0;
+    unsigned int g=0;
+    unsigned int b=0;
 }RGBType;
 
 struct material {

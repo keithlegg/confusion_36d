@@ -82,12 +82,12 @@
 
 
 #include "gl_setup.h"
-
 #include "point_op.h"
 #include "obj_model.h"
+#include "cnc_globals.h"
+#include "parse_cmds.h"
 
 #include "confusion_36d.h"
-#include "cnc_globals.h"
 
 //#include "timer.h"
 //#include "socket.h"
@@ -526,17 +526,18 @@ void test_bezier( vec3 start, vec3 ctrl1, vec3 ctrl2, vec3 end)
 
 
 /***************************************/
+/*
 
-std::string buffer;
 
-static void key(unsigned char key, int x, int y)
+static void parse_cmds(unsigned char key, int x, int y)
 {
     buffer.push_back((char) key);
     std::cout << buffer << "\n";
     glutPostRedisplay();
 
-}
-/*
+};
+
+
 std::string input_txt(void){
 
     std::string sentence;
@@ -562,6 +563,21 @@ std::string input_txt(void){
 }
 */
 
+std::string cmd_buffer;
+
+static void parser_cb(unsigned char key, int x, int y)
+{
+    std::string new_buffer;
+
+    //cmd_buffer.push_back((char) key);
+    //new_buffer = parse_cmds(*cmd_buffer);
+
+    parse_cmds(&cmd_buffer);
+
+    std::cout << new_buffer << "\n";
+    glutPostRedisplay();
+
+};
 
 /***************************************/
 /***************************************/
@@ -601,9 +617,9 @@ static void render_loop()
         void *font = GLUT_BITMAP_TIMES_ROMAN_24; 
 
      
-
-        glutKeyboardFunc(key);
-        renderBitmapString( ((int)scr_size_x/2) , scr_size_y-20  ,(void *)font,  buffer.c_str() );
+        glColor3f(0.6f, 1.0f, 0.0f);  //text color 
+        glutKeyboardFunc(parser_cb);
+        renderBitmapString(  20, scr_size_y-20  ,(void *)font,  cmd_buffer.c_str() );
 
 
         //sprintf(s, "    %d tris ", pt_model_buffer->num_tris );
