@@ -21,12 +21,13 @@ void parse_cmds(std::string *buffer, unsigned char *pt_key )
 
     std::string parsed;
     std::string word;
-
-    std::istringstream iss(*buffer);
-    if (getline(iss, parsed, ' '))
-    {
-         // do some processing.
-    };
+    
+    // std::istringstream iss(*buffer);
+    // if (getline(iss, parsed, ' '))
+    // {
+    //     // do some processing.
+    //     std::cout << "EEE " << parsed << "\n";
+    // };
 
     // std::stringstream ss(*buffer);
     // int number_int;
@@ -35,11 +36,40 @@ void parse_cmds(std::string *buffer, unsigned char *pt_key )
     // ss >> word; // word will be "apple"
     // ss >> word; // word will be "banana"
 
+    int i = static_cast<int>(*pt_key);
+    std::cout << " int val " << i << std::endl;
+
+    if(*pt_key==*"a")
+    {
+        std::cout << "a PRESSED\n";        
+    }
+    if(i==97)
+    {
+        std::cout << "a PRESSED\n";        
+    }
+
+
+    if(i==13)
+    {
+        buffer->clear();
+        std::cout << "ENTER PRESSED\n";        
+    }    
+
+    if(i==27)
+    {
+        buffer->clear();
+        std::cout << "ESCAPE PRESSED\n";        
+    }  
+
+    //---------------
+
+    //output results
     buffer->push_back(*pt_key);
 
-    //buffer->push_back(*"HELLO KITTY\n");
-    
-    std::cout << *buffer << "\n";
+    //std::cout << *buffer << "\n";
+    //std::cout << *pt_key << "\n";
+
+
 
 };
 

@@ -550,11 +550,8 @@ static void parser_cb(unsigned char key, int x, int y)
     //s.push_back(key);
     //std::cout << s << "\n";
 
-    //std::string new_buffer;
-
     parse_cmds(&cmd_buffer, &key);
 
-    //std::cout << new_buffer << "\n";
     glutPostRedisplay();
 
 };
@@ -598,7 +595,12 @@ static void render_loop()
 
      
         glColor3f(0.6f, 1.0f, 0.0f);  //text color 
+        
+        // https://www.opengl.org/resources/libraries/glut/spec3/node49.html
+        // During a keyboard callback, glutGetModifiers may be called to determine the state of modifier keys when the keystroke generating the callback occurred. 
+
         glutKeyboardFunc(parser_cb);
+
         renderBitmapString(  20, scr_size_y-20  ,(void *)font,  cmd_buffer.c_str() );
 
 
