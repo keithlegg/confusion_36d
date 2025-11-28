@@ -346,7 +346,8 @@ void show_obj_geom(obj_model* loader)
     for (i=0;i<loader->num_pts;i++)
     {
         printf("%d pt    ",i);
-        print_vec3( loader->points[i]) ;
+        //DEBUG UNTESTED NEW PRINT IN C++
+        //print_vec3( &loader->points[i]) ;
     }
 
     printf("\n# line indices  ------------------- %d \n", loader->num_lines);
@@ -543,6 +544,7 @@ void load_objfile( char *filepath, obj_model* loader)
 
 
     std::cout << "load_objfile loading file "<< filepath << "\n";
+    
     int pofst = 0; //pointoffset indices to points if geom exists already 
     int line_ct = 0;
 
@@ -575,261 +577,227 @@ void load_objfile( char *filepath, obj_model* loader)
             // std::cout << "FULL LINE " << line << std::endl;
             std::vector<std::string>  tokenized = tokenizer(line, *" ");
 
+            //point offset indices to points - if geom exists already 
             if (loader->num_pts>0){
                 pofst = loader->num_pts;
             }
 
-            char nrmls_str[256];  // string that verts get copied to 
-            char coords_str[256]; // string that verts get copied to 
-            char fidx_str[256];   // string that faces get copied to
-
-            // printf("%s",line);
+            std::string coords_str; // string that verts get copied to 
+            std::string nrmls_str;  // string that verts get copied to 
+            std::string fidx_str;   // string that faces get copied to
 
             //if line is not blank
             if(tokenized.size()>0)
             {
-
-                //-----------------------------//
-                //  look for UV coordinates
-                //if ( strcmp( tok_spacs, "vt") == 0)  uv_cnt++;
-
-                //-----------------------------//
-                // look for V / vertices
-                if ( tokenized.at(0).find("v") != std::string::npos )
+                int commentpos = tokenized.at(0).find('#');
+                if ( commentpos != std::string::npos)
                 {
-                    
-                    std::cout << tokenized.at(1) << "\n";  // <- vertex line 
-                    
-                    /* 
-                    //walk the tokens on the line (a copy of it)
-                    char* tok_line = strtok(coords_str, " ");
-                    int vidx = 0;
-
-                    //printf("TOK %s\n", tok_line); // <- vertex line 
-
-                    float  xc, yc, zc = 0.0;
-                    float  cr, cg, cb = 0.0; //RGB float (0.0 - 1.0)
-                    while (tok_line) 
+                    //line is commented out  
+                }
+                else
+                {
+                    //-----------------------------//
+                    // look for V / vertices
+                    if ( tokenized.at(0).find("v") != std::string::npos )
                     {
-                        //printf("%s \n", tok_line );   
+                        int a = 0;
+                        int vidx = 0;
                         
-                        if(vidx==0){
-                            xc = atof(tok_line);
-                        }
-                        if(vidx==1){
-                            yc = atof(tok_line);                        
-                        }  
-                        if(vidx==2){
-                            zc = atof(tok_line);
-                        }                                        
+                        float  xc, yc, zc = 0.0;
+                        float  cr, cg, cb = 0.0; //RGB float (0.0 - 1.0)
+
+                        //walk the space delineated tokens per each line
+                        for (a=0;a<tokenized.size();a++)
+                        {   
+                 
+                            //std::cout << " line " << line_ct << " vertex " << vidx << " " << tokenized.at(a) <<"\n"; // <- vertex line 
                           
-                        //optional vertex color 
-                        if(vidx==3){
-                            cr = atof(tok_line);
+                            if(vidx==1){
+                                xc = std::stof(tokenized.at(a));
+                            }
+                            if(vidx==2){
+                                yc = std::stof(tokenized.at(a));                        
+                            }  
+                            if(vidx==3){
+                                zc = std::stof(tokenized.at(a));
+                            }                                        
+                              
+                            //optional vertex color 
+                            if(vidx==4){
+                                cr = std::stof(tokenized.at(a));
+                            }
+                            if(vidx==5){
+                                cg = std::stof(tokenized.at(a));                        
+                            }  
+                            if(vidx==6){
+                                cb = std::stof(tokenized.at(a));
+                            } 
+
+                            vidx++; 
                         }
-                        if(vidx==4){
-                            cg = atof(tok_line);                        
-                        }  
-                        if(vidx==5){
-                            cb = atof(tok_line);
-                        } 
                         
+                        //--------------------------------//
+                        //done looping vertex line, now process the data we found 
+                        
+                        //std::cout << "VIDX IS "<< vidx <<"\n"; 
 
-                        //printf("TOK LINE IS %s \n", tok_line );
-
-                        if (tok_line)
+                        //if two points its a 2D coord ( not a standard obj file )  
+                        if (vidx==3){
+                            std::cout << "2D point detected!\n"; 
+                        }
+                        
+                        //if three points its a proper vertex 
+                        if (vidx==3 || vidx==7)
                         {
-                            vidx++;
-                        }
+                            vec3 vpt = newvec3( xc, yc, zc  );
 
-                        tok_line = strtok(NULL," \n\t");
-                    }
-                    
-                    //printf( " NUM IS %d %f %f %f \n", vidx, cr, cg, cb);
+                            //print_vec3(&vpt); //to view output 
+                            std::cout << "NUM PTS LOADED "<< loader->num_pts << "\n";
 
-                    //if two points its a 2D coord ( not a standard obj file )  
-                    if (vidx==2){
-                        printf("2D point detected! \n"); 
-                    }
-                    
-                    //if three points its a proper vertex 
-                    if (vidx==3){
-                        vec3 vpt = newvec3( xc, yc, zc  );
-                        loader->points[loader->num_pts] = vpt;
-                        loader->num_pts++;
-     
-                        //print_vec3(vpt); //to view output 
+                            loader->points[loader->num_pts] = vpt;
+                            loader->num_pts++;
+         
+                            ////set color to white initially  ?? DEBUG 
+                            //vec3 color;
+                            //color.x=1.0;   
+                            //color.y=1.0;
+                            //color.z=1.0; 
+                            //loader->vtxrgb[loader->num_vtxrgb] = color;
 
-                        ////set color to white initially  ?? DEBUG 
-                        //vec3 color;
-                        //color.x=1.0;   
-                        //color.y=1.0;
-                        //color.z=1.0; 
-                        //loader->vtxrgb[loader->num_vtxrgb] = color;
+                        }  
 
-                    }  
-                    
-                    //-------------------- 
-                    // optional color per vertex 
-
-                    //if 4 deep - we have RGB DEBUG - space at end of line throws this off ! 
-                    if (vidx==6){
-                        //cout << "HAS COLOR! "<< " "<< cr <<" "<< cg << " " << cb << "\n"; 
-
-                        vec3 vpt = newvec3( xc, yc, zc  );
-                        loader->points[loader->num_pts] = vpt;
-                        loader->num_pts++;                    
-
-                        vec3 color;
-                        // DEBUG - CLAMP 0 - 1.0 
-                        color.x=cr;   
-                        color.y=cg;
-                        color.z=cb;   
-                        loader->vtxrgb[loader->num_vtxrgb] = color;
-                        loader->num_vtxrgb++;                                      
-                    }
-
-                    //else{
-                    //    //add a white color if none specified 
-                    //    vec3 color;
-                    //    color.x=1.0;   
-                    //    color.y=1.0;
-                    //    color.z=1.0; 
-                    //    loader->vtxrgb[loader->num_pts] = color;
-                    //} 
-                     
-                    */
-
-                }//end vertex loader 
+                    }//end vertex loader 
 
 
-                //-----------------------------//
+                    //-----------------------------//
 
-                //  look for normals
-                if ( tokenized.at(0).find("vn") != std::string::npos )
-                {
-                    /*
-                    strcpy (nrmls_str, tok_spacs+4);
-
-                    //walk the tokens on the line (a copy of it)
-                    char* tok_line = strtok(nrmls_str, " ");
-                    int nidx = 0;
-                    
-                    float xc, yc, zc = 0.0;
-
-                    while (tok_line) 
+                    //  look for normals
+                    if ( tokenized.at(0).find("vn") != std::string::npos )
                     {
-                        // printf("%s \n", tok_line );   
+                        /*
+                        strcpy (nrmls_str, tok_spacs+4);
+
+                        //walk the tokens on the line (a copy of it)
+                        char* tok_line = strtok(nrmls_str, " ");
+                        int nidx = 0;
                         
-                        if(nidx==0){
-                            xc = atof(tok_line);
+                        float xc, yc, zc = 0.0;
+
+                        while (tok_line) 
+                        {
+                            // printf("%s \n", tok_line );   
+                            
+                            if(nidx==0){
+                                xc = atof(tok_line);
+                            }
+                            if(nidx==1){
+                                yc = atof(tok_line);                        
+                            }  
+                            if(nidx==2){
+                                zc = atof(tok_line);
+                            }                                        
+                            
+                            nidx++;tok_line = strtok(NULL, " \t\n");
                         }
-                        if(nidx==1){
-                            yc = atof(tok_line);                        
-                        }  
-                        if(nidx==2){
-                            zc = atof(tok_line);
-                        }                                        
+
+                        if (nidx==3)
+                        {
+                            vec3 vn = newvec3( xc, yc, zc  );
+                            loader->vnormals[loader->num_vnrmls] = vn;
+                            loader->num_vnrmls++;
+
+                        }     
+
+                        */
+                    }//end vertex normal loader 
+
+                    //-----------------------------//
+
+                    //  look for F / faces
+                    if ( tokenized.at(0).find("f") != std::string::npos )
+                    {
+                        /*
+                        strcpy (fidx_str, tok_spacs+2);
+                        char* tok_line = strtok(fidx_str, " ");
+                        int fidx = 0;
                         
-                        nidx++;tok_line = strtok(NULL, " \t\n");
-                    }
+                        int pt1,pt2,pt3,pt4 = 0;;
 
-                    if (nidx==3)
-                    {
-                        vec3 vn = newvec3( xc, yc, zc  );
-                        loader->vnormals[loader->num_vnrmls] = vn;
-                        loader->num_vnrmls++;
+                        // walk the tokens on the line 
+                        // ASSUME TRIANGLES ONLY! (3 coords per vertex)
+                        // STUPID BUG - IF THERE IS EMPTY SPACE AT END OF FIDS IT COUNTS ONE MORE fidx
+                        while (tok_line) 
+                        {
+                            //printf("%d %s\n", fidx, tok_line); // <- face line                  
 
-                    }     
+                            //only supports 2,3,4 sided polygons  
+                            if(fidx==0){
+                                pt1 = atoi( tok_line);
+                                if (pofst>0){ pt1 = pt1+pofst;};
+                            }
+                            if(fidx==1){
+                                pt2 = atoi( tok_line);
+                                if (pofst>0){ pt2 = pt2+pofst;};                                               
+                            }  
+                            if(fidx==2){
+                                pt3 = atoi( tok_line);
+                                if (pofst>0){ pt3 = pt3+pofst;};                         
+                            }   
+                            if(fidx==3){
+                                pt4 = atoi( tok_line);
+                                if (pofst>0){ pt4 = pt4+pofst;};                                               
+                            }  
+                            ////////////////////
 
-                    */
-                }//end vertex normal loader 
+                            //n = atoi (buffer);
+                            tok_line = strtok(NULL, " \t\n");fidx++;
 
-                //-----------------------------//
-
-                //  look for F / faces
-                if ( tokenized.at(0).find("f") != std::string::npos )
-                {
-                    /*
-                    strcpy (fidx_str, tok_spacs+2);
-                    char* tok_line = strtok(fidx_str, " ");
-                    int fidx = 0;
-                    
-                    int pt1,pt2,pt3,pt4 = 0;;
-
-                    // walk the tokens on the line 
-                    // ASSUME TRIANGLES ONLY! (3 coords per vertex)
-                    // STUPID BUG - IF THERE IS EMPTY SPACE AT END OF FIDS IT COUNTS ONE MORE fidx
-                    while (tok_line) 
-                    {
-                        //printf("%d %s\n", fidx, tok_line); // <- face line                  
-
-                        //only supports 2,3,4 sided polygons  
-                        if(fidx==0){
-                            pt1 = atoi( tok_line);
-                            if (pofst>0){ pt1 = pt1+pofst;};
                         }
-                        if(fidx==1){
-                            pt2 = atoi( tok_line);
-                            if (pofst>0){ pt2 = pt2+pofst;};                                               
-                        }  
-                        if(fidx==2){
-                            pt3 = atoi( tok_line);
-                            if (pofst>0){ pt3 = pt3+pofst;};                         
-                        }   
-                        if(fidx==3){
-                            pt4 = atoi( tok_line);
-                            if (pofst>0){ pt4 = pt4+pofst;};                                               
-                        }  
-                        ////////////////////
+                        // STUPID BUG - IF THERE IS EMPTY SPACE AT END OF FIDS IT COUNTS ONE MORE fidx
 
-                        //n = atoi (buffer);
-                        tok_line = strtok(NULL, " \t\n");fidx++;
+                        //-------                  
+                        //if two face indices - its a line  
+                        if (fidx==2)
+                        {
+                            loader->lines[loader->num_lines].pt1 = pt1;
+                            loader->lines[loader->num_lines].pt2 = pt2;                          
+                            loader->num_lines++;                    
+                        }//end line loader
 
-                    }
-                    // STUPID BUG - IF THERE IS EMPTY SPACE AT END OF FIDS IT COUNTS ONE MORE fidx
+                        //-------
+                        if (fidx==3)
+                        {
 
-                    //-------                  
-                    //if two face indices - its a line  
-                    if (fidx==2)
-                    {
-                        loader->lines[loader->num_lines].pt1 = pt1;
-                        loader->lines[loader->num_lines].pt2 = pt2;                          
-                        loader->num_lines++;                    
-                    }//end line loader
+                            // if you want the actual point data from this index
+                            // print_vec3(loader->points[pt1]);
 
-                    //-------
-                    if (fidx==3)
-                    {
+                            //or just store the indices
+                            loader->tris[loader->num_tris].pt1 = pt1;
+                            loader->tris[loader->num_tris].pt2 = pt2;                          
+                            loader->tris[loader->num_tris].pt3 = pt3;
 
-                        // if you want the actual point data from this index
-                        // print_vec3(loader->points[pt1]);
+                            loader->num_tris++;
 
-                        //or just store the indices
-                        loader->tris[loader->num_tris].pt1 = pt1;
-                        loader->tris[loader->num_tris].pt2 = pt2;                          
-                        loader->tris[loader->num_tris].pt3 = pt3;
+                        }//end triangle loader
 
-                        loader->num_tris++;
+                        //------- 
 
-                    }//end triangle loader
+                        if (fidx==4)
+                        {
+                            loader->quads[loader->num_quads].pt1 = pt1;
+                            loader->quads[loader->num_quads].pt2 = pt2;                          
+                            loader->quads[loader->num_quads].pt3 = pt3;
+                            loader->quads[loader->num_quads].pt4 = pt4;
+                            loader->num_quads++;
+                        }//end quad loader 
+                    */
+                    }//end face loader
 
-                    //------- 
-
-                    if (fidx==4)
-                    {
-                        loader->quads[loader->num_quads].pt1 = pt1;
-                        loader->quads[loader->num_quads].pt2 = pt2;                          
-                        loader->quads[loader->num_quads].pt3 = pt3;
-                        loader->quads[loader->num_quads].pt4 = pt4;
-                        loader->num_quads++;
-                    }//end quad loader 
-                */
-                }//end face loader
-
-                //-----------------------------//
-                //-----------------------------//
+                    //-----------------------------//
+                    //-----------------------------//
+                }//line is not commented out
                 line_ct++;
+
             }//line not blank
         }//line by line
     }//obj exists   

@@ -1194,16 +1194,11 @@ void start_gui(int *argc, char** argv){
     //shader_test();
     set_colors();
 
-    //load CNC cfg and any 3d models needed for setup
+    //load CNC cfg 
     cncglobals cg;
     cg.load_cfg_file(argv[1]);
-    
-    //void cncglobals::load_objects(void)
-    cg.load_objects();
-
-    //debug - load a single model?
-    //void load_objfile( char *filepath, obj_model* loader)
-    //cg.load_objfile();
+    //load any optional 3d models needed for setup
+    //cg.load_objects();
 
     //cg.show();
 

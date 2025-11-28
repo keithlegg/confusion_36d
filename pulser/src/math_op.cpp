@@ -22,6 +22,13 @@
 */
 /*************************************************************/
 
+
+#include <string.h>
+#include <iostream>
+
+// #include <vector>
+// using std::vector;
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -484,12 +491,12 @@ vec3 mult( m44 m, vec3 v ){
 
 /************************************************/
  
-void print_vec2(vec2 input){
-    printf("%f %f \n", input.x, input.y );
+void print_vec2(vec2 *input){
+    std::cout << input->x << " "<< input->y << "\n";
 }
 
-void print_vec3(vec3 input){
-    printf("%f %f %f\n", input.x, input.y, input.z );
+void print_vec3(vec3 *input){
+    std::cout << input->x << " "<< input->y << " " << input->z << "\n";
 }
  
 

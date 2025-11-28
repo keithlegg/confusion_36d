@@ -92,8 +92,9 @@ vec3 normalize( vec3 );
 vec3 dtr_vec3( vec3 );
 vec3 rtd_vec3( vec3 );       
 
-void print_vec2( vec2 );
-void print_vec3( vec3 );
+void print_vec2( vec2* );
+void print_vec3( vec3* );
+
 void print_matrix( m33 );
 void print_matrix( m44 );
 
