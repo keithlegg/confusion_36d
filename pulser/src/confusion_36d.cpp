@@ -1238,7 +1238,8 @@ void start_gui(int *argc, char** argv){
 
     glutReshapeFunc(&reshape_window);  // register window resize callback 
 
-    glutKeyboardFunc(&keyPressed);     // register key pressed callback 
+    //old keyboard callback - replaced with fancier parser
+    //glutKeyboardFunc(&keyPressed);     // register key pressed callback 
 
     InitGL(scr_size_x, scr_size_y); // Initialize window. 
   
@@ -1666,14 +1667,8 @@ void setlight0(void){
 
 
 //define keyboard events 
-static void keyPressed(unsigned char key, int x, int y) 
+void key_cb(unsigned int key) 
 {
-
-    //printf("scancode key %u \n", key );
-
-    usleep(100);
-
-    //if (key == 115) //s key 
 
     if (key == 83) //shift s key - open socket  
     { 

@@ -1,23 +1,37 @@
 
-#include "parse_cmds.h"
-#include "gl_setup.h"
-
-
 #include <sstream>
 #include <vector>
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <unistd.h>     
+#include <unistd.h>  
+
+#include "parse_cmds.h"
+#include "gl_setup.h"
+
+#include "confusion_36d.h"
+
+
+   
 
 
 
 /***************************************/
 
 
+int cursor = 0;
 
 void parse_cmds(std::string *buffer, unsigned char *pt_key )
 {
+    int i = static_cast<int>(*pt_key);
+    std::cout << " int val " << i << std::endl;
+
+    if(i!=8)
+    {
+        cursor = buffer->size();
+    }
+
+    std::cout << " cursor "<< cursor <<"\n"; 
 
     std::string parsed;
     std::string word;
@@ -36,29 +50,41 @@ void parse_cmds(std::string *buffer, unsigned char *pt_key )
     // ss >> word; // word will be "apple"
     // ss >> word; // word will be "banana"
 
-    int i = static_cast<int>(*pt_key);
-    std::cout << " int val " << i << std::endl;
 
-    if(*pt_key==*"a")
-    {
-        std::cout << "a PRESSED\n";        
-    }
-    if(i==97)
+
+
+    if(*pt_key==*"a"||i==97)
     {
         std::cout << "a PRESSED\n";        
     }
 
 
+    //backspace key
+    if(i==8)
+    {
+        if (buffer->size()>0)
+        {
+            cursor--;
+        }
+        buffer->erase(cursor, buffer->size());
+
+    }
+
+
+    //enter key
     if(i==13)
     {
+        //todo - keep a log of commands as txt file 
+        std::cout << "command to parse \n" << *buffer << "\n";
+
         buffer->clear();
-        std::cout << "ENTER PRESSED\n";        
+        //std::cout << "ENTER PRESSED\n";        
     }    
 
+    //esc key
     if(i==27)
     {
-        buffer->clear();
-        std::cout << "ESCAPE PRESSED\n";        
+        key_cb(i);      
     }  
 
     //---------------

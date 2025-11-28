@@ -28,7 +28,9 @@ static void render_loop();
 //static void animateTextures3(Image *loaded_texture);
 
 static void ReSizeGLScene(int, int);
-static void keyPressed(unsigned char key, int x, int y); 
+
+void key_cb(unsigned int key);
+
 
 void draw_poly_mousevent(int button, int state, int x, int y);
 void olmec_mouse_button(int button, int state, int x, int y);
