@@ -135,12 +135,12 @@ class obj_model {
         struct quad quads[num_faces];       // 4 ints   - quad     idx 
 
         //vec3 get_obj_centroid( void );
+        vec3 get_extents(void);
 
         void reset(void);
         void load( char *);
         void save( char *);
         void show(void);
-        
         void calc_normals(void);
         void add_triangle(vec3 pt1, vec3 pt2, vec3 pt3);
         void triangulate(void);
@@ -157,6 +157,7 @@ class obj_model {
 
 //DEBUG remove this and merge into the main object?
 //cant recall why the hell I did it like this 
+/*
 class obj_info {
     public:
         obj_info(){
@@ -187,12 +188,7 @@ class obj_info {
     float bb_max_z;    
 
 };
-
-
-vec3 get_extents( obj_info* obinfo );
-void show(obj_info* obinfo);
-
-
+*/
 
 
 #endif

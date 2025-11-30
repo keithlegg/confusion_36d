@@ -65,16 +65,16 @@ struct directional_light
 
 
 
-void glutm44_to_m44( m44* pt_m44, GLfloat m44_glfloat[16] );
+void glutm44_to_m44( m44* , GLfloat m44_glfloat[16] );
 
-void graticulate( bool *draw_grid, bool *draw_cntrgrid, RGBType *pt_gridcolor, RGBType *pt_gridcolor2 );
+void graticulate( bool *, bool *, RGBType *, RGBType * );
 
-void show_bbox(bool * pt_draw_bbox, struct obj_info* pt_obinfo, RGBType *pt_gridcolor);
+//void show_bbox(bool * pt_draw_bbox, struct obj_info* pt_obinfo, RGBType *);
+void show_bbox(bool *, RGBType *);
 
-
-void InitGL(int Width, int Height);
-void dump_points_GLfloat( GLfloat* verts, obj_model* pt_object, int numpts);
-void dump_points_GLfloat( GLfloat* verts, vector<vec3>* pt_vecarray, int numpts);
+void InitGL(int , int );
+void dump_points_GLfloat( GLfloat* , obj_model* , int );
+void dump_points_GLfloat( GLfloat* , vector<vec3>* , int );
 
 void clear_scenegeom( void);
 

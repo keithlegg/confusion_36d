@@ -101,6 +101,7 @@ void obj_model::show_geom(void)
     //std::cout << "\n# point indices  ---------------- %d \n", (*this).num_pts);
     for (i=0;i<(*this).num_pts;i++)
     {
+        std::cout << " pt idx "<< i  << " is :"; 
         print_vec3( &(*this).points[i]) ;
     }
 
@@ -394,11 +395,11 @@ void get_obj_info( obj_model* loader,  obj_info* obinfo)
 
 /*******************************************************************/
 /*
-    Print out info from an object info struct
+    DEBUG - NOT DONE -  Print out info from an object info struct
 */
 
-
-vec3 get_extents(obj_info* obinfo){
+vec3 obj_model::get_extents(void)
+{
 
     float bb_min_x;
     float bb_max_x;

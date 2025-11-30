@@ -161,9 +161,6 @@ char active_filepath[300];
 obj_model* pt_model_buffer  = new(obj_model);
 obj_model* pt_loader        = new(obj_model);
 
-obj_info* pt_obinfo         = new(obj_info);
-obj_info* pt_loadernfo      = new(obj_info);
-
 
 float xrot, yrot, zrot; 
 
@@ -609,7 +606,7 @@ static void render_loop()
 
     graticulate(&draw_grid, &draw_cntrgrid, pt_gridcolor, pt_gridcolor2);
 
-    show_bbox(&draw_bbox, pt_obinfo, pt_gridcolor);
+    // show_bbox(&draw_bbox, pt_obinfo, pt_gridcolor);
 
 
     /******************************************/

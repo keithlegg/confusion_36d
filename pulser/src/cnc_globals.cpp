@@ -70,7 +70,6 @@ const int MAX_CHARS_PER_LINE = 512;
 const int MAX_TOKENS_PER_LINE = 20;
 
 extern obj_model pt_model_buffer;
-extern obj_info pt_obinfo;
 
 
 /*
@@ -279,8 +278,7 @@ int cncglobals::cvt_int( const std::string& s)
 void cncglobals::show_obj(void)
 {
     
-    //pt_model_buffer.show();
-
+    pt_model_buffer.show();
     pt_model_buffer.show_geom();
 
 }
@@ -300,12 +298,7 @@ void cncglobals::load_objects(void)
         {
             //std::cout << "#### load_objects loading  " << (*this).obj_filepaths[x] <<"\n";
             strcpy(char_array, (*this).obj_filepaths[x].c_str()); 
-            
-            //DEBUG - THIS BLOWS UP 
             pt_model_buffer.load(char_array);
-            
-            //DEBUG - THIS IS SKETCHY   
-            //get_obj_info( &pt_model_buffer, &pt_obinfo);
         };
     };
 }
