@@ -34,7 +34,6 @@ using std::vector;
 
 #include <vector>
 #include <iostream>
-#include <string.h>
 #include <fstream>
 
 #include <algorithm> // for std::find

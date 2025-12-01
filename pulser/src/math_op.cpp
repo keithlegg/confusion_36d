@@ -21,17 +21,7 @@
 
 */
 /*************************************************************/
-
-
-#include <string.h>
 #include <iostream>
-
-// #include <vector>
-// using std::vector;
-
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <cmath>
 
 #include "math_op.h"

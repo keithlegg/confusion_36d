@@ -14,9 +14,10 @@
 
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
+
+#include <string>
+
 
 #include <iostream>
 
@@ -25,12 +26,6 @@
 using std::vector;
 
 #include <sstream>
-
-//#include <iomanip>
-
-//#include <string>
-//#include <cstring>
-
 #include "obj_model.h"
 
 
@@ -515,11 +510,9 @@ std::vector<std::string> tokenizer( const std::string& p_pcstStr, char delim )  
 void obj_model::load(char *filepath)
 {
 
+    std::cout << "##### DEBUG load_objfile resetting file internals \n";
     //DEBUG - NOT FOR ALL CASES initialize the buffers 
-    //(*this).clearall();
     (*this).reset();
-
-
 
 
     std::cout << "##### load_objfile loading file "<< filepath << "\n";

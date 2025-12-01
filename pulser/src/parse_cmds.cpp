@@ -9,6 +9,7 @@
 #include "parse_cmds.h"
 #include "gl_setup.h"
 
+#include "obj_model.h"
 #include "confusion_36d.h"
 
 
@@ -117,7 +118,14 @@ void parse_cmds(std::string *buffer, unsigned char *pt_key )
     int i = static_cast<int>(*pt_key);
     //std::cout << " int val " << i << std::endl;
 
+    //std::vector<std::string>  tokenized = tokenizer(buffer, *" ");
+    //if(tokenized.size()>0)
+    
+
+    
+
     //-----
+    //all except backspace key
     if(i!=8)
     {
         cursor = buffer->size();

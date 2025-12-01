@@ -1,6 +1,11 @@
 #ifndef OBJMODEL_H    
 #define OBJMODEL_H
 
+#include <string>
+#include <vector>
+
+#include <stdio.h>
+
 #include "math_op.h"
 
 
@@ -152,6 +157,10 @@ class obj_model {
 
 };
 
+
+
+
+std::vector<std::string> tokenizer( const std::string&, char);
 
 
 
