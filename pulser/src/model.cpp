@@ -10,7 +10,7 @@ using namespace std;
 #include "math.h"
 #include "Vectors.h"
 #include "model.h"
-#include "point_ops.h"
+#include "point_op.h"
 
 using namespace std;
 

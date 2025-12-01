@@ -23,7 +23,7 @@
 using std::vector;
 
 #include "math_op.h"
-#include "point_op.h"
+//#include "point_op.h"
 
 #include "obj_model.h"
 #include "cnc_plot.h"

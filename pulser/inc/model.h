@@ -9,7 +9,7 @@
 #include "Vectors.h"
 #include "Matrices.h"
 
-#include "point_ops.h"
+#include "point_op.h"
 
 #define MAX_NUM_VERTICES 10000
 #define MAX_NUM_FACES 10000

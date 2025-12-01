@@ -22,7 +22,7 @@
 
 
 #include "math_op.h"
-#include "point_op.h"
+//#include "point_op.h"
 
 
 #include "cnc_globals.h"
