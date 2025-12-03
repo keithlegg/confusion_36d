@@ -1,0 +1,27 @@
+
+
+
+-build 3D models of tools 
+
+
+
+#model_loader
+    - get triangles, quads working
+    - triangulate
+
+
+#general architecture  
+    - think about a newer Vector/Matrix library?
+    - sort out the inheritance structure 
+
+
+#general cleanup 
+    - make pure C++ - eliminate old C code 
+    - recursive makefiles - clean
+    - sort source into folders/modules 
+
+
+
+
+
+
