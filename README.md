@@ -1,13 +1,12 @@
-# confusion 36d 
 
+# Octant CNC 
 
-THIS IS VERY MUCH A WORK IN PROGRESS. DO NOT USE IT TO RUN A DANGEROUS MACHINE.
+(formerly confusion 36d)
 
+THIS IS VERY MUCH A WORK IN PROGRESS. Not ready to run anything yet. Soon, hopefully.
 
-TO QUOTE THE LINUXCNC PEOPLE:
-
+To Quote the Linuxcnc people:
 <br>
-
 ## DISCLAIMER
   
 <br>
@@ -34,28 +33,46 @@ for such compliance.
 
 <br>
 
-What is it? Its 7 years of my own hobby programming - in a stack of libraries.
+2018:
+
+It started out as a python program to visualize 3D vectors and learn numpy.
+Then it turned into an experiment to use OpenGL in C.
+Then it was a 3D scanline renderer in C++.
+
+2019:
+I had a dream of controlling CNC machines. 
+It was almost a GCODE parser (and may be one someday)
+
+(I took a long break from 2020-2025 for a major life reset)
+
+2025:
+It was a parallel port testing tool. 
+That turned into a way to control 3 stepper motors in 3D space.
+
+2026 and beyond: 
+
+It is all of these things (except the renderer, I ripped that out.)
+
+It is a pile of experiments that will control a CNC machine, or 3D printer, or an SMT pick and place. 
+
+It is general purpose interface from graphicsd on a screen to the physical world.
 
 
-This is my attempt to make an open source CNC controller using a bunch of graphics code I wrote for fun. 
 
+ 
 
-Contains a combination of older tools I built: 
-
+An amalgamation of some of my older projects:
 
 This tool for a simple OpenGL GUI and 3D math libraries:
 https://github.com/keithlegg/gnolmec
 
-
 This tool for 3D spatial motion control: 
 https://github.com/keithlegg/micro_cnc_controller
 
+Simple C++ 3D renderer:
+https://github.com/keithlegg/gnorender
 
-Together they may be able to be usable to control a 3D printer, CNC machine, Pick and place and more. 
 
-We will see. 
-
-More coming soon. 
 
 
 
