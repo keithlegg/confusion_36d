@@ -32,6 +32,7 @@ using std::vector;
 int uv_cnt   = 0;  // number of UVs loaded 
  
 
+extern obj_model* pt_model_buffer;
 
 /*******************************************************************/
 /*
@@ -496,8 +497,8 @@ void obj_model::insert(std::vector<int>& input)
 {
 
 
-    std::cout << "HEYHEYHEY\n"; 
-    std::cout << input[0] << " "<< input[1]<< " " << input[2] << "\n";
+    //std::cout << "HEYHEYHEY\n"; 
+    //std::cout << input[0] << " "<< input[1]<< " " << input[2] << "\n";
 
     tris[0] = input;
 
@@ -738,28 +739,23 @@ void obj_model::load(char *filepath)
                         if (fidx==3)
                         {
                             //DEBUG THIS IS BLOWING UP  
-                            // std::cout << " pt1 is " << pt1 << "\n";
-                            // std::cout << " pt2 is " << pt2 << "\n";
-                            // std::cout << " pt3 is " << pt3 << "\n";
-                            
-                            //fac_tmp.clear();
-                            //fac_tmp.push_back( pt1 );
-                            // fac_tmp.push_back( pt2 );
-                            // fac_tmp.push_back( pt3 );
+                            //std::cout << " pt1 " << pt1 << " pt2 " << pt2 << " pt3 " << pt3 << "\n";
 
-                                                       
                             vector<int> newtri;
                             newtri.push_back(pt1);
                             newtri.push_back(pt2);
                             newtri.push_back(pt3);
-                            
-                            std::cout << " newtri "<< newtri[0]<<' ' << newtri[1]<< ' '<< newtri[2]<< "\n";
-                            
-                            tris[ num_tris ] = newtri;
+                            //std::cout << " newtri "<< newtri[0]<<' ' << newtri[1]<< ' '<< newtri[2]<< "\n";
+                            //this->insert(newtri);
+                        
+                            tris[num_tris].push_back(pt1);
+                            tris[num_tris].push_back(pt2);
+                            tris[num_tris].push_back(pt3);
+                                                                                    
                             num_tris++;
 
                             //add_triangle(pt1,pt2,pt3);
-                            // // this->insert(newtri);
+   
 
                         }//end triangle loader
 

@@ -142,10 +142,10 @@ class obj_model {
         // std::vector< std::vector<int> > quads; // 4 sided 
         // std::vector< std::vector<int> > faces; // >4, N sided faces 
 
-        std::vector<int> lines[MAX_NUM_FACES] ={}; // 2 sided faces 
-        std::vector<int> tris[MAX_NUM_FACES]  ={};  // 3 sided 
-        std::vector<int> quads[MAX_NUM_FACES] ={}; // 4 sided 
-        std::vector<int> faces[MAX_NUM_FACES] ={}; // >4, N sided faces 
+        std::vector<int> lines[MAX_NUM_FACES]; // 2 sided faces 
+        std::vector<int> tris [MAX_NUM_FACES]; // 3 sided 
+        std::vector<int> quads[MAX_NUM_FACES]; // 4 sided 
+        std::vector<int> faces[MAX_NUM_FACES]; // >4, N sided faces 
 
         // ---
         Vector3 bfr_pts[MAX_NUM_VERTICES];          // general point buffer   ( tmp work area )

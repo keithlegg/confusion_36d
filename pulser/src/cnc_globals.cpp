@@ -69,8 +69,7 @@ int num_drawpoints = 0;
 const int MAX_CHARS_PER_LINE = 512;
 const int MAX_TOKENS_PER_LINE = 20;
 
-extern obj_model pt_model_buffer;
-
+obj_model* pt_model_buffer  = new(obj_model);
 
 /*
   std::cout
@@ -266,8 +265,8 @@ int cncglobals::cvt_int( const std::string& s)
 void cncglobals::show_obj(void)
 {
     
-    pt_model_buffer.show();
-    pt_model_buffer.show_geom();
+    pt_model_buffer->show();
+    pt_model_buffer->show_geom();
 
 }
 
@@ -283,7 +282,7 @@ void cncglobals::load_objects(void)
         int x = 0 ; 
             
         std::cout << "## DEBUG load_objfile resetting obj_file internals \n";
-        pt_model_buffer.reset();
+        pt_model_buffer->reset();
         
         //pt_model_buffer.load( "/home/keith/keith/wip_projects/confusion_36d/pulser/3d_obj/sphere.obj" );
 
@@ -293,7 +292,7 @@ void cncglobals::load_objects(void)
         {
             //std::cout << "#### load_objects loading  " << (*this).obj_filepaths[x] <<"\n";
             strcpy(char_array, obj_filepaths[x].c_str()); 
-            pt_model_buffer.load(char_array);
+            pt_model_buffer->load(char_array);
             //pt_model_buffer->calc_normals();
 
         };

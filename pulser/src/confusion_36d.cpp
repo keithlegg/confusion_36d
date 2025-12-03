@@ -122,7 +122,7 @@ bool draw_points     = FALSE;
 bool draw_lines      = FALSE;
 bool draw_normals    = FALSE;
 bool draw_quads      = FALSE;
-bool draw_triangles  = FALSE;
+bool draw_triangles  = TRUE;
 bool draw_grid       = FALSE;
 bool draw_cntrgrid   = FALSE;
 bool draw_bbox       = FALSE;
@@ -154,12 +154,15 @@ char *cam_matrix_filepath  = "camera_matrix.olm";
 char *proj_matrix_filepath = "projection_matrix.olm";
 
 
+extern obj_model* pt_model_buffer;
 extern GLuint texture[3];
 
 char active_filepath[300];
 
-obj_model* pt_model_buffer  = new(obj_model);
-//obj_model* pt_loader        = new(obj_model);
+
+
+
+
 
 
 float xrot, yrot, zrot; 
@@ -740,7 +743,7 @@ static void render_loop()
             glColor3f(1.,1.,1.);
         }
         
-        //std::cout << pt_model_buffer->num_tris << "\n";
+        //std::cout << " num tris " << pt_model_buffer->num_tris << "\n";
 
   
         glBegin(GL_TRIANGLES);  
@@ -751,32 +754,31 @@ static void render_loop()
                 int tri1 = pt_model_buffer->tris[p_i][0];
                 int tri2 = pt_model_buffer->tris[p_i][1];
                 int tri3 = pt_model_buffer->tris[p_i][2];
-                
-                //use the same vertex indices to lookup RGB 
+
+                //std::cout << tri1 << " " << tri2 << " " << tri3 << "\n";
+
+
+                // //use the same vertex indices to lookup RGB 
                 Vector3 rgb1 = pt_model_buffer->vtxrgb[tri1-1];
                 Vector3 rgb2 = pt_model_buffer->vtxrgb[tri2-1];
                 Vector3 rgb3 = pt_model_buffer->vtxrgb[tri3-1];
-
-                                
                 glColor3f(rgb1.x,rgb1.y,rgb1.z);   
-
                 //vec2 uv = pt_model_buffer->uvs[tri1];
                 //glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.5, 1.0);                
+                
                 Vector3 pt1 = pt_model_buffer->points[tri1-1];
                 glVertex3f(pt1.x, pt1.y, pt1.z);
-
               
                 Vector3 nrm1 = pt_model_buffer->vnormals[tri1-1];
                 glNormal3f( nrm1.x, nrm1.y, nrm1.z);
                 //printf( " %d %d %d \n",  nrm1.x, nrm1.y, nrm1.z);
 
-
                 //////
                 glColor3f(rgb2.x,rgb2.y,rgb2.z); 
 
-                //vec2 uv = pt_model_buffer->uvs[tri2];
-                //glTexCoord2f(uv.x, uv.y);
+                Vector2 uv = pt_model_buffer->uvs[tri2];
+                glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.0, 1.0); 
 
                 Vector3 pt2 = pt_model_buffer->points[tri2-1];
@@ -786,20 +788,18 @@ static void render_loop()
                 Vector3 nrm2 = pt_model_buffer->vnormals[tri2-1];
                 glNormal3f( nrm2.x, nrm2.y, nrm2.z);
 
-
                 //////
-                glColor3f(rgb3.x,rgb3.y,rgb3.z); 
+                //glColor3f(rgb3.x,rgb3.y,rgb3.z); 
+                // Vector2 uv = pt_model_buffer->uvs[tri3];
+                // glTexCoord2f(uv.x, uv.y);
+                // glTexCoord2f(1.0, 0.0);       
 
-                //vec2 uv = pt_model_buffer->uvs[tri3];
-                //glTexCoord2f(uv.x, uv.y);
-                glTexCoord2f(1.0, 0.0);       
-
-                Vector3 pt3 = pt_model_buffer->points[tri3-1];
-                glVertex3f(pt3.x, pt3.y, pt3.z);
+                //Vector3 pt3 = pt_model_buffer->points[tri3-1];
+                //glVertex3f(pt3.x, pt3.y, pt3.z);
 
                 // calculated face normals
-                Vector3 nrm3 = pt_model_buffer->vnormals[tri3-1];
-                glNormal3f( nrm3.x, nrm3.y, nrm3.z);
+                //Vector3 nrm3 = pt_model_buffer->vnormals[tri3-1];
+                //glNormal3f( nrm3.x, nrm3.y, nrm3.z);
                
 
             }
@@ -1118,7 +1118,7 @@ void start_gui(int *argc, char** argv){
     cg.load_cfg_file(argv[1]);
     //load any optional 3d models needed for setup
     cg.load_objects();
-    cg.show_obj();
+    //cg.show_obj();
     
     //cg.show();
 

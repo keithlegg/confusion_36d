@@ -134,8 +134,16 @@ void parse_args(cncglobals* cg,  int argc, char **argv)
  
 int main(int argc, char **argv) 
 {  
-
     
+    /*
+    cncglobals cg;
+    cg.load_cfg_file(argv[1]);
+    //load any optional 3d models needed for setup
+    cg.load_objects();
+    //cg.show_obj();
+    //cg.show();
+    */
+
     /*------------------*/  
       
     if( argc == 2 ) {
@@ -149,6 +157,7 @@ int main(int argc, char **argv)
         }
     }
     
+
 
     /*------------------*/
     //spinningCubeDemo(&argc, argv);
