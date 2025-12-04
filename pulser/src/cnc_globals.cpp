@@ -472,18 +472,35 @@ void cncglobals::load_cfg_file( char* filepath )
                         // RUN SCRIPT OPERATORS IN HERE 
                         //****************************************/                                    
 
-                        // previously named load_scene() 
+                        // LOAD 3D OBJECT (CLASSIC DISPLAY)
                         if (tokenized.at(0).find("op_loadobj")!= std::string::npos)
                         {   
-                            std::cout << "\n#LOAD OPERATOR ! - object found " << tokenized.at(1) << "\n";
-
+                            std::cout << "\n#LOAD OPERATOR ! - 3d obj found " << tokenized.at(1) << "\n";
                             obj_filepaths.push_back(tokenized.at(1));
-                            //std::cout <<  num_loaded_obj;
+                            //num_loaded_obj++;
+
+                            //std::cout <<  num_loaded_obj << "\n";
                             //std::cout << "#ADDED OBJ " << (*this).num_loaded_obj << " "<< obj_filepaths.at((*this).num_loaded_obj) << "\n";
                             
 
 
                         }
+
+                        // LOAD 3D OBJECT (VECTOR LINE DISPLAY)
+                        // load a 3d or 2d object to display as vector lines
+                        if (tokenized.at(0).find("op_vec3d")!= std::string::npos)
+                        {   
+                            std::cout << "\n#LOAD OPERATOR ! - vecobj found " << tokenized.at(1) << "\n";
+                            obj_vecpaths.push_back(tokenized.at(1));
+                            //num_loaded_vecobj++;
+
+                            std::cout <<  num_loaded_vecobj << "\n";
+                            std::cout << "#ADDED VEC OBJ " << (*this).num_loaded_vecobj << " "<< obj_vecpaths.at((*this).num_loaded_vecobj) << "\n";
+                            
+
+
+                        }
+
 
                         //------------------------------------------------
                         //-- CONTROLLER PORT INPUTS       ----------------

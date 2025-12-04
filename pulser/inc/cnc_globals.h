@@ -26,8 +26,11 @@ class cncglobals
         bool ENABLE_MOTOR_DRIVE     = false;
 
         //----------
+        std::vector<std::string> obj_vecpaths;
         std::vector<std::string> obj_filepaths;
-        int num_loaded_obj = 0;
+
+        int num_loaded_obj    = 0;
+        int num_loaded_vecobj = 0;
 
         //----------
         //controller hardware config 
