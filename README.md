@@ -1,9 +1,7 @@
 
 # Octant CNC 
 
-(formerly confusion 36d)
-
-THIS IS VERY MUCH A WORK IN PROGRESS. Not ready to run anything yet. Soon, hopefully.
+THIS IS VERY MUCH A WORK IN PROGRESS. Not ready to run any machines yet. Soon, hopefully.
 
 To Quote the Linuxcnc people:
 <br>

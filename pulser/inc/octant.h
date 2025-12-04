@@ -8,8 +8,9 @@
 
 //void tweak_matrix( void );
 
-void grab_camera_matrix( Matrix4 *pt_mmm );
 //void grab_projection_matrix(Matrix4 *pt_mpm );
+void grab_camera_matrix( Matrix4 *pt_mmm );
+
 
 void triangulate(void);
 void calc_normals(void);

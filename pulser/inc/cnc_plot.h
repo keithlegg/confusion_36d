@@ -1,13 +1,10 @@
 #ifndef CNC_PLOT_H    
 #define CNC_PLOT_H
 
-//#include <iostream>
-//#include <math.h>
-
 #include <vector>
 using std::vector;  
 
-//#include "math_op.h"
+
 #include "Vectors.h"
 
 

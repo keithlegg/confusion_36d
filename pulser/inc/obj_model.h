@@ -38,67 +38,6 @@ typedef struct quad{
 };
 
 
-/*
-// from : https://stackoverflow.com/questions/2750316/this-vs-this-in-c
-
-#include <iostream>
-
-class Foo
-{
-    public:
-        Foo()
-        {
-            this->value = 0;
-        }
-
-        Foo get_copy()
-        {
-            return *this;
-        }
-
-        Foo& get_copy_as_reference()
-        {
-            return *this;
-        }
-
-        Foo* get_pointer()
-        {
-            return this;
-        }
-
-        void increment()
-        {
-            this->value++;
-        }
-
-        void print_value()
-        {
-            std::cout << this->value << std::endl;
-        }
-
-    private:
-        int value;
-};
-
-int main()
-{
-    Foo foo;
-    foo.increment();
-    foo.print_value();
-
-    foo.get_copy().increment();
-    foo.print_value();
-
-    foo.get_copy_as_reference().increment();
-    foo.print_value();
-
-    foo.get_pointer()->increment();
-    foo.print_value();
-
-    return 0;
-}
-*/
-
 class obj_model {
     public:
         obj_model()
@@ -110,10 +49,15 @@ class obj_model {
             num_lines   = 0;
             num_tris    = 0;
             num_quads   = 0; 
-            num_vtxrgb  = 0;            
+            num_vtxrgb  = 0;  
+            
+            load_as_lines= false;
+
         };
 
         ~obj_model(){};
+
+        bool load_as_lines;
 
         int num_pts;
         int num_vtxrgb;
@@ -195,42 +139,6 @@ class obj_model {
 
 std::vector<std::string> tokenizer( const std::string&, char);
 
-
-
-//DEBUG remove this and merge into the main object?
-//cant recall why the hell I did it like this 
-/*
-class obj_info {
-    public:
-        obj_info(){
-
-        };
-
-        ~obj_info(){};
-
-    int num_pts;
-    int num_nrmls;
-    int num_uvs;
-
-    int num_tris;
-    int num_faces;
-    int num_quads;
-
-    float centroid_x;
-    float centroid_y;
-    float centroid_z;
-
-    float bb_min_x;
-    float bb_max_x;
-    
-    float bb_min_y;
-    float bb_max_y;
-
-    float bb_min_z;
-    float bb_max_z;    
-
-};
-*/
 
 
 #endif

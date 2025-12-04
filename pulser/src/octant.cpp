@@ -1,7 +1,8 @@
 
 /*************************************************************/
 /*
-   CONfusion_36d.c 
+   octant.c 
+
 
    Copyright (C) 2018-2026 Keith Legg - keithlegg23@gmail.com
 
@@ -13,60 +14,7 @@
         |                    |        |                    | 
         ______X (look on Z)  |        ____X (look on Y)    |
    -------------------------------------------------------------------------------------
-    
-
-    TODO:
-
-
-    IDEAS:
-
-
-    -------------- HOTKEYS -----------------
-    ESC  - exit 
-
-    -- VIEW COMMANDS       
-
-          1    - perspesctive view mode
-          2    - orthographic view mode  
-    shift 2    - orthographic top
-          3    - orthographic front
-    shift 3    - ???
-          4    - display wireframe 
-    shift 4    - toggle display as points
-          5    - display as solid, no texture 
-    shift 5    - ignore lights
-          6    - display as solid, with texture 
-    shift 6    - toggle texture
-          7    - ? lighting ?
-    - (minus)  - zoom in 
-    + (plus)   - zoom out 
-      (space)  - toggle fullscreen 
-
-
-          i    - obj info in console / draw bounding box (bbox) 
-    shift i    - object deep info to terminal 
-          n    - toggle normal display 
-          t    - dump camera matrix file to disk based on view 
-    shift t    -        
-          f    - reset view/camera  
-          g    - toggle center grid 
-    shift g    - toggle centroid axis 
-
-    -----------------------------------------
-
-    -- wacky commands 
-          r    -  load scene 0 ONLY AFTER CLEARING OR IT BLOWS UP!
-    shift r    - Reset/ clear scene 
-
-          p    - run python via gnelscript 
-          o    - load PYCORE.obj (output from gnelscript) 
-    shift p    - run python render (fixed custom py command) 
-
-
-    d          - toggle polygon drawing 
  
-
-}
 
 */
 /*************************************************************/

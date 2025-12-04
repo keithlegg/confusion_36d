@@ -1,4 +1,7 @@
-#pragma once
+#ifndef BMP_H    
+#define BMP_H
+
+
 #include <fstream>
 #include <vector>
 #include <stdexcept>
@@ -296,3 +299,6 @@ private:
         }
     }
 };
+
+
+#endif

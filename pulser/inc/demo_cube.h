@@ -12,13 +12,6 @@ static void keyPressed(unsigned char key, int x, int y);
 static void maya_mouse_motion(int x, int y);
 static void maya_mouse_button(int button, int state, int x, int y);
 
-/*
-static void animateTextures3(Image *loaded_texture);
-// static void draw_3d_cube();
-*/
-
-
-
 
 
 #endif

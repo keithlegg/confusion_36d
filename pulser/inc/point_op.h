@@ -8,9 +8,6 @@
 #include "Vectors.h"
 #include "Matrices.h"
 
-//OLD C library - need to update 
-//#include "math_op.h"
-
 
 //coordinate to a pixel in the scancache 
 struct pt2d {
