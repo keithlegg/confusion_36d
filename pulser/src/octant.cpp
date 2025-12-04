@@ -87,7 +87,7 @@
 #include "cnc_globals.h"
 #include "parse_cmds.h"
 
-#include "confusion_36d.h"
+#include "octant.h"
 
 //#include "timer.h"
 //#include "socket.h"

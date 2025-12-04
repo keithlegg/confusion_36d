@@ -43,7 +43,7 @@
 #include "gl_setup.h"
 
 #include "obj_model.h"
-#include "confusion_36d.h"
+#include "octant.h"
 
 
    
