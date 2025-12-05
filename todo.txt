@@ -29,7 +29,8 @@
 #general architecture  
     - think about a newer Vector/Matrix library?
     - sort out the inheritance structure 
-
+    - framebuffer RASTER texture for parport testing (green dots, etc)
+    
 -build 3D models of tools 
 
 
