@@ -1,6 +1,20 @@
 #ifndef OBJMODEL_H    
 #define OBJMODEL_H
 
+
+/*
+
+    broken up into multiple C files:
+
+    obj_model.cpp 
+    obj_geom.cpp 
+    obj_fio.cpp  
+
+
+*/
+
+
+
 #include <string>
 #include <vector>
 

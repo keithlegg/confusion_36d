@@ -50,7 +50,7 @@ using std::vector;
 #include <sstream>
 
 #include "obj_model.h"
-#include "obj_fio.h"
+
 
  
 
