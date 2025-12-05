@@ -15,7 +15,7 @@
 #define MAX_NUM_VERTICES 10000
 #define MAX_NUM_FACES 10000
 
-
+/*
 // index/indices for a line object 
 typedef struct line{
     int pt1;
@@ -36,6 +36,7 @@ typedef struct quad{
     int pt3;    
     int pt4;
 };
+*/
 
 
 class obj_model {
@@ -71,65 +72,56 @@ class obj_model {
         // --- 
         std::vector<double> vtx_tmp;
         std::vector<int>    fac_tmp;  
+        
+        //Vector3 centroid( void );
+        Vector3 extents(void);
 
         // --- 
-        Vector3 points[MAX_NUM_VERTICES];          // vertices of model    
-        Vector3 vtxrgb[MAX_NUM_VERTICES];          // vertices of model  
+        Vector3 points[MAX_NUM_VERTICES];      // vertices of model    
+        Vector3 vtxrgb[MAX_NUM_VERTICES];      // vextex colors of model  
 
-        Vector2 uvs[MAX_NUM_VERTICES];           // 2 floats - UV coords 
-        Vector3 vnormals[MAX_NUM_VERTICES];      // 3 floats - face normal 
-        Vector3 fnormals[MAX_NUM_FACES];    // 3 floats - face normal 
-
-
-        // std::vector< std::vector<int> > lines; // 2 sided faces 
-        // std::vector< std::vector<int> > tris;  // 3 sided 
-        // std::vector< std::vector<int> > quads; // 4 sided 
-        // std::vector< std::vector<int> > faces; // >4, N sided faces 
+        Vector2 uvs[MAX_NUM_VERTICES];         // UV coords 
+        Vector3 vnormals[MAX_NUM_VERTICES];    // veretx normals 
+        Vector3 fnormals[MAX_NUM_FACES];       // face normals
 
         std::vector<int> lines[MAX_NUM_FACES]; // 2 sided faces 
-        std::vector<int> tris [MAX_NUM_FACES]; // 3 sided 
-        std::vector<int> quads[MAX_NUM_FACES]; // 4 sided 
+        std::vector<int> tris [MAX_NUM_FACES]; // 3 sided faces
+        std::vector<int> quads[MAX_NUM_FACES]; // 4 sided faces
         std::vector<int> faces[MAX_NUM_FACES]; // >4, N sided faces 
 
         // ---
         Vector3 bfr_pts[MAX_NUM_VERTICES];          // general point buffer   ( tmp work area )
         std::vector<int> bfr_faces[MAX_NUM_FACES];  // general polygon buffer ( tmp work area ) 
 
-        // ---
-        //Matrix4 m44;
+        //----------------
+        //----------------
+        // class members to deal with this as a contained object 
 
-        // float& operator[] (size_t i)
-        // {
-        //   switch (i) {
-        //     case 0: return x;
-        //     case 1: return y;
-        //     case 2: return z;
-        //     default: throw "something";
-        //   }
-        // }
-        // float operator[] (size_t i) const
-        // { return (*const_cast<vector3f*>(this))[i];
-
-        //Vector3 get_obj_centroid( void );
-        Vector3 get_extents(void);
-
-        void insert(std::vector<int>& input);
-
+        // Matrix3 m33;
+        // Matrix4 m44;
+        // 
+        // void translate(void);
+        // void rotate(void);
+        // void scale(void);
+        //----------------
+        //----------------
 
         void reset(void);
+        
         void load( char *);
         void save( char *);
         void show(void);
+        void show_geom(void);
+
         void calc_normals(void);
-        
+        void triangulate(void);
+        void insert(std::vector<int>& input);
         void add_triangle(Vector3 pt1, Vector3 pt2, Vector3 pt3);
         void add_triangle(int vid1, int vid2, int vid3);
 
-        void triangulate(void);
-        void show_geom(void);
 
         //void get_obj_info(obj_model* loader, obj_info* obinfo);
-        //void test_loader_data( obj_model* loader);
+        void sample_data( obj_model* loader);
 
 
 };

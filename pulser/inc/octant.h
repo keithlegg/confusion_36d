@@ -12,10 +12,6 @@
 void grab_camera_matrix( Matrix4 *pt_mmm );
 
 
-void triangulate(void);
-void calc_normals(void);
-
-
 void set_view_ortho(void);
 void setOrthographicProjection();
 void resetPerspectiveProjection();

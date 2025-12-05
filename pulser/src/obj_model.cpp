@@ -188,10 +188,13 @@ void obj_model::add_triangle(int vid1, int vid2, int vid3)
 
 
 
+
+
+/*******************************************************************/
 /*
 
 
-    void model::op_triangulate(void)
+    void model::triangulate(void)
     {
         reset_buffers();
 
@@ -223,8 +226,6 @@ void obj_model::add_triangle(int vid1, int vid2, int vid3)
 
 */
 
-
-/*******************************************************************/
 
 
 // UNTESTED  NOT WORKING YET 
@@ -348,9 +349,12 @@ void obj_model::calc_normals(void)
 /**********************************************/
 /*
     DEBUG - NOT DONE -  Print out info from an object info struct
+
+    debug - add axis option for 2D, otherwise return 3D
+
 */
 
-Vector3 obj_model::get_extents(void)
+Vector3 obj_model::extents(void)
 {
 
     float bb_min_x;
@@ -767,7 +771,7 @@ void obj_model::save( char *filepath)
 
 /**********************************************/
 
-void test_loader_data( obj_model* loader){
+void sample_data( obj_model* loader){
 
     loader->uvs[0]    = Vector2(  0.0 , 0.0         );  
     loader->points[0] = Vector3( -1.0 , -1.0,  1.0  );

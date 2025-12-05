@@ -56,8 +56,8 @@ class model: public polygon_ops {
         vector<int> quads[MAX_NUM_FACES];      // 4 sided 
         vector<int> faces[MAX_NUM_FACES];      // >4, N sided faces 
         // ---
-        Vector3 bfr_pts[MAX_NUM_VERTICES];          // general point buffer   ( tmp work area )
-        vector<int> bfr_faces[MAX_NUM_FACES];  // general polygon buffer ( tmp work area ) 
+        //Vector3 bfr_pts[MAX_NUM_VERTICES];          // general point buffer   ( tmp work area )
+        //vector<int> bfr_faces[MAX_NUM_FACES];  // general polygon buffer ( tmp work area ) 
 
         // ---
         Matrix4 m44;
