@@ -1,7 +1,9 @@
 /*************************************************************/
 /*
    gl_setup.c 
-       -  common home for an openGL application 
+       - common home for an openGL application 
+       - OpenGL utilities for drawing geometry and managing a display window
+
   
     MIT License
 
@@ -39,12 +41,17 @@
 #include "gl_setup.h"
 
 
-extern GLuint texture[3];
+extern int num_drawvec3;
 
 extern float gridsquares;
 extern float gridsize;
 extern float gnomonsize;
 
+extern vector<Vector3> scene_drawvec3; 
+extern vector<Vector3> scene_drawvecclr; 
+
+
+extern GLuint texture[3];
 
 static GLfloat emis_full[]   = { 1, 1, 1, 0};
 static GLfloat emis_off[]    = { 0, 0, 0, 0};
@@ -58,7 +65,7 @@ static GLfloat emis_blue[]   = { 0, 0, 1., 0};
 
 
 
-//////////////////////////////////////////////////////////////
+/*************************************************************/
 //void m44_to_glm44( m44* pt_m44, GLfloat m44_glfloat[16] ){}
 
 void glutm44_to_m44( Matrix4* pt_m44, GLfloat m44_glfloat[16] ){
@@ -93,7 +100,7 @@ void glutm44_to_m44( Matrix4* pt_m44, GLfloat m44_glfloat[16] ){
 } 
 
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
 //draw a 3D grid on the "floor" and an indicator to show XYZ axis  
 void graticulate( bool *draw_grid, bool *draw_cntrgrid, RGBType *pt_gridcolor, RGBType *pt_gridcolor2 )
 {
@@ -206,7 +213,7 @@ void graticulate( bool *draw_grid, bool *draw_cntrgrid, RGBType *pt_gridcolor, R
 }
 
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
  
 void show_bbox(bool *pt_draw_bbox, RGBType *pt_gridcolor)
 {
@@ -270,7 +277,7 @@ void show_bbox(bool *pt_draw_bbox, RGBType *pt_gridcolor)
 }
 
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
 
 // initialize OpenGL  
 void InitGL(int Width, int Height)           
@@ -292,7 +299,7 @@ void InitGL(int Width, int Height)
 }
 
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
 
 
 //    function to convert internal geom into GLfloat array 
@@ -319,7 +326,7 @@ void dump_points_GLfloat( GLfloat* verts, obj_model* pt_object, int numpts)
 
 }
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
 
 //void dump_points_GLfloat( GLfloat* verts, vector<vec3>* pt_vecarray, int numpts);
 //overloaded dump points to accept array of points instead of object 
@@ -362,17 +369,79 @@ void dump_points_GLfloat( GLfloat* verts, vector<Vector3>* pt_vecarray, int nump
 
 
 
-//////////////////////////////////////////////////////////////
+/*******************************************************/
 void clear_scenegeom( void)
 {
-
-    //scene_drawvec3.clear();
-    //scene_drawvecclr.clear();
-    //num_drawvec3 = 0;
+    scene_drawvec3.clear();
+    scene_drawvecclr.clear();
+    num_drawvec3 = 0;
 }
 
 
-//////////////////////////////////////////////////////////////
+
+void drawTriangle (GLfloat x1, GLfloat y1, GLfloat x2, 
+    GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)
+{
+   glBegin (GL_TRIANGLES);
+       glVertex3f (x1, y1, z);
+       glVertex3f (x2, y2, z);
+       glVertex3f (x3, y3, z);
+   glEnd ();
+}
+
+
+/*******************************************************/
+
+void drawViewVolume (GLfloat x1, GLfloat x2, GLfloat y1, 
+                     GLfloat y2, GLfloat z1, GLfloat z2)
+{
+   glColor3f (1.0, 1.0, 1.0);
+
+   glBegin (GL_LINE_LOOP);
+       glVertex3f (x1, y1, -z1);
+       glVertex3f (x2, y1, -z1);
+       glVertex3f (x2, y2, -z1);
+       glVertex3f (x1, y2, -z1);
+   glEnd ();
+
+   glBegin (GL_LINE_LOOP);
+       glVertex3f (x1, y1, -z2);
+       glVertex3f (x2, y1, -z2);
+       glVertex3f (x2, y2, -z2);
+       glVertex3f (x1, y2, -z2);
+   glEnd ();
+
+   glBegin (GL_LINES);  //  4 lines    
+       glVertex3f (x1, y1, -z1);
+       glVertex3f (x1, y1, -z2);
+       glVertex3f (x1, y2, -z1);
+       glVertex3f (x1, y2, -z2);
+       glVertex3f (x2, y1, -z1);
+       glVertex3f (x2, y1, -z2);
+       glVertex3f (x2, y2, -z1);
+       glVertex3f (x2, y2, -z2);
+   glEnd ();
+}
+
+
+/*******************************************************/
+
+
+void set_screen_square(int* sx, int* sy){
+    
+    if (*sx>*sy){
+        *sy = *sx;
+        glutReshapeWindow(*sx, *sx);
+    }else{
+        *sx = *sy;
+        glutReshapeWindow(*sy, *sy);
+    }
+
+}
+
+
+
+/*******************************************************/
 
 // m33_from_euler
 // m44_from_euler
@@ -420,7 +489,7 @@ void render_m33(m33 *t33)
     glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_full); 
 }
 
-//////////////////////////////////////////////////////////////
+/////
 
 void render_m44(m44 *t44)
 {
@@ -461,78 +530,9 @@ void render_m44(m44 *t44)
 
 
 
+///
 
 
-
-//////////////////////////////////////////////////////////////
-
-void drawTriangle (GLfloat x1, GLfloat y1, GLfloat x2, 
-    GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)
-{
-   glBegin (GL_TRIANGLES);
-       glVertex3f (x1, y1, z);
-       glVertex3f (x2, y2, z);
-       glVertex3f (x3, y3, z);
-   glEnd ();
-}
-
-
-//////////////////////////////////////////////////////////////
-
-void drawViewVolume (GLfloat x1, GLfloat x2, GLfloat y1, 
-                     GLfloat y2, GLfloat z1, GLfloat z2)
-{
-   glColor3f (1.0, 1.0, 1.0);
-
-   glBegin (GL_LINE_LOOP);
-       glVertex3f (x1, y1, -z1);
-       glVertex3f (x2, y1, -z1);
-       glVertex3f (x2, y2, -z1);
-       glVertex3f (x1, y2, -z1);
-   glEnd ();
-
-   glBegin (GL_LINE_LOOP);
-       glVertex3f (x1, y1, -z2);
-       glVertex3f (x2, y1, -z2);
-       glVertex3f (x2, y2, -z2);
-       glVertex3f (x1, y2, -z2);
-   glEnd ();
-
-   glBegin (GL_LINES);  //  4 lines    
-       glVertex3f (x1, y1, -z1);
-       glVertex3f (x1, y1, -z2);
-       glVertex3f (x1, y2, -z1);
-       glVertex3f (x1, y2, -z2);
-       glVertex3f (x2, y1, -z1);
-       glVertex3f (x2, y1, -z2);
-       glVertex3f (x2, y2, -z1);
-       glVertex3f (x2, y2, -z2);
-   glEnd ();
-}
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////
-void set_screen_square(int* sx, int* sy){
-    
-    if (*sx>*sy){
-        *sy = *sx;
-        glutReshapeWindow(*sx, *sx);
-    }else{
-        *sx = *sy;
-        glutReshapeWindow(*sy, *sy);
-    }
-
-}
-
-
-//////////////////////////////////////////////////////////////
 
 void swimbag_tile(void)
 {
@@ -554,11 +554,8 @@ void swimbag_tile(void)
 }
 
 
-
-
-
-
-
 */
+
+
 
 

@@ -7,12 +7,12 @@
    Copyright (C) 2018-2026 Keith Legg - keithlegg23@gmail.com
 
    -------------------------------------------------------------------------------------
-   Maya coordinate system    |  Blender coordinate system  |    Fusion 360 Coordinate System
-                             |                             |  
-        Y                    |        Z                    |  
-        |                    |        |                    |      
-        |                    |        |                    | 
-        ______X (look on Z)  |        ____X (look on Y)    |
+   Maya coordinate system    |  Blender coordinate system  |    (MOST) CNC/ 3D printers
+                             |                             |         
+        Y                    |        Z                    |          Z   
+        |                    |        |                    |          |
+        |                    |        |                    |          | 
+        ______X (look on Z)  |        _____X (look on Y)   |          ______X (look on Y)  
    -------------------------------------------------------------------------------------
  
 

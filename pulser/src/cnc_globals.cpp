@@ -32,8 +32,9 @@
 */
          
 
-/*****************************************************************************/
 /*************************************************************/
+/*************************************************************/
+
 
 #include <fstream>
 #include <iostream>
@@ -52,30 +53,12 @@ using std::vector;
 
 #include "obj_model.h"
 #include "cnc_plot.h"
-#include "cnc_io.h"
+
+//renamed to "parport", anticipating other interfaces in the future
+//#include "cnc_io.h"
+#include "cnc_parport.h"
+
 #include "cnc_globals.h"
-
-
-/*
-
-#include <vector>
-#include <iostream>
-#include <fstream>
-
-#include <algorithm> // for std::find
-
-#include "obj_model.h"
-#include "gl_setup.h"
-
-
-// USE MAKEFILE TO SET THIS 
-#ifdef _ISLINUX
-    #include <bits/stdc++.h> 
-#else
-    #include "bits_stdc++.h" 
-#endif
-*/
-
 
 
 
@@ -96,20 +79,8 @@ const int MAX_TOKENS_PER_LINE = 20;
 
 obj_model* pt_model_buffer  = new(obj_model);
 
-/*
-  std::cout
-    << std::left
-    << std::showbase
-    << std::hex
-    << std::uppercase
-    << std::setfill('0')
-    << std::setw(std::numeric_limits<decltype(ia)>::digits / 4)
-    << ia
-    << std::endl;
-  std::cout.flags(save_flags);
-*/
 
-/**********************************/
+/*******************************************************/
 void cncglobals::show_params( void )
 {
     std::cout <<"\n\n";
@@ -181,65 +152,7 @@ void cncglobals::show_params( void )
 };
 
 
-/**********************************/
-
-//char to string and back 
-// auto my_cstr = "Hello";        // A
-// std::string s(my_cstr);        // A
-// // ... modify 's' ...
-// auto back_to_cstr = s.c_str(); // B
-
-
-
-/* 
-// warning: untested code.
-
-std::vector<std::string> split(std::string const &input) { 
-    std::istringstream buffer(input);
-    std::vector<std::string> ret;
-
-    std::copy(std::istream_iterator<std::string>(buffer), 
-              std::istream_iterator<std::string>(),
-              std::back_inserter(ret));
-    return ret;
-}
-
-
-int splitstr(char *sentence)
-{
-  std::stringstream ss(sentence);
-  std::string to;
-
-  if (sentence != NULL)
-  {
-    while(std::getline(ss,to,'\n')){
-      std::cout << to << std::endl;
-    }
-  }
-
-return 0;
-}
-
-*/
-
-/**********************************/
-/**********************************/
-//string utility functions - experimental
-
-//convert char * to string type 
-
-//method 1
-// std::string foo = *t;
-
-// method 2
-// const char *s = "Hello, World!";
-// std::string str(s);
-
-//parse 3 floats at a time 
-//campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
-
-
-/******************************/
+/*******************************************************/
 
 std::vector<std::string> cncglobals::tokenizer( const std::string& p_pcstStr, char delim )  {
     std::vector<std::string> tokens;
@@ -251,7 +164,7 @@ std::vector<std::string> cncglobals::tokenizer( const std::string& p_pcstStr, ch
     return tokens;
 } 
 
-/******************************/
+/*******************************************************/
 
 
 int cncglobals::cvt_int( const std::string& s)
@@ -285,8 +198,9 @@ int cncglobals::cvt_int( const std::string& s)
 
 }
 
-/**********************************/
-/**********************************/
+/*******************************************************/
+/*******************************************************/
+
 void cncglobals::show_obj(void)
 {
     
@@ -297,6 +211,7 @@ void cncglobals::show_obj(void)
 
 
 
+/*******************************************************/
 void cncglobals::load_objects(void)
 {
     //std::cout <<  "load_objects called \n";
@@ -325,7 +240,7 @@ void cncglobals::load_objects(void)
     };
 }
 
-
+/*******************************************************/
 void cncglobals::load_cfg_file( char* filepath )
 {
     std::cout << "cncglobals loading file "<< filepath << "\n";

@@ -1,5 +1,81 @@
 
 
+/**********************************/
+
+//char to string and back 
+// auto my_cstr = "Hello";        // A
+// std::string s(my_cstr);        // A
+// // ... modify 's' ...
+// auto back_to_cstr = s.c_str(); // B
+
+
+
+/* 
+// warning: untested code.
+
+std::vector<std::string> split(std::string const &input) { 
+    std::istringstream buffer(input);
+    std::vector<std::string> ret;
+
+    std::copy(std::istream_iterator<std::string>(buffer), 
+              std::istream_iterator<std::string>(),
+              std::back_inserter(ret));
+    return ret;
+}
+
+
+int splitstr(char *sentence)
+{
+  std::stringstream ss(sentence);
+  std::string to;
+
+  if (sentence != NULL)
+  {
+    while(std::getline(ss,to,'\n')){
+      std::cout << to << std::endl;
+    }
+  }
+
+return 0;
+}
+
+*/
+
+/**********************************/
+/**********************************/
+//string utility functions - experimental
+
+//convert char * to string type 
+
+//method 1
+// std::string foo = *t;
+
+// method 2
+// const char *s = "Hello, World!";
+// std::string str(s);
+
+//parse 3 floats at a time 
+//campos = Vector3( atof(token[1]), atof(token[2]), atof(token[3]) );
+
+
+///////////////////////////////////////////////////////
+
+  std::cout
+    << std::left
+    << std::showbase
+    << std::hex
+    << std::uppercase
+    << std::setfill('0')
+    << std::setw(std::numeric_limits<decltype(ia)>::digits / 4)
+    << ia
+    << std::endl;
+  std::cout.flags(save_flags);
+
+
+
+///////////////////////////////////////////////////////
+
+
 
 
 /*
