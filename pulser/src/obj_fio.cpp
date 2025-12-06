@@ -49,7 +49,9 @@ using std::vector;
 
 #include <sstream>
 
+#include "point_op.h"
 #include "obj_model.h"
+
 
 
  

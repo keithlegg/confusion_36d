@@ -384,7 +384,7 @@ void reset_view(void){
 void test_bezier( Vector3 start, Vector3 ctrl1, Vector3 ctrl2, Vector3 end)
 {
 
-    pointgen PG;
+    point_ops PG;
 
     vector<Vector3> * ptDrawvec = &scene_drawvec3;
     vector<Vector3> * ptDrawClr = &scene_drawvecclr;

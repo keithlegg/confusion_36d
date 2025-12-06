@@ -134,7 +134,7 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
 
             bool debug = false;
 
-            pointgen PG;
+            point_ops PG;
 
             //set the pulses per linear unit (spatial unit divions) - X,Y,Z unit prescaler 
             //for now use one number for all 3 - we will add the others in later

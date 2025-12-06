@@ -63,8 +63,17 @@ extern obj_model* pt_model_buffer;
     Clear an object to "reset" it
 */
 
+
+
+/*
+    Overridden function - inherited from polygon_ops  
+
+*/
+
 void obj_model::reset(void)
 {
+
+
     //DEBUG - FIX THIS 
     
     // memset(uvs,      0, num_pts);

@@ -63,6 +63,15 @@ double rad_to_deg ( double rad){
 }
 
 
+
+/*******************************************************************/
+/*
+   Overridden function in obj_model 
+   this is empty
+*/
+void polygon_ops::reset(void){;}
+
+
 /**********************************************/
 int polygon_ops::getnum_verts(void){
     // NOT USED YET 
@@ -78,7 +87,7 @@ void  polygon_ops::hello(void)
 
 
 /**********************************************/
-void pointgen::locate_pt_along3d(std::vector<Vector3>* output,
+void point_ops::locate_pt_along3d(std::vector<Vector3>* output,
                                  Vector3 fpos, 
                                  Vector3 spos, 
                                  int num)
@@ -127,7 +136,7 @@ void pointgen::locate_pt_along3d(std::vector<Vector3>* output,
 
 /**********************************************/
 
-void pointgen::cubic_bezier(std::vector<Vector3>* output, 
+void point_ops::cubic_bezier(std::vector<Vector3>* output, 
                             std::vector<Vector3>* colors,
                             int* numvecs,
                             int draw_steps, 
@@ -218,7 +227,7 @@ char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
 }
 */
 
-int pointgen::get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
+int point_ops::get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
     float p2_x, float p2_y, float p3_x, float p3_y, float *i_x, float *i_y)
 {
     float s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;
@@ -256,7 +265,7 @@ int pointgen::get_line_intersection(float p0_x, float p0_y, float p1_x, float p1
 
 /**********************************************/
 //not convinced this totally works due to roundoff error, but its close enough
-void pointgen::calc_circle ( pt2d *out_coords, int numdiv, int x_orig, int y_orig, float dia, int *num)
+void point_ops::calc_circle ( pt2d *out_coords, int numdiv, int x_orig, int y_orig, float dia, int *num)
 {
     int divamt = (int)(360/numdiv);
     int rotation_offset = 45;
@@ -276,7 +285,7 @@ void pointgen::calc_circle ( pt2d *out_coords, int numdiv, int x_orig, int y_ori
 
 /**********************************************/
 
-void pointgen::calc_line( pt2d *out_coords, int *pt1, int *pt2, int *num)
+void point_ops::calc_line( pt2d *out_coords, int *pt1, int *pt2, int *num)
 {
 
     int x1 = pt1[0];

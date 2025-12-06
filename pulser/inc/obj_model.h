@@ -57,29 +57,30 @@ typedef struct quad{
 
 class obj_model: public polygon_ops {
     public:
+
         obj_model()
         {
-            num_pts     = 0;
-            num_vnrmls  = 0;
-            num_fnrmls  = 0;
-            num_uvs     = 0;
-            num_lines   = 0;
-            num_tris    = 0;
-            num_quads   = 0; 
-            num_vtxrgb  = 0;  
-
-            bb_min_x = 0;
-            bb_max_x = 0;
-            bb_min_y = 0;
-            bb_max_y = 0;
-            bb_min_z = 0;
-            bb_max_z = 0;
-
+            //this->num_pts     = polygon_ops::num_pts;
+            //this->num_vnrmls  = polygon_ops::num_vnrmls;
+            //this->num_fnrmls  = polygon_ops::num_fnrmls;
+            //this->num_uvs     = polygon_ops::num_uvs;
+            //this->num_lines   = polygon_ops::num_lines;
+            //this->num_tris    = polygon_ops::num_tris;
+            //this->num_quads   = polygon_ops::num_quads; 
+            //this->num_vtxrgb  = polygon_ops::num_vtxrgb;  
+            //this->bb_min_x = polygon_ops::::bb_min_x;
+            //this->bb_max_x = polygon_ops::::bb_max_x;
+            //this->bb_min_y = polygon_ops::::bb_min_y;
+            //this->bb_max_y = polygon_ops::::bb_max_y;
+            //this->bb_min_z = polygon_ops::::bb_min_z;
+            //this->bb_max_z = polygon_ops::::bb_max_z;   
         };
 
         ~obj_model(){};
-        
-        //properties about our model 
+
+
+        //INHERITED PROPERTIES 
+        //polygon level stuff moved to pointgen class
         int num_pts;
         int num_vtxrgb;
         int num_vnrmls;    
@@ -96,6 +97,9 @@ class obj_model: public polygon_ops {
         float bb_max_y;
         float bb_min_z;
         float bb_max_z;
+
+
+        void reset(void) override;
 
         //------
         //buffers to be used as tmp storage 
@@ -136,7 +140,7 @@ class obj_model: public polygon_ops {
         //----------------
         //----------------
 
-        void reset(void);
+
         void show(void);
         void show_geom(void);
         

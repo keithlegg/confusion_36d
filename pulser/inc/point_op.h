@@ -19,13 +19,16 @@ struct pt2d {
 double deg_to_rad ( double);
 
 
-class pointgen
+class point_ops
 {
     public:
-        pointgen(){
-        };
 
-        ~pointgen(){};
+    point_ops(){
+        
+    };
+
+    ~point_ops(){};
+
 
     void locate_pt_along3d(std::vector<Vector3>*,
                            Vector3, 
@@ -49,26 +52,7 @@ class pointgen
     void calc_line(  pt2d *out_coords, int *pt1, int *pt2, int *num);
 
 };
-
-
-
  
-class point_ops {
-    public:
-
-        point_ops(){
-        };
-
-        ~point_ops(){};
-    
-    //double triangle_mean_z(Vector3 pt1, Vector3 pt2, Vector3 pt3){}
-        
-    // cvt_2d_to_3d( points ){}
-    // cvt_3d_to_2d( points ){}
-    // locate_pt_along3d( x1, y1, z1, x2, y2, z2, num)
-
-
-};
 
 
 
@@ -78,9 +62,45 @@ class polygon_ops : public point_ops
       int id_c; 
 
         polygon_ops(){
+            num_pts     = 0;
+            num_vnrmls  = 0;
+            num_fnrmls  = 0;
+            num_uvs     = 0;
+            num_lines   = 0;
+            num_tris    = 0;
+            num_quads   = 0; 
+            num_vtxrgb  = 0;  
+
+            bb_min_x = 0;
+            bb_max_x = 0;
+            bb_min_y = 0;
+            bb_max_y = 0;
+            bb_min_z = 0;
+            bb_max_z = 0;              
         };
 
         ~polygon_ops(){};
+
+
+    virtual void reset(void);
+
+    //properties about our model 
+    int num_pts;
+    int num_vtxrgb;
+    int num_vnrmls;    
+    int num_fnrmls;
+    int num_uvs;
+    int num_lines;
+    int num_tris;
+    int num_quads;    
+
+    // extents of model (you can derive centroid from these)
+    float bb_min_x;
+    float bb_max_x;
+    float bb_min_y;
+    float bb_max_y;
+    float bb_min_z;
+    float bb_max_z;
 
     
     void hello(void); //test of inheritance 
