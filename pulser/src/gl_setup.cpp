@@ -104,6 +104,33 @@ void glutm44_to_m44( Matrix4* pt_m44, GLfloat m44_glfloat[16] ){
 
 } 
 
+/*******************************************************/
+//draw a locator representing a "quill", "extruder", etc 
+//Basically the thing that moves around doing stuff on your machine
+
+void draw_locator( Vector3* pos, RGBType *rgb, float locsize)
+{
+    glMaterialfv(GL_FRONT, GL_EMISSION, emis_red);
+    glColor3f(rgb->r,rgb->g,rgb->b);    
+    
+    glBegin(GL_LINES);
+        glVertex3f(  pos->x        , pos->y        , pos->z );
+        glVertex3f(  pos->x+locsize, pos->y+locsize, pos->z );
+        
+        /*
+        glMaterialfv(GL_FRONT, GL_EMISSION, emis_green);
+        glColor3f(0,.5,0); 
+        glVertex3f( id, locsize , id );
+        glVertex3f( id, id       , id ); 
+
+        glMaterialfv(GL_FRONT, GL_EMISSION, emis_blue); 
+        glColor3f(0,0,.5);                    
+        glVertex3f( id, grd_height,   locsize );
+        glVertex3f( id, grd_height,  0 );  
+        */
+    glEnd();
+
+}
 
 /*******************************************************/
 //draw a 3D grid on the "floor" and an indicator to show XYZ axis  

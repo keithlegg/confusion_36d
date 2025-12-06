@@ -63,6 +63,8 @@ struct directional_light
 
 
 
+void draw_locator( Vector3* pos, RGBType *pt_loccolor, float locsize);
+
 void glutm44_to_m44( Matrix4* , GLfloat m44_glfloat[16] );
 
 void graticulate( bool *, bool *, RGBType *, RGBType * );

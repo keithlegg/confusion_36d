@@ -90,7 +90,7 @@ void parse_cmd_text(std::string *buffer)
     }
 
     //--------------
-    if (a1=="dv")
+    if (a1=="st")
     {
         v11 = std::stof(a2);
         v12 = std::stof(a3);
@@ -102,6 +102,16 @@ void parse_cmd_text(std::string *buffer)
 
         std::cout << v11 <<"  "<< v12 <<"  "<< v13 <<"  "
                   << v21 <<"  "<< v22 <<"  "<< v23 <<'\n';
+
+    }
+
+    //--------------
+    if (a1=="rt")
+    {
+        v11 = std::stof(a2);
+        v12 = std::stof(a3);
+        v13 = std::stof(a4);
+        std::cout << v11 <<"  "<< v12 <<"  "<< v13  <<'\n';
 
     }
 

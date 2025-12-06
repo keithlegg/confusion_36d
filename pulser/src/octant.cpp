@@ -549,6 +549,18 @@ static void render_loop()
     /******************************************/
     /******************************************/
 
+    RGBType quill_clr;
+    RGBType* pt_quill_clr = &quill_clr;
+
+    pt_quill_clr->r = 255;
+    pt_quill_clr->g = 255;
+    pt_quill_clr->b = 255;
+
+    //void draw_locator( Vector3* pos, RGBType *pt_loccolor, float locsize)
+    Vector3 pos = Vector3(1,1,1);
+    draw_locator(&pos, pt_quill_clr, 2.0 );
+
+    /******************************************/
     graticulate(&draw_grid, &draw_cntrgrid, pt_gridcolor, pt_gridcolor2);
 
     // show_bbox(&draw_bbox, pt_obinfo, pt_gridcolor);
