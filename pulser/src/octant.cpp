@@ -1,7 +1,10 @@
 
 /*************************************************************/
 /*
-   octant.c 
+   octant.cpp
+
+   Top level Container for Octant CNC OpenGL application. 
+
 
 
    Copyright (C) 2018-2026 Keith Legg - keithlegg23@gmail.com
@@ -62,16 +65,16 @@ extern vector<std::string>  obj_filepaths;
 bool DRAW_POLYS  = TRUE; // state for toggle command
 bool DRAW_GEOM   = TRUE; // state for toggle command
 
-bool draw_points_vbo = FALSE; // test of VBO 
-bool draw_points     = FALSE;   
-bool draw_lines      = FALSE;
-bool draw_normals    = FALSE;
-bool draw_quads      = FALSE;
+bool draw_points_vbo = TRUE; // test of VBO 
+bool draw_points     = TRUE;   
+bool draw_lines      = TRUE;
+bool draw_normals    = TRUE;
+bool draw_quads      = TRUE;
 bool draw_triangles  = TRUE;
 bool draw_grid       = TRUE;
 bool draw_cntrgrid   = TRUE;
-bool draw_bbox       = FALSE;
-bool show_textures   = FALSE;
+bool draw_bbox       = TRUE;
+
 
 //DEBUG - hilarious effect - if you turn all these off the view floats away quickly
 //render_text seems to anchor it 
@@ -120,25 +123,13 @@ float obj_len_x, obj_len_y, obj_len_z = 0;
 // data containers 
 
 
-//RGB can be stored as GL float3 - DEBUG 
-
-RGBType line_color;
-RGBType *pt_linecolor = &line_color;
-
-// RGBType line_color2;
-// RGBType *pt_linecolor2 = &line_color2;
-
-RGBType grid_color;
-RGBType *pt_gridcolor = &grid_color;
-
-RGBType grid_color2;
-RGBType *pt_gridcolor2 = &grid_color2;
-
-
-
 
 Vector3 quil_pos = Vector3(1,1,1);
 
+
+//I think this was from a test of the VBO 
+int num_pts_drw = 0;
+GLfloat vertices[100];
 
 
 /***************************************/
@@ -202,6 +193,24 @@ Vector3 orbt_xform_original;
 
 /***************************************/
 
+
+//RGB can be stored as GL float3 - DEBUG 
+
+RGBType line_color;
+RGBType *pt_linecolor = &line_color;
+
+// RGBType line_color2;
+// RGBType *pt_linecolor2 = &line_color2;
+
+RGBType grid_color;
+RGBType *pt_gridcolor = &grid_color;
+
+RGBType grid_color2;
+RGBType *pt_gridcolor2 = &grid_color2;
+
+
+
+
 GLfloat clr_linez[]   = { 0, 1., 0, 0};
 GLfloat emis_full[]   = { 1, 1, 1, 0};
 GLfloat emis_text[]   = { .8, .8, .9, 0};
@@ -237,10 +246,20 @@ void set_colors(void){
 }
 
 
-
 /***************************************/
-int num_pts_drw = 0;
-GLfloat vertices[100];
+
+
+void toggle_polygon_draw(){
+    if (DRAW_POLYS == TRUE){
+        DRAW_POLYS = FALSE;
+        draw_quads      = FALSE;
+        draw_triangles  = FALSE;
+    }else{
+        DRAW_POLYS = TRUE;
+        draw_quads      = TRUE;
+        draw_triangles  = TRUE;
+    }
+}
 
 
 
@@ -322,17 +341,6 @@ void tweak_matrix( void )
 
 
 
-void toggle_polygon_draw(){
-    if (DRAW_POLYS == TRUE){
-        DRAW_POLYS = FALSE;
-        draw_quads      = FALSE;
-        draw_triangles  = FALSE;
-    }else{
-        DRAW_POLYS = TRUE;
-        draw_quads      = TRUE;
-        draw_triangles  = TRUE;
-    }
-}
 
 
 
@@ -546,7 +554,7 @@ static void render_loop()
     /******************************************/
     graticulate(&draw_grid, &draw_cntrgrid, pt_gridcolor, pt_gridcolor2);
 
-    // show_bbox(&draw_bbox, pt_obinfo, pt_gridcolor);
+    show_bbox(&draw_bbox, pt_gridcolor);
 
 
     /******************************************/
@@ -1557,8 +1565,6 @@ void key_cb(unsigned int key)
         // glLoadIdentity();
         
         set_view_persp();
-
-
     }
 
     if (key == 50) //2 - orthographic side 
@@ -1772,19 +1778,6 @@ void key_cb(unsigned int key)
     }
 
 
-    if (key == 84) // shift t key 
-    { 
-       
-        if (show_textures == TRUE)
-        {
-        
-            show_textures = FALSE;
-        }else{
-
-            show_textures = TRUE;
-        }       
- 
-    }
     
     //------
     if (key == 70) //shift f

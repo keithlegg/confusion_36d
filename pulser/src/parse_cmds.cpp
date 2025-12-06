@@ -2,6 +2,9 @@
 /* 
     parse_cmds.cpp
     
+    A fun little command line tool inside an OpenGL window. 
+
+
 
 
     MIT License
@@ -71,6 +74,7 @@ void parse_cmd_text(std::string *buffer)
     vector <std::string> tokens;
     vector <std::string> subtokens;
 
+
     //--------------
     std::stringstream check1(*buffer);
     std::string intermediate;
@@ -91,7 +95,14 @@ void parse_cmd_text(std::string *buffer)
     }
 
     //--------------
+    //toggle grid
     if (a1=="tog")
+    {
+        key_cb(103); 
+    }
+
+    //toggle gnomon at origin
+    if (a1=="togg")
     {
         key_cb(71); 
     }
@@ -128,6 +139,21 @@ void parse_cmd_text(std::string *buffer)
     }
 
     //--------------
+    //display modes
+    if (a1=="dm")
+    {
+        if(a2=="persp")   {key_cb(49);} 
+        if(a2=="oside")   {key_cb(50);} 
+        if(a2=="otop")    {key_cb(64);} 
+        if(a2=="ofront")  {key_cb(51);} 
+        
+        if(a2=="pts")     {key_cb(36);} 
+        if(a2=="wire")    {key_cb(52);} 
+        if(a2=="solid")   {key_cb(53);}                 
+
+    }
+
+    //--------------
     /*
     //parse the second token (you cant use spaces - duh)
     std::stringstream check2(second);
@@ -151,6 +177,17 @@ void parse_cmd_text(std::string *buffer)
 
 
 /***************************************/
+/*
+    single key press callback freom OpenGL. 
+
+    It has a poinmter to the screen text buffer and   
+    can manipulate it before sending it back.
+
+    The "enter" acctivates the more in depth parser on the text buffer. 
+    It calls parse_cmd_text() which further tokenizes and runs more advanced commands. 
+
+*/
+
 void parse_cmds(std::string *buffer, unsigned char *pt_key )
 {
     int i = static_cast<int>(*pt_key);
