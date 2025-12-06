@@ -469,22 +469,15 @@ void obj_model::calc_normals(void)
 /**********************************************/
 /*
     DEBUG - NOT DONE -  Print out info from an object info struct
-
     debug - add axis option for 2D, otherwise return 3D
 
 */
 
-Vector3 obj_model::extents(void)
+Vector3 obj_model::calc_extents(void)
 {
+    //set up the containers to store data 
+    //iterate all point geom - storing highest and lowest for each axis 
 
-    float bb_min_x;
-    float bb_max_x;
-    
-    float bb_min_y;
-    float bb_max_y;
-
-    float bb_min_z;
-    float bb_max_z;
 }
 
 

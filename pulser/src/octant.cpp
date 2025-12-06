@@ -59,22 +59,23 @@ extern vector<std::string>  obj_filepaths;
 
 
 // view prefs 
-bool DRAW_POLYS      = TRUE; // is this needed? 
-
-bool draw_scene_geom = TRUE;
+bool DRAW_POLYS  = TRUE; // state for toggle command
+bool DRAW_GEOM   = TRUE; // state for toggle command
 
 bool draw_points_vbo = FALSE; // test of VBO 
-bool draw_points     = TRUE;   
-bool draw_lines      = TRUE;
-bool draw_normals    = TRUE;
-bool draw_quads      = TRUE;
+bool draw_points     = FALSE;   
+bool draw_lines      = FALSE;
+bool draw_normals    = FALSE;
+bool draw_quads      = FALSE;
 bool draw_triangles  = TRUE;
 bool draw_grid       = TRUE;
 bool draw_cntrgrid   = TRUE;
-bool draw_bbox       = TRUE;
-
-bool render_text     = TRUE;
+bool draw_bbox       = FALSE;
 bool show_textures   = FALSE;
+
+//DEBUG - hilarious effect - if you turn all these off the view floats away quickly
+//render_text seems to anchor it 
+bool render_text     = TRUE;
 
 
 int TCP_PORT = 0;
@@ -245,6 +246,7 @@ GLfloat vertices[100];
 
 /***************************************/
 //DEBUG - GL_MODELVIEW_MATRIX and GL_PROJECTION_MATRIX seem to be the same 
+//this was an artifact of the render code - I did a dump of the matrix for the renderer to use
 void grab_camera_matrix( Matrix4 *pt_mmm)
 {
     GLfloat model[16]; 
@@ -313,24 +315,6 @@ void tweak_matrix( void )
 }
 */
 
-
-void negate_y_axis(Matrix4 *input){
-   // this is a hack!  (invert Y is option on renderer! debug )
-   // for some reason python 3D renderer wants y inverted  
-   
-   /*
-    float a,b,c;
-
-    a = -input->m1;
-    b = -input->m5;
-    c = -input->m9;
-   
-    input->m1 = a;
-    input->m5 = b;
-    input->m9 = c;
-    */
-    
-}
 
 
 /***************************************/
@@ -809,7 +793,7 @@ static void render_loop()
 
     // ----------------------
     // draw scene defined geom 
-    if (draw_scene_geom)
+    if (DRAW_GEOM)
     {
 
         glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -1802,89 +1786,15 @@ void key_cb(unsigned int key)
         }       
  
     }
-
-
-    if (key == 116) // t key 
-    { 
-        /*
-        m44 cam_matrix = identity44();
-        grab_camera_matrix(&cam_matrix);
-        //transpose(&foo);
-        //negate_y_axis(&foo); //PIL want this (origin is TL, Framebuffer and CPP origin is BL)
-
-        // // probably a terrible idea 
-        // cam_matrix.m12=cam_posx;
-        // cam_matrix.m13=cam_posy;
-        // cam_matrix.m14=cam_posz;
-        
-        print_matrix(cam_matrix);
-
-        save_matrix44( cam_matrix_filepath, &cam_matrix );
-
-
-        //hmm, this returns the same matrix .. investigate 
-        m44 proj_matrix = identity44();
-        grab_projection_matrix(&proj_matrix );
-        save_matrix44( proj_matrix_filepath, &cam_matrix );
-        */
-        pt_model_buffer->triangulate();
-
-    }
-  
-
-    if (key == 80) //shift p
-    { 
-
-        //go ahead and dump camera matrix automatically 
-        Matrix4 foo = Matrix4();
-        grab_camera_matrix(&foo);
-        negate_y_axis(&foo);
-        //save_matrix44(cam_matrix_filepath, &foo );
-        //python_render();
-    }
-
-    if (key == 112) //p
-    { 
-
-        //go ahead and dump camera matrix automatically 
-        Matrix4 foo = Matrix4();
-        grab_camera_matrix(&foo);
-        negate_y_axis(&foo);
-        //save_matrix44(cam_matrix_filepath, &foo );
-
-        //launch python3 
-        //init_pycore(); 
-    }
-
-
-    if (key == 8 || key == 127) //backspace /delete on OSX )
-    { 
-        Matrix4 cam_matrix = Matrix4();
-        grab_camera_matrix(&cam_matrix);
-        //negate_y_axis(&foo); - PIL, CPP and framebuffer use different origins!
-
-        //// probably a terrible idea 
-        // cam_matrix.m12=cam_posx;
-        // cam_matrix.m13=cam_posy;
-        // cam_matrix.m14=cam_posz;
-
-        //save_matrix44(cam_matrix_filepath, &cam_matrix );
-
-        //hmm, this returns the same matrix .. investigate 
-        //grab_projection_matrix(&foo);
-        //save_matrix44("projection_matrix.olm", &foo );
-
-        //software_render();
-    }
     
     //------
     if (key == 70) //shift f
     { 
-        if (draw_scene_geom == TRUE){
-            draw_scene_geom = FALSE;
+        if (DRAW_GEOM == TRUE){
+            DRAW_GEOM = FALSE;
 
         }else{
-            draw_scene_geom = TRUE;
+            DRAW_GEOM = TRUE;
         }
     }
 

@@ -255,6 +255,9 @@ void show_bbox(bool *pt_draw_bbox, RGBType *pt_gridcolor)
         glBindTexture(GL_TEXTURE_2D, texture[0]);    
 
         float id = 0;
+        
+        //gDEBUG rab object extents from class method 
+        //pt_obinfo
 
         glBegin(GL_LINES);
             
@@ -410,7 +413,7 @@ void clear_scenegeom( void)
 
 
 void drawTriangle (GLfloat x1, GLfloat y1, GLfloat x2, 
-    GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)
+                   GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)
 {
    glBegin (GL_TRIANGLES);
        glVertex3f (x1, y1, z);

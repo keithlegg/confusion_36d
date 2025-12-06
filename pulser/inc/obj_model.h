@@ -67,15 +67,19 @@ class obj_model: public polygon_ops {
             num_tris    = 0;
             num_quads   = 0; 
             num_vtxrgb  = 0;  
-            
-            load_as_lines = false;
+
+            bb_min_x = 0;
+            bb_max_x = 0;
+            bb_min_y = 0;
+            bb_max_y = 0;
+            bb_min_z = 0;
+            bb_max_z = 0;
 
         };
 
         ~obj_model(){};
-
-        bool load_as_lines;
-
+        
+        //properties about our model 
         int num_pts;
         int num_vtxrgb;
         int num_vnrmls;    
@@ -85,12 +89,21 @@ class obj_model: public polygon_ops {
         int num_tris;
         int num_quads;    
 
+        // extents of model (you can derive centroid from these)
+        float bb_min_x;
+        float bb_max_x;
+        float bb_min_y;
+        float bb_max_y;
+        float bb_min_z;
+        float bb_max_z;
+
         //------
+        //buffers to be used as tmp storage 
         std::vector<double> vtx_tmp;
         std::vector<int>    fac_tmp;  
         
-        //Vector3 centroid( void );
-        Vector3 extents(void);
+        //Vector3 calc_centroid( void );
+        Vector3 calc_extents(void);
         Vector3 get_triface_normal(int);
 
         // --- 
