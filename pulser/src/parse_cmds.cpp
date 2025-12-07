@@ -108,25 +108,8 @@ void parse_cmd_text(std::string *buffer)
     }
 
     //--------------
-    //offset transform (from another xyz to an xyy)    
-    if (a1=="ot")
-    {
-        v11 = std::stof(a2);
-        v12 = std::stof(a3);
-        v13 = std::stof(a4);
-
-        v21 = std::stof(a5);
-        v22 = std::stof(a6);
-        v23 = std::stof(a7);   
-
-        //std::cout << v11 <<"  "<< v12 <<"  "<< v13 <<"  "
-        //          << v21 <<"  "<< v22 <<"  "<< v23 <<'\n';
-
-    }
-
-    //--------------
-    //relative transform (from current xyz)
-    if (a1=="rt")
+    //absolute transform (in space)
+    if (a1=="at")
     {
         v11 = std::stof(a2);
         v12 = std::stof(a3);
@@ -136,12 +119,63 @@ void parse_cmd_text(std::string *buffer)
         qpos.y = v12;
         qpos.z = v13;   
 
-        Vector3 rgb = Vector3(1.0,0,0);
+        Vector3 rgb = Vector3(0,1.0,1.0);
         add_vec_scndrw(&qpos, &rgb);
+    }
 
-        // add_vec_scndrw( Vector3* insert, Vector3* rgb)
+    //--------------
+    //relative transform (from current xyz)
+    if (a1=="clear")
+    {
+        clear_scn_geom();
+    }
 
+    //--------------
+    //relative transform 2D (from current xyz)
+    if (a1=="rt2")
+    {
+        Vector3 rgb = Vector3(0,1.0,1.0);
+       
+        v11 = std::stof(a2);
+        v12 = std::stof(a3);
+        
+        //sample the qpos 
+        Vector3 old = qpos;
+       
+        old = qpos.operator-(old);
 
+        //set new qpos
+        qpos.x = v11;
+        qpos.y = v12;
+        qpos.z = 0;  
+         
+        //store the difference between them
+        add_vec_scndrw(&old, &rgb);
+    }
+
+    //--------------
+    //relative transform (from current xyz)
+    if (a1=="rt")
+    {
+        Vector3 rgb = Vector3(0,1.0,1.0);
+       
+        v11 = std::stof(a2);
+        v12 = std::stof(a3);
+        v13 = std::stof(a4);
+        
+
+        //sample the qpos 
+        Vector3 old = Vector3(qpos.x, qpos.y,qpos.z);
+
+        //set new qpos
+        qpos.x = v11;
+        qpos.y = v12;
+        qpos.z = v13;  
+
+        Vector3 newvec = qpos.operator-(old);
+
+        //store the difference between them
+        add_vec_scndrw(&newvec, &rgb);
     }
 
     //--------------

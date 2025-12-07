@@ -61,6 +61,7 @@ extern bool scr_full_toglr;
 // toggle - view prefs - state vars dont change  
 bool DRAW_POLYS       = TRUE; // state for toggle command
 bool DRAW_GEOM        = TRUE; // state for toggle command
+
 bool draw_cntrgrid    = TRUE;
 bool draw_grid        = TRUE;
 bool toglr_flatshaded = FALSE;
@@ -120,7 +121,7 @@ GLfloat vertices[100];
 
 
 
-Vector3 qpos = Vector3(.1,.2,.3);
+Vector3 qpos = Vector3(0, 0, 0);
 
 
 
@@ -796,18 +797,19 @@ static void render_loop()
         glMaterialfv(GL_FRONT, GL_EMISSION, emis_full);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_off);
 
-        for (p_i=0;p_i<num_drawvec3;p_i++)
+        for (p_i=1;p_i<num_drawvec3;p_i++)
         {   
              
-            Vector3 dv  = scene_drawvec3[p_i];
+            Vector3 sv  = scene_drawvec3[p_i-1];
+            Vector3 ev  = scene_drawvec3[p_i];
             Vector3 rgb = scene_drawvecclr[p_i];            
 
             glBegin(GL_LINES);
                 glColor3f(rgb.x,rgb.y,rgb.z);
-                glVertex3f(0,0,0);
+              glVertex3f(sv.x, sv.y, sv.z);
 
                 glColor3f(rgb.x,rgb.y,rgb.z);
-                glVertex3f(dv.x, dv.y, dv.z);
+                glVertex3f(ev.x, ev.y, ev.z);
         
             glEnd();
              
