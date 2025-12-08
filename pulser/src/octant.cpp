@@ -38,6 +38,7 @@
 #include "cnc_globals.h"
 #include "parse_cmds.h"
 
+#include "gl_gui.h"
 #include "octant.h"
 
 //#include "timer.h"
@@ -50,38 +51,61 @@
 #define LEN(arr) ( (int) (sizeof (arr) / sizeof (arr)[0]) ) 
 
 
+/***********/
+// mouse related
+extern bool view_ismoving  ;
+extern bool mouseLeftDown  ;
+extern bool mouseRightDown ;
+extern float orbit_dist; 
+extern float orbit_x;         
+extern float orbit_y;  
+
+extern float cam_posx; 
+extern float cam_posy;
+extern float cam_posz;
+
+//second callback for click 
+extern int on_click;
+extern int clk_x_coord;
+extern int clk_y_coord;
+
+float moveSpeed      = 2.1f;
+
 
 /***********/
 // window related 
+extern int VIEW_MODE; 
+
 extern int window_id;
+
 extern int scr_size_x;
 extern int scr_size_y;
 extern bool scr_full_toglr;
 
 // toggle - view prefs - state vars dont change  
-bool DRAW_POLYS       = TRUE; // state for toggle command
-bool DRAW_GEOM        = TRUE; // state for toggle command
+bool DRAW_POLYS       = true; // state for toggle command
+bool DRAW_GEOM        = true; // state for toggle command
 
-bool draw_cntrgrid    = TRUE;
-bool draw_grid        = TRUE;
-bool toglr_flatshaded = FALSE;
+bool draw_cntrgrid    = true;
+bool draw_grid        = true;
+bool toglr_flatshaded = false;
 
 
 // single view prefs - use for debugging 
-bool draw_points_vbo = FALSE; // test of VBO  
-bool draw_points     = TRUE;   
-bool draw_lines      = TRUE;
-bool draw_normals    = TRUE;
-bool draw_quads      = TRUE;
-bool draw_triangles  = TRUE;
+bool draw_points_vbo = false; // test of VBO  
+bool draw_points     = true;   
+bool draw_lines      = true;
+bool draw_normals    = true;
+bool draw_quads      = true;
+bool draw_triangles  = true;
 
 
-//bool draw_bbox       = TRUE;
+//bool draw_bbox       = true;
 
 
 //DEBUG - hilarious effect - if you turn all these off the view floats away quickly
 //render_text seems to anchor it 
-bool render_text     = TRUE;
+bool render_text     = true;
 
 
 int TCP_PORT = 0;
@@ -135,35 +159,12 @@ Vector3 qpos = Vector3(0, 0, 0);
 // static int g_yClick = 0;
 // float total_orbitx;
 
-int VIEW_MODE = -1; 
+
 
 //----- 
 
-bool view_ismoving  = FALSE;
-bool mouseLeftDown  = FALSE;
-bool mouseRightDown = FALSE;
-
-float mouseX, mouseY = 0.0;
-float moveSpeed    = 2.1f;
-
-/*
-float zoomSpeed    = 1.2f;
-float rotateSpeed  = 4.0f;
-Vector3 startpos = newvec3(0.0, 130.0, 60.0);
-
-m33 capsuleObj; //represents a Unity/Maya Transform node 
-quaternion orbt_rot_original;
-Vector3 orbt_xform_original;
-*/
 
 
-float orbit_x;         // 2d click to set 3d view 
-float orbit_y;   
-float orbit_dist = 5.0; // Z zoom 
-
-float cam_posx = 0; // camera location
-float cam_posy = 0;
-float cam_posz = 0;
 
 //----- 
 
@@ -249,14 +250,14 @@ void set_colors(void){
 
 void toggle_polygon_draw()
 {
-    if (DRAW_POLYS == TRUE){
-        DRAW_POLYS = FALSE;
-        draw_quads      = FALSE;
-        draw_triangles  = FALSE;
+    if (DRAW_POLYS == true){
+        DRAW_POLYS = false;
+        draw_quads      = false;
+        draw_triangles  = false;
     }else{
-        DRAW_POLYS = TRUE;
-        draw_quads      = TRUE;
-        draw_triangles  = TRUE;
+        DRAW_POLYS = true;
+        draw_quads      = true;
+        draw_triangles  = true;
     }
 }
 
@@ -405,6 +406,9 @@ static void parser_cb(unsigned char key, int x, int y)
     glutPostRedisplay();
 };
 
+
+
+
 /***************************************/
 /***************************************/
 /***************************************/
@@ -423,7 +427,12 @@ static void render_loop()
 
     if (render_text)
     {
-        
+        if(on_click)
+        {
+            std::cout << " click! "<< clk_x_coord << " "<< clk_x_coord << "\n";
+            on_click=0;
+        }
+
         glBindTexture(GL_TEXTURE_2D, texture[0]); 
 
         glMaterialfv(GL_FRONT, GL_EMISSION, emis_text);
@@ -440,9 +449,12 @@ static void render_loop()
         void *fontsm = GLUT_BITMAP_8_BY_13;     
         void *font   = GLUT_BITMAP_TIMES_ROMAN_24; 
 
+        glutKeyboardFunc(parser_cb);
+        
+
+
         // command line text 
         glColor3f(0.6f, 1.0f, 0.0f);  //text color 
-        glutKeyboardFunc(parser_cb);
         renderBitmapString(  20, scr_size_y-20  ,(void *)font,  cmd_buffer.c_str() );
       
         //--
@@ -926,7 +938,7 @@ static void render_loop()
     // swap the other (double) buffer to display what just got drawn.
     glutSwapBuffers();
   
-    view_ismoving = FALSE;
+    view_ismoving = false;
 }
 
 
@@ -1092,13 +1104,16 @@ void start_gui(int *argc, char** argv){
 
     InitGL(scr_size_x, scr_size_y); // Initialize window. 
   
+    
+    //---
+    //glutMouseFunc(mouse_clk_cb);
 
     // experimental draw polygon 
     //glutMouseFunc (draw_poly_mousevent);
 
-    glutMouseFunc (olmec_mouse_button);
-    glutMotionFunc (olmec_mouse_motion);
-
+    glutMouseFunc (octant_mouse_button);
+    glutMotionFunc (octant_mouse_motion);
+    //---
 
     //loadImage("textures/generated2.bmp" , imageloaded_bfr);
     //loadImage("textures/generated2.bmp" , imageloaded_bfr2);
@@ -1236,205 +1251,6 @@ void olmecnav_start (void ) {
 
 /**************************************************/
 /**************************************************/
-
-/*
-
-int mouseClickCount = 0;
-int rectPlotted;
-
-
-void add_draw_pt(float xx, float yy){
-    vertices[num_pts_drw] = GLfloat(xx);
-    num_pts_drw++;
-    vertices[num_pts_drw] = GLfloat(yy);
-    num_pts_drw++;
-    vertices[num_pts_drw] = GLfloat(0);
-    num_pts_drw++;
-    vertices[num_pts_drw] = GLfloat(1.0);
-    num_pts_drw++;
-}
-
-  void on_vertex_selected(int x, int y){
-
-     if(mouseClickCount == 0){
-       
-        printf("## X %d Y %d \n", x, y );
-
-        // glVertex2i(dr_x1, dr_y1);
-        // glVertex3f (v1.x, v1.y, v1.z);
-       
-
-       add_draw_pt(2.0, 1.7);
-
-     }
-     else{
-        vertices[num_pts_drw] = GLfloat(x);
-        num_pts_drw++;
-        vertices[num_pts_drw] = GLfloat(y);
-        num_pts_drw++;
-        vertices[num_pts_drw] = GLfloat(1.0);
-        num_pts_drw++;
-        vertices[num_pts_drw] = GLfloat(1.0);
-        num_pts_drw++;
-
-        // glVertex2i(dr_x1, dr_y1);
-        // glVertex2i(dr_x1, dr_y2);
-        // glVertex2i(dr_x2, dr_y2);
-        // glVertex2i(dr_x2, dr_y1);
-
-     }
-}
-
-
-void draw_poly_mousevent(int button, int state, int x, int y){
-   if(button==GLUT_LEFT_BUTTON && state ==GLUT_DOWN && mouseClickCount == 0){
-      //y = y+20; //adjusts for VM mouse tracking error
-
-      on_vertex_selected(x, scr_size_y - y);
-      rectPlotted = 0;
-   }
-
-   if(button==GLUT_LEFT_BUTTON && state ==GLUT_UP && mouseClickCount == 0){
-      if(rectPlotted == 1){
-       return;
-      }
-      else{
-       mouseClickCount++;
-      }
-   }
-
-   if(button==GLUT_LEFT_BUTTON && state ==GLUT_DOWN && mouseClickCount == 1){
-       //y = y+20; //adjusts for VM mouse tracking error
-       on_vertex_selected(x, scr_size_y - y);
-       mouseClickCount = 0;
-       rectPlotted = 1;
-   }
-}
-*/
-
-void olmec_mouse_button(int button, int state, int x, int y)
-{
-
-    mouseX = x;
-    mouseY = y;
-
-    //left click 
-    if (button == GLUT_LEFT_BUTTON)
-      {
-        if(state == GLUT_DOWN)
-        {
-            mouseLeftDown = true;
-        }
-        else if(state == GLUT_UP)
-            mouseLeftDown = false;
-
-      }
-
-      // middle click
-      if ((button == 3) || (button == 4)) // It's a wheel event
-      {
-           // Disregard redundant GLUT_UP events
-           if (state == GLUT_UP) return; 
-
-           if (button == 3){
-               //if (orbit_dist < -1.5){
-               orbit_dist+=.1;  
-               //printf("# orbit dist %f \n", orbit_dist );                                 
-               //}
-  
-           }
-           if (button == 4){
-               //if (orbit_dist>0){ 
-                   orbit_dist-=.1; 
-               //}
-           }
-      }else{  // normal button event
-           if (state == GLUT_DOWN){
-               // printf("olmec middle click\n");  
-           }
-      }
-
-
-    //Right click
-    if (button == GLUT_RIGHT_BUTTON)
-      {
-        
-        if(state == GLUT_DOWN)
-        {
-            mouseRightDown = true;
-        }
-        else if(state == GLUT_UP)
-            mouseRightDown = false;
-
-      }
-
-}
-
-
-
-/********************************************/
-
-float coefficient = 0.005f;     
-
-void olmec_mouse_motion(int x, int y)
-{
-    // take offset from center of screen to get "X,Y delta"
-    float center_y = (float)scr_size_y/2;
-    float center_x = (float)scr_size_x/2;
-
-
-    if(mouseLeftDown)
-    { 
-
-        switch (VIEW_MODE) 
-        { 
-
-            // orthographic side  (key 2)
-            case 1: 
-                view_ismoving = TRUE;
-                cam_posz = -(center_x-x) * coefficient; 
-                cam_posy = -(center_y-y) * coefficient; 
-            break; 
-        
-            // orthographic top   (key shift 2)
-            case 2:  
-                view_ismoving = TRUE;
-                cam_posx = (center_x-x) * coefficient; 
-                cam_posz = (center_y-y) * coefficient;  
-            break; 
-        
-            // orthographic front  (key 3)
-            case 3:  
-                view_ismoving = TRUE;
-                cam_posx = (center_x-x)  * coefficient; 
-                cam_posy = -(center_y-y) * coefficient; 
-            break; 
-        
-
-            default:  
-                    view_ismoving = TRUE;
-                    
-                    orbit_x += (x-mouseX) * coefficient; 
-                    orbit_y += (y-mouseY) * coefficient; 
-                    mouseX = x;
-                    mouseY = y;
-                    //printf("# mouse motion %d %d %f %f \n", x,y, orbit_x, orbit_y );
-            break;
-        }
-    }
-
-    if(mouseRightDown)
-    {
-        orbit_dist -= (y - mouseY) * 0.02f;
-        mouseY = y;
-    }
-
-    /**************/
-   
-
-     
-
-}
 
 
 
@@ -1655,10 +1471,10 @@ void key_cb(unsigned int key)
         /*
         std::cout << "\n\n\n"; 
         get_obj_info( pt_model_buffer, pt_obinfo);        
-        if (draw_bbox == TRUE){
-            draw_bbox = FALSE;
+        if (draw_bbox == true){
+            draw_bbox = false;
         }else{
-            draw_bbox = TRUE;
+            draw_bbox = true;
             show(pt_model_buffer);            
         }*/
     }
@@ -1682,13 +1498,13 @@ void key_cb(unsigned int key)
     if (key == 32) // space
     { 
 
-        if (scr_full_toglr == TRUE){
+        if (scr_full_toglr == true){
             glutFullScreen();
-            scr_full_toglr = FALSE;
+            scr_full_toglr = false;
         }else{
             glutReshapeWindow(800, 800);
             glutPositionWindow(0,0);  
-            scr_full_toglr = TRUE;
+            scr_full_toglr = true;
         }
 
     }
@@ -1697,10 +1513,10 @@ void key_cb(unsigned int key)
     if (key == 110) // n
     { 
 
-        if (draw_normals == TRUE){
-            draw_normals = FALSE;
+        if (draw_normals == true){
+            draw_normals = false;
         }else{
-            draw_normals = TRUE;
+            draw_normals = true;
             pt_model_buffer->calc_normals();
 
         }
@@ -1710,21 +1526,21 @@ void key_cb(unsigned int key)
     //----
     if (key == 70) //shift f
     { 
-        if (DRAW_GEOM == TRUE){
-            DRAW_GEOM = FALSE;
+        if (DRAW_GEOM == true){
+            DRAW_GEOM = false;
 
         }else{
-            DRAW_GEOM = TRUE;
+            DRAW_GEOM = true;
         }
     }
 
     //----
     if (key == 71) //shift g
     { 
-        if (draw_cntrgrid == TRUE){
-            draw_cntrgrid = FALSE;
+        if (draw_cntrgrid == true){
+            draw_cntrgrid = false;
         }else{
-            draw_cntrgrid = TRUE;
+            draw_cntrgrid = true;
         }
 
     }
@@ -1732,10 +1548,10 @@ void key_cb(unsigned int key)
     //----
     if (key == 103) //g
     { 
-        if (draw_grid == TRUE){
-            draw_grid = FALSE;
+        if (draw_grid == true){
+            draw_grid = false;
         }else{
-            draw_grid = TRUE;
+            draw_grid = true;
         }
     }
 
@@ -1747,14 +1563,14 @@ void key_cb(unsigned int key)
         //glPolygonMode (GL_FRONT_AND_BACK, GL_POINT);
         //glPointSize(4);
     
-        if (draw_points == TRUE){
-            draw_points_vbo = FALSE;
+        if (draw_points == true){
+            draw_points_vbo = false;
             glPolygonMode (GL_FRONT_AND_BACK,  GL_POINT);
-            draw_points = FALSE;
+            draw_points = false;
         }else{
-            draw_points_vbo = TRUE;
+            draw_points_vbo = true;
             glPolygonMode (GL_FRONT_AND_BACK,  GL_LINE);
-            draw_points = TRUE;
+            draw_points = true;
         }
     }
 
@@ -1762,14 +1578,14 @@ void key_cb(unsigned int key)
     if (key == 37) //shift 5 , ignore lights  
     { 
         //trying to get the flat, no shaded ambient look 
-        if (toglr_flatshaded == TRUE){
+        if (toglr_flatshaded == true){
             glDisable(GL_TEXTURE_2D);        
             glDisable(GL_LIGHTING);
-            toglr_flatshaded = FALSE;
+            toglr_flatshaded = false;
         }else{
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_LIGHTING);
-            toglr_flatshaded = TRUE;
+            toglr_flatshaded = true;
         }
 
     } 

@@ -2,10 +2,6 @@
 #define GLSETUP_H
 
 
-//DEBUG replace with lowercase versions 
-#define TRUE 1
-#define FALSE 0
-
 //#include <stdint.h>
 
 #include <vector>

@@ -45,10 +45,10 @@ unsigned int use_tex = 0;
 //extern Image* imageloaded_bfr  ; 
 
 
-static bool g_bButton1Down = FALSE;
-static bool g_bLightingEnabled = TRUE;
-static bool g_bFillPolygons = TRUE;
-static bool g_bTexture = FALSE;
+static bool g_bButton1Down = false;
+static bool g_bLightingEnabled = true;
+static bool g_bFillPolygons = true;
+static bool g_bTexture = false;
 
 
 static int g_yClick = 0;
@@ -339,7 +339,7 @@ static void maya_mouse_button(int button, int state, int x, int y)
     //left click 
     if (button == GLUT_LEFT_BUTTON)
       {
-        g_bButton1Down = (state == GLUT_DOWN) ? TRUE : FALSE;
+        g_bButton1Down = (state == GLUT_DOWN) ? true : false;
 
       }
 
@@ -419,13 +419,13 @@ static void keyPressed(unsigned char key, int x, int y)
     if (key == 32) //space
     { 
 
-        if (scr_full_toglr == TRUE){
+        if (scr_full_toglr == true){
             glutFullScreen();
-            scr_full_toglr = FALSE;
+            scr_full_toglr = false;
         }else{
             glutReshapeWindow(800, 800);
             glutPositionWindow(0,0);  
-            scr_full_toglr = TRUE;
+            scr_full_toglr = true;
         }
 
     }

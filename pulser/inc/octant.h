@@ -23,8 +23,6 @@ static void ReSizeGLScene(int, int);
 void key_cb(unsigned int key);
 static void parser_cb(unsigned char key, int x, int y);
 
-void olmec_mouse_button(int button, int state, int x, int y);
-void olmec_mouse_motion(int x, int y);
 
 void start_gui(int *argc, char** argv);
 

@@ -140,17 +140,17 @@ void parse_cmd_text(std::string *buffer)
         v12 = std::stof(a3);
         
         //sample the qpos 
-        Vector3 old = qpos;
-       
-        old = qpos.operator-(old);
+        //Vector3 old = qpos;
+        //old = qpos.operator-(old);
 
+        //I AM SHIFTING THE AXIS TO Z UP HERE
         //set new qpos
         qpos.x = v11;
-        qpos.y = v12;
-        qpos.z = 0;  
-         
+        qpos.y = 0;  
+        qpos.z = v12;
+
         //store the difference between them
-        add_vec_scndrw(&old, &rgb);
+        add_vec_scndrw(&qpos, &rgb);
     }
 
     //--------------
@@ -163,19 +163,21 @@ void parse_cmd_text(std::string *buffer)
         v12 = std::stof(a3);
         v13 = std::stof(a4);
         
-
-        //sample the qpos 
-        Vector3 old = Vector3(qpos.x, qpos.y,qpos.z);
-
         //set new qpos
         qpos.x = v11;
         qpos.y = v12;
         qpos.z = v13;  
 
-        Vector3 newvec = qpos.operator-(old);
 
+        //sample the qpos 
+        //Vector3 old = Vector3(qpos.x, qpos.y,qpos.z);
+        
+        //Vector3 newvec = qpos.operator-(old);
         //store the difference between them
-        add_vec_scndrw(&newvec, &rgb);
+        //add_vec_scndrw(&newvec, &rgb);
+        
+        add_vec_scndrw(&qpos, &rgb);
+
     }
 
     //--------------

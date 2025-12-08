@@ -227,9 +227,6 @@ void cncglobals::load_objects(void)
         //std::cout << "## DEBUG load_objfile resetting obj_file internals \n";
         pt_model_buffer->reset();
         
-        //pt_model_buffer.load( "/home/keith/keith/wip_projects/confusion_36d/pulser/3d_obj/sphere.obj" );
-
-        
         //for(x=0;x<(*this).num_loaded_obj;x++)
         for(x=0;x<obj_filepaths.size();x++)
         {

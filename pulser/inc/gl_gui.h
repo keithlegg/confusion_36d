@@ -12,9 +12,18 @@
 
 
 
-//void mouse_button_callback(GLFWwindow*, int, int, int);
 
+//void mouse_clk_cb(int button, int state, int x, int y);
+
+
+
+void octant_mouse_motion(int x, int y);
+
+
+void octant_mouse_button(int button, int state, int x, int y);
 
 
 
 #endif
+
+
