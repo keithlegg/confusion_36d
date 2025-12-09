@@ -404,14 +404,33 @@ void cncglobals::load_cfg_file( char* filepath )
                         // load a 3d or 2d object to display as vector lines
                         if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
                         {   
-                             Vector3 v = Vector3(1,1,1); 
-                             add_vec_scndrw(&v);
-                             
-                             Vector3 vv = Vector3(.5,-1,0); 
-                             add_vec_scndrw(&vv);
-                             
-                             Vector3 vvv = Vector3(-.7,0,-2); 
-                             add_vec_scndrw(&vvv);
+
+                            float c1,c2,c3;
+
+                            try {
+                                c1 = std::stof(tokenized.at(1));
+                                c2 = std::stof(tokenized.at(2));
+                                c3 = std::stof(tokenized.at(3));
+                                
+                                Vector3 v = Vector3(c1,c2,c3); 
+                                add_vec_scndrw(&v);
+
+                                //std::cout << "NEW VEC "<< c1 <<" "<< c2 <<" "<< c3 << "\n";
+
+                            } catch (const std::invalid_argument& e) {  
+                                //std::cerr << "Error: " << e.what() << std::endl; // Handling the error
+                            } catch (...) { // Catch-all for any other unexpected exceptions
+                                std::cerr << "Error loading vec3 geom from cfg" << std::endl;
+                            }                            
+ 
+
+
+
+
+                            // move locator to first vector loaded to init
+                            if(num_drawvec3==0){
+                                 //qpos
+                            } 
 
                         }
 

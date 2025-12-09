@@ -137,6 +137,15 @@ void parse_cmd_text(std::string *buffer)
         clear_scn_geom();
     }
 
+
+    //--------------
+    //reload cfg file 
+    if (a1=="load")
+    {
+        //DEBUG
+        std::cout << "NOT WORKY YET\n";
+    }
+
     //--------------
     //absolute transform (in space)
     if (a1=="at")
