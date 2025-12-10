@@ -100,11 +100,14 @@ void point_ops::lerp_along( Vector3* output,
 {
  
     Vector3 npos;
+    int n = 1;
 
     //X
     if(fpos.x-spos.x!=0)
     {
-        npos.x =  spos.x+fpos.x-spos.x*dist;
+        //npos.x =  (spos.x+(fpos.x-spos.x))*dist;
+        npos.x =  spos.x+(((fpos.x-spos.x))*(-dist+1));
+
     }else{
         npos.x=0;
     }
@@ -112,7 +115,8 @@ void point_ops::lerp_along( Vector3* output,
     //Y
     if (fpos.y-spos.y!=0)
     { 
-        npos.y =  spos.y+(fpos.y-spos.y)*dist; 
+        //npos.y =  (spos.y+(fpos.y-spos.y))*dist; 
+        npos.y =  spos.y+(((fpos.y-spos.y))*(-dist+1));         
     }else{
         npos.y=0;
     }
@@ -120,7 +124,8 @@ void point_ops::lerp_along( Vector3* output,
     //Z
     if (fpos.z-spos.z!=0)
     { 
-        npos.z =  spos.z+(fpos.z-spos.z)*dist;
+        //npos.z =  (spos.z+(fpos.z-spos.z))*dist;
+        npos.z =  spos.z+(((fpos.z-spos.z))*(-dist+1));        
     }else{
         npos.z=0;            
     }
@@ -132,7 +137,12 @@ void point_ops::lerp_along( Vector3* output,
     //return npos 
 };
 
- 
+
+
+
+
+
+
 
 
 /***************************************/

@@ -593,20 +593,18 @@ static void render_loop()
         //                 Vector3 spos, 
         //                 float dist );
 
-        Vector3 locpos = Vector3(0,0,0);
-
-        for (int dpi=0; dpi<plot.pathcache_vecs.size();dpi++)
-        {   
-
-            //draw_locator( &plot.pathcache_vecs[dpi], .3);
-
-            PG.lerp_along(&locpos, Vector3(0,0,0), plot.pathcache_vecs[dpi], mtime.getElapsedTime());
-            draw_locator( &locpos, .3);
-
- 
-
-        } 
+        Vector3 locpos = Vector3(10,10,10);
+         
+        // for (int dpi=0; dpi<plot.pathcache_vecs.size();dpi++)
+        // {   
+        //     //draw_locator( &plot.pathcache_vecs[dpi], .3);
+        //     PG.lerp_along(&locpos, Vector3(0,0,0), plot.pathcache_vecs[dpi], mtime.getElapsedTime());
+        //     draw_locator( &locpos, .3);
+        // } 
                
+        PG.lerp_along(&locpos, plot.pathcache_vecs[1], plot.pathcache_vecs[0], mtime.getElapsedTime()/10);
+        draw_locator( &locpos, .3);
+
 
         //mtime.stop();
         //std::cout << "STOPPED! " << "\n";
