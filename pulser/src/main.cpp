@@ -44,51 +44,7 @@ GLuint texture[3]; // storage for one texture
 
 
 
-/******************************************/
-//command line tool to generate XYZ pulses from 2 vectors 
-/*
-void run_cncplot(cncglobals* cg,
-                 double f_x,
-                 double f_y,
-                 double f_z,
-                 double s_x,
-                 double s_y,
-                 double s_z,
-                 int divs)  
-{
 
-
-    cnc_plot plot;
-    
-    vector<Vector3> pulsetrain;
-    vector<Vector3>* pt_pulsetrain = &pulsetrain; 
-
-    Vector3 s_p = Vector3(f_x , f_y ,f_z );
-    Vector3 e_p = Vector3(s_x , s_y ,s_z );
-
-    plot.calc_3d_pulses(pt_pulsetrain, s_p, e_p, divs);
-
-    if(cg->GLOBAL_DEBUG==true)
-    {
-        int x=0;
-        for(x=0;x<pulsetrain.size();x++)
-        {
-            std::cout<<pulsetrain[x].x  <<" "<<pulsetrain[x].y  <<" "<<pulsetrain[x].z   << "\n";        
-        } 
-    }
-
-    if(cg->GLOBAL_DEBUG==false)
-    {
-       //moved to IO DEBUG   
-       // plot.send_pulses(pt_pulsetrain);
-    }
-
-    delete pt_pulsetrain;
-    
-
-}
-
-*/
 
 /******************************************/
 

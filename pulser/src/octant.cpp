@@ -49,11 +49,8 @@
 #define LEN(arr) ( (int) (sizeof (arr) / sizeof (arr)[0]) ) 
 
 
-
-extern GLfloat emis_red;
-
-/***********/
-// mouse related
+/***************************************/
+//Mouse related
 extern bool view_ismoving  ;
 extern bool mouseLeftDown  ;
 extern bool mouseRightDown ;
@@ -73,15 +70,7 @@ extern int clk_y_coord;
 float mouse_orbit_speed      = 2.1f;
 
 
-/***********/
-// window related 
-extern int VIEW_MODE; 
 
-extern int window_id;
-
-extern int scr_size_x;
-extern int scr_size_y;
-extern bool scr_full_toglr;
 
 // toggle - view prefs - state vars dont change  
 bool DRAW_POLYS       = true; // state for toggle command
@@ -99,19 +88,28 @@ bool draw_lines      = true;
 bool draw_normals    = true;
 bool draw_quads      = true;
 bool draw_triangles  = true;
-
-
 //bool draw_bbox       = true;
-
-
 //DEBUG - hilarious effect - if you turn all these off the view floats away quickly
 //render_text seems to anchor it 
 bool render_text     = true;
 
-int TCP_PORT = 0;
 
 /***************************************/
-//test of a timer system 
+//experimental TCP port 
+
+int TCP_PORT;
+
+/***************************************/
+// Window related 
+
+extern int VIEW_MODE; 
+extern int window_id;
+extern int scr_size_x;
+extern int scr_size_y;
+extern bool scr_full_toglr;
+
+/***************************************/
+//Timer related 
 
 timer mtime = timer();
 
@@ -128,14 +126,26 @@ extern char* obj_filepath;
 
 extern int num_drawvec3;
 extern int num_drawpoints;
-extern int TCP_PORT;
 
+
+/***************************************/
+//3d objects to load 
 extern vector<std::string>  obj_filepaths;
+
+//display 3D lines and color
 extern vector<Vector3> scene_drawvec3;
 extern vector<Vector3> scene_drawvecclr;
+
+//display 3D points and color 
 extern vector<Vector3> scene_drawpoints;
 extern vector<Vector3> scene_drawpointsclr;
 extern vector<Vector3>* pt_scene_drawpoints;
+
+/***************************************/
+//data to pulse out to IO hardware
+//vector<Vector3> pulsetrain;
+//vector<Vector3>* pt_pulsetrain = &pulsetrain; 
+
 
 extern obj_model* pt_model_buffer;
 extern GLuint texture[3];
@@ -190,7 +200,7 @@ extern GLfloat emis_text[];
 extern GLfloat emis_points[];
 extern GLfloat emis_off[];
 extern GLfloat emis_teal[];
-// extern GLfloat emis_red[]; //DEBUG WTF - confilct? where?
+extern GLfloat emis_red[];  
 extern GLfloat emis_green[];
 extern GLfloat emis_blue[];
 extern GLfloat emis_lines[];
@@ -407,6 +417,8 @@ static void parser_cb(unsigned char key, int x, int y)
 
 //send_pulses
 
+
+
 void run_send_pulses(cncglobals* cg,
                  double f_x,
                  double f_y,
@@ -416,6 +428,51 @@ void run_send_pulses(cncglobals* cg,
                  double s_z,
                  int divs)  
 {
+    cnc_plot plot;
+    
+
+
+    Vector3 s_p = Vector3(f_x , f_y ,f_z );
+    Vector3 e_p = Vector3(s_x , s_y ,s_z );
+
+    vector<Vector3> pulsetrain;
+    vector<Vector3>* pt_pulsetrain = &pulsetrain; 
+
+    plot.calc_3d_pulses(pt_pulsetrain, s_p, e_p, divs);
+
+    if(cg->GLOBAL_DEBUG==true)
+    {
+        int x=0;
+        for(x=0;x<pulsetrain.size();x++)
+        {
+            std::cout<<pulsetrain[x].x  <<" "<<pulsetrain[x].y  <<" "<<pulsetrain[x].z   << "\n";        
+        } 
+    }
+
+    if(cg->GLOBAL_DEBUG==false)
+    {
+       // plot.send_pulses(pt_pulsetrain);
+    }
+
+    delete pt_pulsetrain;
+ }   
+
+
+
+/******************************************/
+//command line tool to generate XYZ pulses from 2 vectors 
+/*
+void run_cncplot(cncglobals* cg,
+                 double f_x,
+                 double f_y,
+                 double f_z,
+                 double s_x,
+                 double s_y,
+                 double s_z,
+                 int divs)  
+{
+
+
     cnc_plot plot;
     
     vector<Vector3> pulsetrain;
@@ -437,13 +494,18 @@ void run_send_pulses(cncglobals* cg,
 
     if(cg->GLOBAL_DEBUG==false)
     {
+       //moved to IO DEBUG   
        // plot.send_pulses(pt_pulsetrain);
     }
 
     delete pt_pulsetrain;
- }   
+    
 
-//----------------------------------------
+}
+
+*/
+
+/***************************************/
 
 /*
     3d lerp function ?? 
@@ -464,14 +526,12 @@ void run_send_pulses(cncglobals* cg,
 
 
 
+/***************************************/
+/***************************************/
 
 int q_i, p_i, f_i = 0;
 char cs[100];
 char s[100];
-
-
-
-
 
 
 static void render_loop()
@@ -486,25 +546,25 @@ static void render_loop()
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
     //------------ 
+
     if(run_pulses)
     {
-        
-        //std::cout << "WE ARE RUNNING \n";
-         
+
 
         //DEBUG
         //we need to pre calculate all the pulses, then use the pointer to progress to update position
         //we need to know the total count of the pulses, use progress to step through and stop timer running when done 
         //we need to know the speed of the travel and divide by the distance of the path 
-        
-        //3d lerp function ?? 
-
       
         //run_send_pulses()  
         //position = symtime * 
 
+        // trav_dist  ;
+        // num_vecs   ;
+        // trav_speed ; //linear unit per sec 
+
         //glTranslatef( sin(mtime.getElapsedTime()), 0, 0);
-        qpos.x = ( num_vecs/mtime.getElapsedTime() )  ;
+        qpos.x = ( (trav_dist/num_vecs)* (mtime.getElapsedTime()/trav_speed) )  ;
 
  
 

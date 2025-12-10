@@ -60,6 +60,7 @@
 
 
 // this file intentionally left blank. Error 404 
+// this was the home of parallel port IO but we need to think ahead to when there are more than 1 interface
 
 
 

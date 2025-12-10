@@ -222,6 +222,9 @@ void cnc_parport::read_limits(cncglobals* cg, Vector3* pt_limit_switch_data)
         pt_pulsetrain  - pointer to the data to send (XYZ array of 1s and 0s with the first element indicating direction)
 
 
+
+    DEBUG progress is not tested yet 
+
 */
 
 void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, vector<Vector3>* pt_pulsetrain)

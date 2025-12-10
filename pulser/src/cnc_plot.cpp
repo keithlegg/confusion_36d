@@ -139,9 +139,6 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
 
     //set the pulses per linear unit (spatial unit divions) - X,Y,Z unit prescaler 
     //for now use one number for all 3 - we will add the others in later
-    // int pp_lux      = 10;
-    // int pp_luy      = 10;
-    // int pp_luz      = 10;
     int pp_lux      = numdivs;
     int pp_luy      = numdivs;
     int pp_luz      = numdivs;
@@ -151,33 +148,32 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
     vector<Vector3> x_pts;
     vector<Vector3> y_pts;
     vector<Vector3> z_pts;
-    vector<Vector3> samples;
 
     //make some pointers to those data.
     //(people who say THOSE data are technically correct, but they are pedantic dillholes) 
     vector<Vector3>* pt_xpts    = &x_pts;
     vector<Vector3>* pt_ypts    = &y_pts;
     vector<Vector3>* pt_zpts    = &z_pts;
-    vector<Vector3>* pt_samples = &samples;
 
 
-    //set up variables to do vector-y stuff
-    //Vector3 between   = sub(fr_pt, to_pt);
-    Vector3 between   = fr_pt.operator-(to_pt);
+    //set up variables  
 
-    double mag     = between.length();
+    //calc a new 3D vector betwen the two points in 3D
+    //Vector3 between   = sub(fr_pt, to_pt);     //old vector lib 
+    Vector3 between   = fr_pt.operator-(to_pt); //new vector lib 
     
-    //double gran    = 0;  //granularity 
-    //double thresh  = 0;  //threshold 
-    //std::cout << mag <<"\n";
+    //calc the length of the path vector
+    double mag     = between.length();
     
     int xp=0;int yp=0;int zp=0;
 
-    //calculate the absolute change for each axis  
+    //calculate 3 scalars for the absolute change on each axis  
     double delta_x = fr_pt.x-to_pt.x;
     double delta_y = fr_pt.y-to_pt.y;
     double delta_z = fr_pt.z-to_pt.z;
 
+
+    //2 is a magic number to (all other data is 1 )
     //calc the direction of the vector 
     if (to_pt.x>fr_pt.x){
         xp=2;
@@ -208,7 +204,7 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
     int num_pul_z = pp_luz*abs(delta_z); 
 
     if (debug)
-        std::cout << "# num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
+        std::cout << "# calc_3d_pulses num pulses " << num_pul_x <<" "<<num_pul_y<<" "<<num_pul_z <<"\n";
 
     // get the absolute highest number of pulses (on any axis) to calculate 
     int tmp[] = {num_pul_x, num_pul_y, num_pul_z};
@@ -221,8 +217,8 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
     ////////////////////////////////////              
     if (debug)
     {            
-        std::cout << "# most   " << most << " "<< numdivs << " " <<"\n";  
-        std::cout << "# numpts " << num_pul_x <<" " << num_pul_y <<" " << num_pul_z <<"\n"; 
+        std::cout << "#   most   " << most << " "<< numdivs << " " <<"\n";  
+        std::cout << "#   numpts " << num_pul_x <<" " << num_pul_y <<" " << num_pul_z <<"\n"; 
         std::cout << "#####\n";
     }
 
