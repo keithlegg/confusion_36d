@@ -61,15 +61,17 @@
 #include "cnc_plot.h"
 
 
-
-
-
-vector<Vector3> disp_pathcache;
-vector<Vector3>* pt_pathcache = &disp_pathcache;
-
 point_ops PG;
 
 
+/******************************************/
+
+// vector<Vector3> disp_pathcache;
+// vector<Vector3>* pt_pathcache = &disp_pathcache;
+
+
+
+/******************************************/
 
 /*
 void cnc_plot::reset_precache(num_drawvec3)
@@ -87,11 +89,21 @@ void cnc_plot::reset_precache(num_drawvec3)
 
 
 
-void cnc_plot::calc_precache(vector<Vector3>* pt_disppathcache, 
-                              Vector3 fr_pt, 
-                              Vector3 to_pt,
-                              int numdivs)
+/******************************************/
+
+void cnc_plot::calc_precache( vector<Vector3>* pt_drawvecs, int numdivs)
 {
+
+    //precache path vectors here 
+    //DEBUG move to reset_cache() or whatever its called
+    for (int i=1;i<pt_drawvecs->size();i++)
+    {   
+        Vector3 sv  = pt_drawvecs->at(i);
+        //Vector3 ev  = pt_drawvecs->at(i+1);
+        pathcache_vecs.push_back(sv);
+        //calc_precache(pt_pathcache, sv, ev, 10);
+    } 
+
     // void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
     //                               Vector3 fr_pt, 
     //                               Vector3 to_pt,
@@ -100,7 +112,7 @@ void cnc_plot::calc_precache(vector<Vector3>* pt_disppathcache,
     //length of vector/abs num - locate_along()
     //tmpvec = Vector3();most
     
-    PG.locate_pt_along3d(pt_pathcache, to_pt, fr_pt, numdivs);
+    //PG.locate_pt_along3d( ,  to_pt, fr_pt, numdivs);
     
     // void point_ops::locate_pt_along3d(std::vector<Vector3>* output,
     //                              Vector3 fpos, 

@@ -21,7 +21,7 @@ int main() {
 
 
 
-
+/*
 
 double trav_dist  ;
 double num_vecs   ;
@@ -34,7 +34,7 @@ void timer::reset_sim(void)
     trav_speed = 1;
 
 }
-
+*/
 
 
 

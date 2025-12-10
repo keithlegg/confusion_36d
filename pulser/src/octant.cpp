@@ -140,9 +140,6 @@ extern int num_drawvec3;
 
 /***************************************/
 //display cache of 3D path vectors 
-extern vector<Vector3> disp_pathcache;
-extern vector<Vector3>* pt_pathcache;
-
 cnc_plot plot;
 
 /***************************************/
@@ -558,15 +555,46 @@ static void render_loop()
 
         //DEBUG
         //pre calculated cache
-        std::cout << "num pts in cache is "<< disp_pathcache.size() << "\n";
+        // std::cout << "num pts in cache is "<< disp_pathcache.size() << "\n";
 
+        //Vector3 npos;
+        /*
+            //X
+            if(fpos.x-spos.x!=0)
+            {
+                npos.x =  spos.x+(((fpos.x-spos.x)/(num+1))*(n+1));
+            }else{
+                npos.x=0;
+            }
+     
+            //Y
+            if (fpos.y-spos.y!=0)
+            { 
+                npos.y =  spos.y+(((fpos.y-spos.y)/(num+1))*(n+1)); 
+            }else{
+                npos.y=0;
+            }
 
-        for (int dpi=1; dpi<disp_pathcache.size();dpi++)
+            //Z
+            if (fpos.z-spos.z!=0)
+            { 
+                npos.z =  spos.z+(((fpos.z-spos.z)/(num+1))*(n+1));
+            }else{
+                npos.z=0;            
+            }
+        */ 
+
+        std::cout << mtime.getElapsedTime() << "\n";
+
+        //<< " "<< npos.x <<" "<<npos.y<<" "<< npos.z<<"\n";
+         
+        for (int dpi=0; dpi<plot.pathcache_vecs.size();dpi++)
         {   
-            draw_locator( &disp_pathcache[dpi], 1);
+            draw_locator( &plot.pathcache_vecs[dpi], .3);
             //std::cout << disp_pathcache[dpi].x << " "<< disp_pathcache[dpi].y << " "<< disp_pathcache[dpi].z << "\n";
 
-        }        
+        } 
+               
 
         //mtime.stop();
         //std::cout << "STOPPED! " << "\n";
@@ -1286,32 +1314,11 @@ void start_gui(int *argc, char** argv){
     
     //cg.show();
 
-
     // -----------
-    //DEBUG
-  
-    //precache path vectors here 
-    //DEBUG move to reset_cache() or whatever its called
-    for (p_i=1;p_i<num_drawvec3;p_i++)
-    {   
-        Vector3 sv  = scene_drawvec3[p_i];
-        Vector3 ev  = scene_drawvec3[p_i+1];
-        plot.calc_precache(pt_pathcache, sv, ev, 5);
-    } 
-
-    /*
-    Vector3 sv  = Vector3(0,0,0);
-    Vector3 ev  = Vector3(1,0,0);
-    plot.calc_precache(pt_pathcache, sv, ev, 10);
-    */
-
+    // we have vectors in display - calcluate the head path from them   
+    plot.calc_precache(&scene_drawvec3, 10);
+    
     //------------
-
-    // Vector3 start = newvec3(0.0 ,3.0 ,1.0 );
-    // Vector3 ctrl1 = newvec3(2.5  ,0.0 ,0.0 );
-    // Vector3 ctrl2 = newvec3(0.0 ,1.0  ,0.0 );
-    // Vector3 end   = newvec3(-1.0 ,0.0 ,-5.0 );
-    // test_bezier(start, ctrl1, ctrl2, end);
     
     //warnings();
     
@@ -1324,7 +1331,7 @@ void start_gui(int *argc, char** argv){
  
     /////////////////////////////////////////////////
     reset_view();
-    mtime.reset_sim();
+    //mtime.reset_sim();
 
     // Register GL callbacks       
     glutDisplayFunc(&render_loop); 
