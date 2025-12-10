@@ -23,7 +23,18 @@ int main() {
 
 
 
- 
+double trav_dist  ;
+double num_vecs   ;
+double trav_speed ; //linear unit per sec 
+
+void timer::reset_sim(void)
+{
+    trav_dist = 5.0;
+    num_vecs = 5;
+    trav_speed = 1;
+
+}
+
 
 
 

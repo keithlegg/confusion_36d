@@ -111,29 +111,30 @@ bool render_text     = true;
 int TCP_PORT = 0;
 
 /***************************************/
-
 //test of a timer system 
+
 timer mtime = timer();
 
+bool run_pulses = false;
+
+extern double trav_dist  ;
+extern double num_vecs   ;
+extern double trav_speed ; //linear unit per sec 
 
 /***************************************/
-// object related 
-
-
-
-extern vector<std::string>  obj_filepaths;
+// 3D object related 
 
 extern char* obj_filepath;
+
 extern int num_drawvec3;
 extern int num_drawpoints;
 extern int TCP_PORT;
 
+extern vector<std::string>  obj_filepaths;
 extern vector<Vector3> scene_drawvec3;
 extern vector<Vector3> scene_drawvecclr;
-
 extern vector<Vector3> scene_drawpoints;
 extern vector<Vector3> scene_drawpointsclr;
-
 extern vector<Vector3>* pt_scene_drawpoints;
 
 extern obj_model* pt_model_buffer;
@@ -442,14 +443,36 @@ void run_send_pulses(cncglobals* cg,
     delete pt_pulsetrain;
  }   
 
+//----------------------------------------
+
+/*
+    3d lerp function ?? 
+    
+    https://keithmaggio.wordpress.com/2011/02/15/math-magician-lerp-slerp-and-nlerp/
+
+    https://stackoverflow.com/questions/18755251/linear-interpolation-of-three-3d-points-in-3d-space
+
+    // You can express P4 coordinates in the P1P2P3 vector basis.
+
+    x4 = x1 + A * (x2 - x1) + B * (x3 - x1)
+    y4 = y1 + A * (y2 - y1) + B * (y3 - y1)
+
+    // This is easy-to-solve linear equation system. You have to find A and B coefficients, then use them to calculate z-coordinate
+    z4 = z1 + A * (z2 - z1) + B * (z3 - z1)
+
+*/
+
+
+
 
 int q_i, p_i, f_i = 0;
-
-
 char cs[100];
 char s[100];
 
-bool run_pulses = false;
+
+
+
+
 
 static void render_loop()
 {
@@ -465,18 +488,28 @@ static void render_loop()
     //------------ 
     if(run_pulses)
     {
+        
+        //std::cout << "WE ARE RUNNING \n";
+         
 
         //DEBUG
         //we need to pre calculate all the pulses, then use the pointer to progress to update position
+        //we need to know the total count of the pulses, use progress to step through and stop timer running when done 
+        //we need to know the speed of the travel and divide by the distance of the path 
+        
+        //3d lerp function ?? 
 
+      
         //run_send_pulses()  
         //position = symtime * 
 
         //glTranslatef( sin(mtime.getElapsedTime()), 0, 0);
-        //std::cout << mtime.getElapsedTime() << "\n";        
+        qpos.x = ( num_vecs/mtime.getElapsedTime() )  ;
 
-        qpos.x = sin(mtime.getElapsedTime());
-        qpos.y = cos(mtime.getElapsedTime());
+ 
+
+        // qpos.x = sin(mtime.getElapsedTime());
+        // qpos.y = cos(mtime.getElapsedTime());
     }
     //------------ 
 
@@ -1194,7 +1227,8 @@ void start_gui(int *argc, char** argv){
  
     /////////////////////////////////////////////////
     reset_view();
-    
+    mtime.reset_sim();
+
     // Register GL callbacks       
     glutDisplayFunc(&render_loop); 
     glutIdleFunc(&animate);

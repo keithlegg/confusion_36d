@@ -66,6 +66,8 @@ void stop_machine(void)
 {
     mtime.stop();
     //std::cout << "ESTOP ACTIVATED.\n";
+    mtime.reset_sim();
+
 }
 
 
