@@ -561,6 +561,16 @@ static void render_loop()
         std::cout << "num pts in cache is "<< disp_pathcache.size() << "\n";
 
 
+        for (int dpi=1; dpi<disp_pathcache.size();dpi++)
+        {   
+            draw_locator( &disp_pathcache[dpi], 1);
+            //std::cout << disp_pathcache[dpi].x << " "<< disp_pathcache[dpi].y << " "<< disp_pathcache[dpi].z << "\n";
+
+        }        
+
+        //mtime.stop();
+        //std::cout << "STOPPED! " << "\n";
+
         //we need to know the total count of the pulses, use progress to step through and stop timer running when done 
         //we need to know the speed of the travel and divide by the distance of the path 
       
@@ -572,10 +582,10 @@ static void render_loop()
         // trav_speed ; //linear unit per sec 
 
         //glTranslatef( sin(mtime.getElapsedTime()), 0, 0);
-        qpos.x = ( (trav_dist/num_vecs)* (mtime.getElapsedTime()/trav_speed) )  ;
+        //qpos.x = ( (trav_dist/num_vecs)* (mtime.getElapsedTime()/trav_speed) )  ;
 
  
-
+        
         // qpos.x = sin(mtime.getElapsedTime());
         // qpos.y = cos(mtime.getElapsedTime());
     }
@@ -1278,15 +1288,22 @@ void start_gui(int *argc, char** argv){
 
 
     // -----------
+    //DEBUG
+  
     //precache path vectors here 
     //DEBUG move to reset_cache() or whatever its called
     for (p_i=1;p_i<num_drawvec3;p_i++)
     {   
         Vector3 sv  = scene_drawvec3[p_i];
         Vector3 ev  = scene_drawvec3[p_i+1];
-        plot.calc_precache(pt_pathcache, sv, ev, num_drawvec3);
-    }
+        plot.calc_precache(pt_pathcache, sv, ev, 5);
+    } 
 
+    /*
+    Vector3 sv  = Vector3(0,0,0);
+    Vector3 ev  = Vector3(1,0,0);
+    plot.calc_precache(pt_pathcache, sv, ev, 10);
+    */
 
     //------------
 

@@ -70,6 +70,23 @@ vector<Vector3>* pt_pathcache = &disp_pathcache;
 point_ops PG;
 
 
+
+/*
+void cnc_plot::reset_precache(num_drawvec3)
+{
+    
+
+    for (p_i=1;p_i<num_drawvec3;p_i++)
+    {   
+        Vector3 sv  = scene_drawvec3[p_i];
+        Vector3 ev  = scene_drawvec3[p_i+1];
+        calc_precache(pt_pathcache, sv, ev, num_drawvec3);
+    }
+}
+*/
+
+
+
 void cnc_plot::calc_precache(vector<Vector3>* pt_disppathcache, 
                               Vector3 fr_pt, 
                               Vector3 to_pt,
