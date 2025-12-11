@@ -135,7 +135,6 @@ extern vector<std::string>  obj_filepaths;
 //display 3D lines and color
 extern vector<Vector3> scene_drawvec3;
 extern vector<Vector3> scene_drawvecclr;
-extern int num_drawvec3;
 
 
 /***************************************/
@@ -149,7 +148,6 @@ extern point_ops PG;
 extern vector<Vector3> scene_drawpoints;
 extern vector<Vector3> scene_drawpointsclr;
 extern vector<Vector3>* pt_scene_drawpoints;
- extern int num_drawpoints;
 
 extern obj_model* pt_model_buffer;
 extern GLuint texture[3];
@@ -395,9 +393,8 @@ void test_bezier( Vector3 start, Vector3 ctrl1, Vector3 ctrl2, Vector3 end)
 
     vector<Vector3> * ptDrawvec = &scene_drawvec3;
     vector<Vector3> * ptDrawClr = &scene_drawvecclr;
-    int * ptnum_drawvec3 = &num_drawvec3;
     
-    PG.cubic_bezier(ptDrawvec, ptDrawClr,  ptnum_drawvec3, 10, start, ctrl1, ctrl2, end);
+    //PG.cubic_bezier(ptDrawvec, ptDrawClr,  ptnum_drawvec3, 10, start, ctrl1, ctrl2, end);
 
 }
 
@@ -444,8 +441,7 @@ void run_send_pulses(cncglobals* cg,
 
     if(cg->GLOBAL_DEBUG==true)
     {
-        int x=0;
-        for(x=0;x<pulsetrain.size();x++)
+        for(unsigned int x=0;x<pulsetrain.size();x++)
         {
             std::cout<<pulsetrain[x].x  <<" "<<pulsetrain[x].y  <<" "<<pulsetrain[x].z   << "\n";        
         } 
@@ -456,7 +452,6 @@ void run_send_pulses(cncglobals* cg,
        // plot.send_pulses(pt_pulsetrain);
     }
 
-    delete pt_pulsetrain;
  }   
 
 
@@ -531,7 +526,7 @@ void run_cncplot(cncglobals* cg,
 /***************************************/
 /***************************************/
 
-int q_i, p_i, f_i = 0;
+unsigned int q_i, p_i, f_i = 0;
 char cs[100];
 char s[100];
 
@@ -551,63 +546,23 @@ static void render_loop()
 
     if(run_pulses)
     {
+        //std::cout << mtime.getElapsedTime() << "\n";
 
-
-        //DEBUG
-        //pre calculated cache
-        // std::cout << "num pts in cache is "<< disp_pathcache.size() << "\n";
-
-        //Vector3 npos;
-        /*
-            //X
-            if(fpos.x-spos.x!=0)
-            {
-                npos.x =  spos.x+(((fpos.x-spos.x)/(num+1))*(n+1));
-            }else{
-                npos.x=0;
-            }
-     
-            //Y
-            if (fpos.y-spos.y!=0)
-            { 
-                npos.y =  spos.y+(((fpos.y-spos.y)/(num+1))*(n+1)); 
-            }else{
-                npos.y=0;
-            }
-
-            //Z
-            if (fpos.z-spos.z!=0)
-            { 
-                npos.z =  spos.z+(((fpos.z-spos.z)/(num+1))*(n+1));
-            }else{
-                npos.z=0;            
-            }
-        */ 
-
-        std::cout << mtime.getElapsedTime() << "\n";
-
-        //<< " "<< npos.x <<" "<<npos.y<<" "<< npos.z<<"\n";
         
-        //  void lerp_along( Vector3* output,
-        //                 Vector3 fpos, 
-        //                 Vector3 spos, 
-        //                 float dist );
+        //Vector3 headpos = Vector3(0,0,0);
+        /*
+        for (int dpi=1; dpi<plot.pathcache_vecs.size();dpi++)
+        { 
+            for (int t=0; t<10;t++)
+            {
+                PG.lerp_along(&headpos, plot.pathcache_vecs[dpi-1], plot.pathcache_vecs[dpi], (float)1/t);
+                draw_locator( &headpos, .3);
+            }
+        }*/
 
-        Vector3 locpos = Vector3(10,10,10);
-         
-        // for (int dpi=0; dpi<plot.pathcache_vecs.size();dpi++)
-        // {   
-        //     //draw_locator( &plot.pathcache_vecs[dpi], .3);
-        //     PG.lerp_along(&locpos, Vector3(0,0,0), plot.pathcache_vecs[dpi], mtime.getElapsedTime());
-        //     draw_locator( &locpos, .3);
-        // } 
-               
-        PG.lerp_along(&locpos, plot.pathcache_vecs[1], plot.pathcache_vecs[0], mtime.getElapsedTime()/10);
-        draw_locator( &locpos, .3);
+        PG.lerp_along(&qpos, plot.pathcache_vecs[1], plot.pathcache_vecs[0], mtime.getElapsedTime());
+        //draw_locator( &headpos, .3);
 
-
-        //mtime.stop();
-        //std::cout << "STOPPED! " << "\n";
 
         //we need to know the total count of the pulses, use progress to step through and stop timer running when done 
         //we need to know the speed of the travel and divide by the distance of the path 
@@ -1042,7 +997,7 @@ static void render_loop()
         glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_off);
 
         //DEBUG vertex color is off until I fix it
-        for (p_i=0;p_i<num_drawvec3;p_i++)
+        for (p_i=0;p_i<scene_drawvec3.size();p_i++)
         {   
             if(p_i==0)
             {

@@ -126,7 +126,8 @@ void obj_model::show(void)
 
 void obj_model::show_geom(void)
 {
-    int i = 0;
+    unsigned int i;
+
     std::cout << "\n";
 
     //std::cout << "\n# point indices  ---------------- %d \n", (*this).num_pts);

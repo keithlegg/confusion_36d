@@ -96,7 +96,7 @@ void parse_cmd_text(std::string *buffer)
         tokens.push_back(intermediate);
     }
 
-    for(int i = 0; i < tokens.size(); i++)
+    for(unsigned int i = 0; i < tokens.size(); i++)
     {
         if(i==0){ a1 = tokens[i]; }
         if(i==1){ a2 = tokens[i]; }

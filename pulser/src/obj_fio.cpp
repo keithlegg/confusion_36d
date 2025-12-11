@@ -127,7 +127,7 @@ void obj_model::load(char *filepath)
             //if line is not blank
             if(tokenized.size()>0)
             {
-                int commentpos = tokenized.at(0).find('#');
+                unsigned int commentpos = tokenized.at(0).find('#');
                 if ( commentpos != std::string::npos)
                 {
                     //confige file - line is commented out  
@@ -138,14 +138,13 @@ void obj_model::load(char *filepath)
                     // look for V / vertices
                     if ( tokenized.at(0).find("v") != std::string::npos )
                     {
-                        int a = 0;
                         int vidx = 0;
                         
                         float  xc, yc, zc = 0.0;
                         float  cr, cg, cb = 0.0; //RGB float (0.0 - 1.0)
 
                         //walk the space delineated tokens per each line
-                        for (a=0;a<tokenized.size();a++)
+                        for (unsigned int a=0;a<tokenized.size();a++)
                         {   
                  
                             //std::cout << " line " << line_ct << " vtxpass " << vidx << " " << tokenized.at(a) <<"\n"; // <- vertex line 
@@ -214,14 +213,11 @@ void obj_model::load(char *filepath)
                     //-----------------------------//
                     if ( tokenized.at(0).find("vn") != std::string::npos )
                     {
-                        int a = 0;
-                        int nidx = 0;
-            
-
+                        unsigned int nidx = 0;
                         float xc, yc, zc = 0.0;
 
                         //walk the space delineated tokens per each line
-                        for (a=0;a<tokenized.size();a++)
+                        for (unsigned int a=0;a<tokenized.size();a++)
                         {   
                  
                             //std::cout << " line " << line_ct << " nrmlpass " << nidx << " " << tokenized.at(a) <<"\n"; // <- vertex line 
@@ -254,12 +250,11 @@ void obj_model::load(char *filepath)
                     //  look for F / faces
                     if ( tokenized.at(0).find("f") != std::string::npos )
                     {
-                        int a = 0;
-                        int fidx = 0;
-                        int pt1,pt2,pt3,pt4 = 0;
+                        unsigned int fidx = 0;
+                        unsigned int pt1,pt2,pt3,pt4 = 0;
 
                         //walk the space delineated tokens per each line
-                        for (a=1;a<tokenized.size();a++)
+                        for (unsigned int a=1;a<tokenized.size();a++)
                         {   
 
                             //get type  
@@ -385,7 +380,7 @@ void obj_model::save( char *filepath)
     myfile <<"\n";
 
     
-    for (int xx=0;xx<num_pts;xx++)
+    for (unsigned int xx=0;xx<num_pts;xx++)
     {
         // std::cout << vtxrgb[xx] << "\n";
 
@@ -408,8 +403,8 @@ void obj_model::save( char *filepath)
 
     // std::cout << " triangle count is  " << num_tris << endl;
 
-    int ff = 0; 
-    int xx = 0;
+    unsigned int ff = 0; 
+    unsigned int xx = 0;
 
     //----------------------
 

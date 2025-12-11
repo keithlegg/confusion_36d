@@ -41,8 +41,6 @@
 #include "gl_setup.h"
 
 
-extern int num_drawvec3;
-
 extern float gridsquares;
 extern float gridsize;
 extern float gnomonsize;
@@ -262,8 +260,6 @@ void show_bbox(bool *pt_draw_bbox, RGBType *pt_gridcolor)
         glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_off);
 
         glBindTexture(GL_TEXTURE_2D, texture[0]);    
-
-        float id = 0;
         
         //gDEBUG rab object extents from class method 
         //pt_obinfo
@@ -376,9 +372,7 @@ void dump_points_GLfloat( GLfloat* verts, vector<Vector3>* pt_vecarray, int nump
 {
     
     int y = 0;
-    int num_gl_pts = numpts;
-
-
+ 
     // vector<vec3> vvex;
     // vvex.push_back(newvec3(1,2,3));
     // cout << vvex[0].y << "\n";
@@ -389,7 +383,7 @@ void dump_points_GLfloat( GLfloat* verts, vector<Vector3>* pt_vecarray, int nump
     
     // vector<vec3> * ptDrawvec = &scene_drawvec3;
     // vector<vec3> * ptDrawClr = &scene_drawvecclr;
-    // int * ptnum_drawvec3 = &num_drawvec3;
+
 
     // output->push_back( out );
     // colors->push_back( color );
@@ -416,7 +410,6 @@ void clear_scn_geom( void)
 {
     scene_drawvec3.clear();
     scene_drawvecclr.clear();
-    num_drawvec3 = 0;
 }
 
 
@@ -425,7 +418,6 @@ void add_vec_scndrw( Vector3* insert)
     Vector3 r = Vector3(1,1,1);
     scene_drawvec3.push_back(*insert);
     scene_drawvecclr.push_back(r);
-    num_drawvec3++;
 }
  
 
@@ -434,7 +426,7 @@ void add_vecrgb_scndrw( Vector3* insert, Vector3* rgb)
 {
     scene_drawvec3.push_back(*insert);
     scene_drawvecclr.push_back(*rgb);
-    num_drawvec3++;
+
 }
  
 

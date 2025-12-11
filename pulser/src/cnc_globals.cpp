@@ -81,9 +81,6 @@ std::vector<Vector3> scene_drawpointsclr;
 std::vector<Vector3>* pt_scene_drawpoints = &scene_drawpoints;
 obj_model* pt_model_buffer  = new obj_model;
 
-int num_drawvec3 = 0;
-int num_drawpoints = 0;
-
 const int MAX_CHARS_PER_LINE = 512;
 const int MAX_TOKENS_PER_LINE = 20;
 
@@ -438,14 +435,6 @@ void cncglobals::load_cfg_file( char* filepath )
                                 std::cerr << "Error loading vec3 geom from cfg" << std::endl;
                             }                            
  
-
-
-
-
-                            // move locator to first vector loaded to init
-                            if(num_drawvec3==0){
-                                 //qpos
-                            } 
 
                         }
 

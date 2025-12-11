@@ -100,7 +100,6 @@ void point_ops::lerp_along( Vector3* output,
 {
  
     Vector3 npos;
-    int n = 1;
 
     //X
     if(fpos.x-spos.x!=0)
