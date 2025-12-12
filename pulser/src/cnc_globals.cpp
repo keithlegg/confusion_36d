@@ -382,6 +382,15 @@ void cncglobals::load_cfg_file( char* filepath )
   
                         }
 
+                        //***************************************/ 
+                        if (tokenized.at(0).find("WORK_HEIGHT") != std::string::npos )                            
+                        {  
+                            std::string buffer;
+                            std::cout << "DEBUG parsing WORK_HEIGHT " << tokenized.at(1) << "\n";
+ 
+                            work_height = std::stof( tokenized.at(1) );  
+  
+                        }
 
                         /***************************************/ 
                         //** MACHINE HARDWARE SETUP ************//

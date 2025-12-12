@@ -558,6 +558,7 @@ char cs[100];
 char s[100];
 
 int pathidx = 1;
+double localsimtime;
 
 static void render_loop()
 {
@@ -579,11 +580,15 @@ static void render_loop()
     //MOVE AS MUCH AS POSSIBLE INTO CNC_PLOT 
     if(run_pulses)
     {
+        
         //std::cout << mtime.getElapsedTime() << "\n";
- 
-        double localsimtime = mtime.get_elapsed_simtime();
+        //std::cout << localsimtime           << "\n";
+
+        localsimtime = mtime.get_elapsed_simtime();
         if (localsimtime>=1.0)
         {
+        
+            //std::cout << pathidx           << "\n";
 
             //iterate the stack of vectors to process
             if (pathidx<motionplot.pathcache_vecs.size())
@@ -595,8 +600,9 @@ static void render_loop()
             }
 
             //program finished here
-            if (pathidx>=motionplot.pathcache_vecs.size())
+            if (pathidx>=motionplot.pathcache_vecs.size()-1)
             {
+
                 run_pulses=false;
                 motionplot.stop();
                 motionplot.finished = true;

@@ -128,7 +128,6 @@ void point_ops::lerp_along( Vector3* output,
         npos.x =  spos.x+(((fpos.x-spos.x))*(-dist+1));
     }else if(dist<1.0)
     {
-        //npos.x=0;
         npos.x =  spos.x+(((fpos.x-spos.x))*(dist+1));        
     }
 
@@ -138,7 +137,6 @@ void point_ops::lerp_along( Vector3* output,
         npos.y =  spos.y+(((fpos.y-spos.y))*(-dist+1));         
     }else if(dist<1.0)
     {
-        //npos.y=0;
         npos.y =  spos.y+(((fpos.y-spos.y))*(dist+1));        
     }
 
@@ -148,7 +146,7 @@ void point_ops::lerp_along( Vector3* output,
         npos.z =  spos.z+(((fpos.z-spos.z))*(-dist+1));        
     }else if(dist<1.0)
     {
-        //npos.z=0;        
+
         npos.z =  spos.z+(((fpos.z-spos.z))*(dist+1));                     
     }
 
@@ -157,13 +155,6 @@ void point_ops::lerp_along( Vector3* output,
      *output = npos;
 
 };
-
-
-
-
-
-
-
 
 
 /***************************************/
