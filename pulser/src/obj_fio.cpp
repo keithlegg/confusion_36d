@@ -95,7 +95,7 @@ void obj_model::load(char *filepath)
     std::cout << "## load_objfile loading file "<< filepath << "\n";
     
     int pofst   = 0; //DEBUG point offset indices to points if geom exists already 
-    int line_ct = 0;
+    int line_ct = 0; //idx of text line we are parsing 
     
     std::ifstream obj_filein(filepath, std::ifstream::in);
 
@@ -211,6 +211,7 @@ void obj_model::load(char *filepath)
 
                     //  look for normals
                     //-----------------------------//
+                    
                     if ( tokenized.at(0).find("vn") != std::string::npos )
                     {
                         int nidx = 0;
@@ -222,17 +223,20 @@ void obj_model::load(char *filepath)
                  
                             //std::cout << " line " << line_ct << " nrmlpass " << nidx << " " << tokenized.at(a) <<"\n"; // <- vertex line 
                             
-                            if(nidx==0){
+                            if(nidx==1){
                                 xc = std::stof(tokenized.at(a));
                             }
-                            if(nidx==1){
+                            if(nidx==2){
                                 yc = std::stof(tokenized.at(a));                        
                             }  
-                            if(nidx==2){
+                            if(nidx==3){
                                 zc = std::stof(tokenized.at(a));
                             }                                        
                             
-                            nidx++;
+                            if(nidx<3)
+                            {
+                                nidx++;
+                            }
                         }
 
                         if (nidx==3)
@@ -244,7 +248,7 @@ void obj_model::load(char *filepath)
                         }     
                     
                     }//end vertex normal loader 
-
+                    
                     //-----------------------------//
                      
                     //  look for F / faces
@@ -359,7 +363,8 @@ void obj_model::load(char *filepath)
     
     std::cout << "vertices loaded   "<< num_pts    << "\n";
     std::cout << "uvs loaded        "<< num_uvs    << "\n"; 
-    std::cout << "normals loaded    "<< num_fnrmls << "\n"; 
+    std::cout << "vnormals loaded   "<< num_vnrmls << "\n"; 
+    std::cout << "fnormals loaded   "<< num_fnrmls << "\n"; 
     std::cout << "lines loaded      "<< num_lines  << "\n";
     std::cout << "triangles loaded  "<< num_tris   << "\n";
     std::cout << "quads loaded      "<< num_quads  << "\n";  
@@ -499,7 +504,8 @@ void obj_model::load_m44(char* filename)
         exit (1); // exit if file not found
     }
 
-    int line_ct = 0;
+    int line_ct = 0; //idx of line of text we are parsing
+
     while (!fin.eof())
     {
         char buf[MAX_CHARS_PER_LINE];
