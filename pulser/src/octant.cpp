@@ -4,6 +4,10 @@
    octant.cpp
 
    Top level Container for Octant CNC OpenGL application. 
+   Contains all the parameters for the machine that dont live in external objects. 
+
+   This contains the "render_loop" for the graphic display in OpenGL 
+
 
 
 
@@ -598,28 +602,36 @@ static void render_loop()
                 motionplot.finished = true;
                 pathidx = 1;
 
-                motionplot.rapid_move();
-                motionplot.update_cache();
+                //motionplot.rapid_move();
+                //motionplot.update_cache();
 
             }
         }
 
         //std::cout << localsimtime << "\n";
         
-        if (pathidx<=motionplot.pathcache_vecs.size()&&run_pulses)
+        if (pathidx<=motionplot.pathcache_vecs.size()-1&&run_pulses)
         {
             //DEBUG - get the length of the vector/spatial divs to calc proper speed 
             //vectormag   motionplot.pathcache_vecs[pathidx]
+            
+            if(pathidx==0){
+                //do nothing: A single point, a line does not make. 
+            }
+            if(pathidx>0){
+                PG.lerp_along(&motionplot.quill_pos, 
+                               motionplot.pathcache_vecs[pathidx], 
+                               motionplot.pathcache_vecs[pathidx+1], 
+                               localsimtime);
+            }            
 
-            PG.lerp_along(&motionplot.quill_pos, 
-                           motionplot.pathcache_vecs[pathidx-1], 
-                           motionplot.pathcache_vecs[pathidx], 
-                           localsimtime);
             glColor3d(1, .4, 1);
             draw_locator(&motionplot.quill_pos, .5);
         }
 
     }
+    
+    //draw locator when Idle 
     if(!run_pulses)
     {
         glColor3d(.7, .7, .7);
@@ -1042,15 +1054,19 @@ static void render_loop()
 
         //DEBUG vertex color is off until I fix it
         //DEBUG - size() does not catch new vectors added with the GUI?
-        for (p_i=0;p_i<scene_drawvec3.size();p_i++)
+        
+        //intentionally start at 1 - skip the first point 
+        //we need at least two points to indicate a line 
+        for (p_i=1;p_i<scene_drawvec3.size();p_i++)
         {   
-            if(p_i==0)
-            {
-                sv  = scene_drawvec3[p_i];
-                ev  = scene_drawvec3[p_i+1];
-                //rgb = scene_drawvecclr[p_i+1];  
-            }
-            if(p_i>0){ 
+            //ignore the first vector/point - off for now 
+            // if(p_i==0)
+            // {
+            //     sv  = scene_drawvec3[p_i];
+            //     ev  = scene_drawvec3[p_i+1];
+            //     //rgb = scene_drawvecclr[p_i+1];  
+            // }
+            if(p_i>=1){ 
                 sv  = scene_drawvec3[p_i-1];
                 ev  = scene_drawvec3[p_i];
                 //rgb = scene_drawvecclr[p_i];            

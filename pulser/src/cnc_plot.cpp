@@ -3,7 +3,11 @@
     cnc_plot.cpp 
     
     General motion control and path plotting.
-    Generate a series of 3D pulses from two vectors 
+    
+    Generates a series of 3D pulses from two vectors 
+    Generates the pulsetrain, a series of signals to drive the motors via the parallel port.
+
+
  
 
 
@@ -76,6 +80,28 @@ extern timer mtime;
 // vector<Vector3>* pt_pathcache = &disp_pathcache;
 
 
+/******************************************/
+void cnc_plot::show_vecs(vector<Vector3>* pt_vec)
+{
+    for (int vidx=0;vidx<pt_vec->size();vidx++)
+    {
+        std::cout <<vidx <<" "<< pt_vec->at(vidx) << "\n";
+    }
+}
+
+/******************************************/
+void cnc_plot::show(void)
+{
+    std::cout << "\n "<< rapidmove_vecs.size() <<"rapid vecs \n";
+    show_vecs(&rapidmove_vecs);
+
+    std::cout << program_vecs.size() <<"program vecs \n";    
+    show_vecs(&program_vecs);
+
+    std::cout << pathcache_vecs.size() <<"path vecs \n";    
+    show_vecs(&pathcache_vecs);    
+
+}
 
 /******************************************/
 
@@ -101,22 +127,8 @@ void cnc_plot::stop(void)
 
 
 /******************************************/
-/*
-// DEBUG - look into proper way to combine vectors 
-// https://stackoverflow.com/questions/3177241/what-is-the-best-way-to-concatenate-two-vectors
-AB.reserve( A.size() + B.size() ); // preallocate memory
-AB.insert( AB.end(), A.begin(), A.end() );
-AB.insert( AB.end(), B.begin(), B.end() );
-*/
-
 void cnc_plot::run(void)
 {
-    //swap path buffers and set "running" semaphore 
-
-    //std::cout << "cnc_plot running  "<< running  <<"\n";
-    //std::cout << "cnc_plot finished "<< finished <<"\n";
-
-
     if(running==false && finished==true)
     {
         mtime.start();
@@ -137,8 +149,6 @@ void cnc_plot::rapid_move(void)
     Vector3 trav_vec = quill_pos.operator-(prg_origin);
     Vector3 dwn_vec  = Vector3(prg_origin.x  , work_height, prg_origin.z);        
 
-
-
     rapidmove_vecs.push_back(up_vec );
     rapidmove_vecs.push_back(trav_vec);
     //rapidmove_vecs.push_back(dwn_vec);
@@ -149,16 +159,30 @@ void cnc_plot::rapid_move(void)
  
 
 /******************************************/
+/*
+
+    This rebuilds the path that moves the head. 
+    It is run prior to the machine moving. 
+
+    program_vecs  = cached vectors loaded from a file represeting a path we want to cut
+                    these are seperate from the actual path we will cut so we can build 
+                    more complex paths dynamically. 
+
+    rapidmove_vecs = a path to move the head up, over, and back down 
+    
+    pathcache_vecs   = the actual path that will be "cut". This gets rebuilt each time we run.  
+
+*/
+
 void cnc_plot::update_cache(void)
 {
+    pathcache_vecs.clear();
+
     if(finished==true && running==false)
     {
-
-        pathcache_vecs.clear();
-
         if (rapidmove_vecs.size())
         { 
-            std::cout << "DEBUG - ADDING rapid vecs \n";            
+            //std::cout << "DEBUG - update_cache ADDING rapid vecs \n";            
             for (int v=0;v<rapidmove_vecs.size();v++)
             {
                 pathcache_vecs.push_back( rapidmove_vecs.at(v) );
@@ -168,7 +192,7 @@ void cnc_plot::update_cache(void)
         if (program_vecs.size())
         { 
 
-            std::cout << "DEBUG - ADDING prog vecs \n";            
+            //std::cout << "DEBUG - update_cache ADDING prog vecs \n";            
             for (int v=0;v<program_vecs.size();v++)
             {
                 pathcache_vecs.push_back( program_vecs.at(v) );
@@ -177,27 +201,52 @@ void cnc_plot::update_cache(void)
         }    
     }
 
+    std::cout << " ###############################################         \n";
+    std::cout << " DEBUG number of path vecs "<< pathcache_vecs.size() << " (rapid + prog) \n";
+    std::cout << " DEBUG number of rapid     "<< rapidmove_vecs.size() << "\n";
+    std::cout << " DEBUG number of prog vecs "<< program_vecs.size() << "\n";        
+
 }
 
 
 /******************************************/
+/*
+    The first thing called when the vectors are loaded (or drawn?) in 
+    Esentially loads the vectors from the disk, copies them into 
+
+    program_vecs   = the actual path that will be cut 
+
+
+    pathcache_vecs = cached vectors loaded from a file represeting a path we want to cut
+                     these are seperate from the actual path we will cut so we can build 
+                     more complex paths dynamically. 
+    rapidmove_vecs = a path to move the head up, over, and back down 
+
+*/
+
 void cnc_plot::loadpath( vector<Vector3>* pt_drawvecs, int numdivs)
 {
-    //precache path vectors here 
-    //DEBUG move to reset_cache() or whatever its called
     for (int i=1;i<pt_drawvecs->size();i++)
     {   
         //debug - should add a class method to get first and last vec 
-        if(i==0){prg_origin =pt_drawvecs->at(i);}
-        if(i==pt_drawvecs->size()-1){prg_end =pt_drawvecs->at(i);}
+        if(i==0)
+        {
+            prg_origin = pt_drawvecs->at(i);
+            quill_pos = Vector3(prg_origin.x,
+                                prg_origin.y,
+                                prg_origin.z);
+        };
+
+        if(i==pt_drawvecs->size()-1){prg_end = pt_drawvecs->at(i);}
 
         Vector3 sv  = pt_drawvecs->at(i);
-        program_vecs.push_back(sv);
+        
+        pathcache_vecs.push_back(sv);
+        //program_vecs.push_back(sv);        
+        
     } 
     
-
-
-
+    update_cache();
 }
 
 
@@ -207,6 +256,13 @@ void cnc_plot::loadpath( vector<Vector3>* pt_drawvecs, int numdivs)
 
 
 /******************************************/
+/*
+    calc_3d_pulses - translates a 3D vector into 6 electrical signals (step/dir * 3)
+
+   
+    pt_pulsetrain = pointer to the pulsetrain, a stream of 1s and 0s to send to the parport 
+   
+*/
 
 void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
                               Vector3 fr_pt, 

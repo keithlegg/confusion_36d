@@ -28,50 +28,46 @@ class cnc_plot
         
         ~cnc_plot(){};
 
-    void pause(void);
-    void stop(void);
-    void run(void);
+        void show(void);
+        void pause(void);
+        void stop(void);
+        void run(void);
 
-    //void rapid_move(Vector3* output, Vector3 from, Vector3 to, double speed);
+        void rapid_move(void);
+        void update_cache(void);
+        void loadpath( vector<Vector3>* pt_drawvecs, int numdivs);
 
-    // void rapid_move(float rh, float wh, 
-    //                 Vector3 from, Vector3 to, 
-    //                 double speed);
+        void gen_pules(std::vector<int>*, int, int);
+        void calc_3d_pulses(std::vector<Vector3>*,
+                            Vector3, 
+                            Vector3,
+                            int);
+        
+        //-----
+        Vector3 quill_pos;
+        Vector3 prg_origin;
+        Vector3 prg_end;
 
-    void rapid_move(void);
-    void update_cache(void);
-    void loadpath( vector<Vector3>* pt_drawvecs, int numdivs);
+        //-----    
+        bool running;
+        bool finished;
 
-    void gen_pules(std::vector<int>*, int, int);
-    void calc_3d_pulses(std::vector<Vector3>*,
-                        Vector3, 
-                        Vector3,
-                        int);
-    
-    //-----
-    Vector3 quill_pos;
-    Vector3 prg_origin;
-    Vector3 prg_end;
+        //motion buffers
+        double trav_dist  ;
+        double num_vecs   ;
+        double trav_speed ; //linear unit per sec 
 
-    //-----    
-    bool running;
-    bool finished;
+        double retract_height;
+        double work_height;
 
-    //motion buffers
-    double trav_dist  ;
-    double num_vecs   ;
-    double trav_speed ; //linear unit per sec 
-
-    double retract_height;
-    double work_height;
-
-    //-----
-    vector<Vector3> rapidmove_vecs;    
-    vector<Vector3> program_vecs; 
-    vector<Vector3> pathcache_vecs;
+        //-----
+        vector<Vector3> rapidmove_vecs;    
+        vector<Vector3> program_vecs; 
+        vector<Vector3> pathcache_vecs;
 
 
-
+    private:
+        void show_vecs(vector<Vector3> * pt_vec);
 
 
 

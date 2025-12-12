@@ -56,11 +56,8 @@
 int cursor = 0;
 
 //position of extruder/quill/etc
-
-extern cnc_plot* pt_motionplot;
-
 extern cncglobals cg;
-
+extern cnc_plot* pt_motionplot;
 extern obj_model* pt_model_buffer;
 
 
@@ -135,8 +132,16 @@ void parse_cmd_text(std::string *buffer)
     //peek at internals 
     if (a1=="show")
     { 
-        pt_model_buffer->show();
-        pt_model_buffer->show_geom();
+        if(a2=="paths")
+        { 
+            pt_motionplot->show();
+        }
+
+        if(a2=="geom")
+        { 
+            pt_model_buffer->show();
+            pt_model_buffer->show_geom();
+        }
     }
 
     //--------------
@@ -163,17 +168,6 @@ void parse_cmd_text(std::string *buffer)
         clear_scn_geom();
     }
 
-
-    //--------------
-    /*
-    //reload cfg file 
-    if (a1=="load")
-    {
-        //DEBUG
-        std::cout << "load NOT WORKY YET\n";
-    }
-    */
-    
     //--------------
     //absolute transform (in space)
     if (a1=="at")
@@ -219,10 +213,6 @@ void parse_cmd_text(std::string *buffer)
         } catch (...) { // Catch-all for any other unexpected exceptions
             std::cerr << "RT command bad input " << std::endl;
         }   
-
-
-        
-
     }
 
     //--------------

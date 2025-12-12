@@ -244,17 +244,14 @@ void cncglobals::load_objects(void)
             
         //std::cout << "## DEBUG load_objfile resetting obj_file internals \n";
         pt_model_buffer->reset();
-        
-        //for(x=0;x<(*this).num_loaded_obj;x++)
+
         for(x=0;x<obj_filepaths.size();x++)
         {
             //std::cout << "#### load_objects loading  " << (*this).obj_filepaths[x] <<"\n";
             strcpy(char_array, obj_filepaths[x].c_str()); 
             pt_model_buffer->load(char_array);
             //pt_model_buffer->calc_normals();
-
         };
-        
     };
 }
 
@@ -327,6 +324,44 @@ void cncglobals::load_cfg_file( char* filepath )
                 {
                     if(tokenized.size()>=1)
                     {
+
+                        //****************************************/
+                        // RUN SCRIPT OPERATORS IN HERE 
+                        //****************************************/                                    
+
+                        // LOAD 3D OBJECT - Alias .OBJ file (CLASSIC DISPLAY)
+                        if (tokenized.at(0).find("op_loadobj")!= std::string::npos)
+                        {   
+                            //std::cout << "\n#LOAD OPERATOR ! - 3d obj found " << tokenized.at(1) << "\n";
+                            obj_filepaths.push_back(tokenized.at(1));
+                            //std::cout <<  num_loaded_obj << "\n";
+                            //std::cout << "#ADDED OBJ " << (*this).num_loaded_obj << " "<< obj_filepaths.at((*this).num_loaded_obj) << "\n";
+                        }
+
+
+                        // LOAD 3D VECTOR (3 floats for a vector display)
+                        // load a 3d or 2d object to display as vector lines
+                        if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
+                        {   
+
+                            float c1,c2,c3;
+                            //DEBUG - file loader counts blank spaces - need to fix
+                            //if things are not spaced exactly right wont work with extras 
+                            try 
+                            {
+                                c1 = std::stof(tokenized.at(1));
+                                c2 = std::stof(tokenized.at(2));
+                                c3 = std::stof(tokenized.at(3));
+                                
+                                Vector3 v = Vector3(c1,c2,c3); 
+                                add_vec_scndrw(&v);
+
+                            } catch (const std::invalid_argument& e) {  
+                                //std::cerr << "Error: " << e.what() << std::endl; // Handling the error
+                            } catch (...) { // Catch-all for any other unexpected exceptions
+                                std::cerr << "Error loading vec3 geom from cfg" << std::endl;
+                            }                            
+                        }
 
                         //** MACHINE HARDWARE SETUP ************//
                         if (tokenized.at(0).find("LINEAR_UNIT") != std::string::npos )                            
@@ -409,61 +444,6 @@ void cncglobals::load_cfg_file( char* filepath )
                         }
 
 
-                        //****************************************/
-                        // RUN SCRIPT OPERATORS IN HERE 
-                        //****************************************/                                    
-
-                        // LOAD 3D OBJECT - Alias .OBJ file (CLASSIC DISPLAY)
-                        if (tokenized.at(0).find("op_loadobj")!= std::string::npos)
-                        {   
-                            //std::cout << "\n#LOAD OPERATOR ! - 3d obj found " << tokenized.at(1) << "\n";
-                            obj_filepaths.push_back(tokenized.at(1));
-                            //num_loaded_obj++;
-
-                            //std::cout <<  num_loaded_obj << "\n";
-                            //std::cout << "#ADDED OBJ " << (*this).num_loaded_obj << " "<< obj_filepaths.at((*this).num_loaded_obj) << "\n";
-                        }
-
-
-                        // LOAD 3D VECTOR (3 floats for a vector display)
-                        // load a 3d or 2d object to display as vector lines
-                        if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
-                        {   
-
-                            float c1,c2,c3;
-                            //DEBUG - file loader counts blank spaces - need to fix
-                            //if things are not spaced exactly right wont work with extras 
-                            try {
-                                c1 = std::stof(tokenized.at(1));
-                                c2 = std::stof(tokenized.at(2));
-                                c3 = std::stof(tokenized.at(3));
-                                
-                                Vector3 v = Vector3(c1,c2,c3); 
-                                add_vec_scndrw(&v);
-
-                                //std::cout << "NEW VEC "<< c1 <<" "<< c2 <<" "<< c3 << "\n";
-
-                            } catch (const std::invalid_argument& e) {  
-                                //std::cerr << "Error: " << e.what() << std::endl; // Handling the error
-                            } catch (...) { // Catch-all for any other unexpected exceptions
-                                std::cerr << "Error loading vec3 geom from cfg" << std::endl;
-                            }                            
- 
-
-                        }
-
-                        //------
-
-                        /* 
-                        // load a 3d or 2d object to display as vector lines
-                        if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
-                        {   
-                            std::cout << "\n#LOAD OPERATOR ! - vecobj found " << tokenized.at(1) << "\n";
-                            obj_vecpaths.push_back(tokenized.at(1));
-                            num_loaded_vecobj++;
-                            std::cout <<  num_loaded_vecobj << "\n";
-                            std::cout << "#ADDED VEC OBJ " << (*this).num_loaded_vecobj << " "<< obj_vecpaths.at((*this).num_loaded_vecobj) << "\n";
-                        }*/
 
 
                         //------------------------------------------------

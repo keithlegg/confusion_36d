@@ -412,7 +412,7 @@ void clear_scn_geom( void)
     scene_drawvecclr.clear();
 }
 
-
+/******************************************/
 void add_vec_scndrw( Vector3* insert)
 {   
     Vector3 r = Vector3(1,1,1);
@@ -421,7 +421,7 @@ void add_vec_scndrw( Vector3* insert)
 }
  
 
- 
+/******************************************/
 void add_vecrgb_scndrw( Vector3* insert, Vector3* rgb)
 {
     scene_drawvec3.push_back(*insert);
@@ -431,7 +431,7 @@ void add_vecrgb_scndrw( Vector3* insert, Vector3* rgb)
  
 
 
-
+/******************************************/
 void drawTriangle (GLfloat x1, GLfloat y1, GLfloat x2, 
                    GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)
 {
@@ -444,7 +444,6 @@ void drawTriangle (GLfloat x1, GLfloat y1, GLfloat x2,
 
 
 /******************************************/
-
 void drawViewVolume (GLfloat x1, GLfloat x2, GLfloat y1, 
                      GLfloat y2, GLfloat z1, GLfloat z2)
 {
@@ -478,8 +477,6 @@ void drawViewVolume (GLfloat x1, GLfloat x2, GLfloat y1,
 
 
 /******************************************/
-
-
 void set_screen_square(int* sx, int* sy){
     
     if (*sx>*sy){
