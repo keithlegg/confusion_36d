@@ -61,13 +61,16 @@ extern cnc_plot* pt_motionplot;
 extern obj_model* pt_model_buffer;
 
 
+void run_machine(void)
+{
+    pt_motionplot->run();
+}
+
+
 
 void stop_machine(void)
 {
-    pt_motionplot->stop();
-    //std::cout << "ESTOP ACTIVATED.\n";
-    //mtime.reset_sim();
-
+    pt_motionplot->pause();
 }
 
 
@@ -260,9 +263,7 @@ void parse_cmd_text(std::string *buffer)
     //--------------
     if (a1=="run"||a1=="start")
     {
-        pt_motionplot->update_cache();
-        pt_motionplot->run();
-        //std::cout << "ESTOP DISABLED.\n";
+        run_machine();
     }
 
     //--------------

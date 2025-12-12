@@ -1348,7 +1348,9 @@ void start_gui(int *argc, char** argv){
     // -----------
     // we have vectors in display - calcluate the head path from them   
     motionplot.loadpath(&scene_drawvec3, 10);
-    
+    motionplot.retract_height = cg.retract_height;
+    motionplot.work_height    = cg.work_height;
+
     //------------
     
     //warnings();

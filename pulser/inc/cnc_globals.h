@@ -47,9 +47,8 @@ class cncglobals
         //machine travel size in 3D 
         std::string linear_unit = "mm"; //"mm" or "inch" 
 
-        //DEBUG - make these double type ?? 
-        float retract_height = 4;
-        float work_height    = 1;
+        float retract_height = 0;
+        float work_height    = 0;
 
         float x_xtntx = 25;
         float y_xtntx = 25;

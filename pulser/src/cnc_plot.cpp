@@ -109,7 +109,7 @@ void cnc_plot::pause(void)
 {
     if(running)
     {
-        running=false;
+        running=true;
         mtime.stop();
     }
 }
@@ -129,6 +129,11 @@ void cnc_plot::stop(void)
 /******************************************/
 void cnc_plot::run(void)
 {
+    if(running==true && finished==false)
+    {
+        mtime.start();
+    }
+
     if(running==false && finished==true)
     {
         mtime.start();
@@ -203,11 +208,13 @@ void cnc_plot::update_cache(void)
         }    
     }
 
+    /*
     std::cout << " ###############################################         \n";
     std::cout << " DEBUG number of path vecs "<< pathcache_vecs.size() << " (rapid + prog) \n";
     std::cout << " DEBUG number of rapid     "<< rapidmove_vecs.size() << "\n";
     std::cout << " DEBUG number of prog vecs "<< program_vecs.size() << "\n";        
-
+    */
+    
 }
 
 
