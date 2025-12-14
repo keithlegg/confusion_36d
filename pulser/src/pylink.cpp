@@ -76,6 +76,7 @@ extern cncglobals cg;
 
 void python_render(void)
 {
+    std::cout << "ACTIVE OBJ FILE IS " << cg.active_filepath << "\n";
 
     char* pycore_cmd = "scanline";    
     char buffer[256];

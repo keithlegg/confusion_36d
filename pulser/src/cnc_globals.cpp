@@ -236,7 +236,12 @@ void cncglobals::show_obj(void)
 void cncglobals::load_objects(void)
 {
     //std::cout <<  "load_objects called \n";
+    if(obj_filepaths.empty()) 
+    {
+        active_filepath = "NO FILE LOADED";   
+    }
 
+    //----
     if(!obj_filepaths.empty()) 
     {
         char char_array[100];
@@ -251,11 +256,11 @@ void cncglobals::load_objects(void)
             strcpy(char_array, obj_filepaths[x].c_str()); 
             pt_model_buffer->load(char_array);
             pt_model_buffer->calc_normals();
-            
+        };
+
             //store the name of the file we are working on 
             //this is so python can work on it 
             active_filepath = obj_filepaths[x];
-        };
     };
 }
 

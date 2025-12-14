@@ -3,8 +3,13 @@
     parse_cmds.cpp
     
     A fun little command line tool inside an OpenGL window. 
+    This stores the cursor state, parses both single key and text input
+    and redirectes program execution to the right callbacks. 
 
+    Some of the odler, single key callbacks are called with the legacy function  
+    key_cb()
 
+    
 
 
     MIT License

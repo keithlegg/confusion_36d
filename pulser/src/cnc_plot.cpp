@@ -129,11 +129,13 @@ void cnc_plot::stop(void)
 /******************************************/
 void cnc_plot::run(void)
 {
+    //this is for cases where we are paused but still running  
     if(running==true && finished==false)
     {
         mtime.start();
     }
 
+    //this is a fresh run from the beginning 
     if(running==false && finished==true)
     {
         mtime.start();
@@ -145,6 +147,10 @@ void cnc_plot::run(void)
  
 
 /******************************************/
+/*
+    dynamically generate a tool path that lifts the head, 
+    traverses and drops back down
+*/
 void cnc_plot::rapid_move(void)
 {
     
@@ -220,7 +226,7 @@ void cnc_plot::update_cache(void)
 
 /******************************************/
 /*
-    The first thing called when the vectors are loaded (or drawn?) in 
+    The first thing called when the vectors are loaded from disk
     Esentially loads the vectors from the disk, copies them into 
 
     program_vecs   = the actual path that will be cut 
@@ -374,6 +380,10 @@ void cnc_plot::calc_3d_pulses(vector<Vector3>* pt_pulsetrain,
 
 
 /******************************************/
+/*
+   translates two 3d vectors into a pulsetrain , a series of on/off to send to IO 
+*/
+
 void cnc_plot::gen_pules(vector<int>* pt_pulsetrain, int size, int num)
 {
     
