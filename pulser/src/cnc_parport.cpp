@@ -62,6 +62,13 @@
 
 
 /***************************************/
+//void cnc_parport::decode_quadrature ( 
+
+
+
+
+
+/***************************************/
 void cnc_parport::aux_on(cncglobals* cg, unsigned int pin)
 {
     if(ioperm(cg->parport1_addr,1,1))
