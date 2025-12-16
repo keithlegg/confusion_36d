@@ -453,6 +453,7 @@ void obj_model::calc_normals(void)
     // broken experiment to put face normals in vertex normals
     // only do so if nothing was loaded from the model 
     // DEBUG - its wrong !
+    /*
     if (obj_model::num_vnrmls==0)
     {
         for (p_i=0;p_i<obj_model::num_tris;p_i++)
@@ -480,7 +481,7 @@ void obj_model::calc_normals(void)
             num_vnrmls++;
     
         }
-    }   
+    }  */ 
 
 
 }

@@ -768,11 +768,11 @@ static void render_loop()
         //glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_full); 
         //glBindTexture(GL_TEXTURE_2D, texture[2]);   // choose the texture to use.
 
-        GLfloat ke[] = { 0.1, 0.15, 0.05, 1.0 };
-        GLfloat ka[] = { 0.1, 0.15, 0.1, 1.0 };
-        GLfloat kd[] = { 0.3, 0.3, 0.2, 1.0 };
+        GLfloat ke[] = { 0.0, 0.0, 0.00, 1.0 };
+        GLfloat ka[] = { 0.0, 0.0, 0.0, 1.0 };
+        GLfloat kd[] = { 0.5, 0.5, 0.3, 1.0 };
         GLfloat ks[] = { 0.2, 0.2, 0.2, 1.0 };
-        GLfloat ns[] = { 50.0 };
+        GLfloat ns[] = { 80.0 };
         glMaterialfv(GL_FRONT, GL_EMISSION, ke);
         glMaterialfv(GL_FRONT, GL_AMBIENT, ka);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, kd);
@@ -795,17 +795,23 @@ static void render_loop()
                 int tri2 = pt_model_buffer->tris[p_i][1];
                 int tri3 = pt_model_buffer->tris[p_i][2];
 
+                int vn1 = pt_model_buffer->vnids[p_i][0];
+                int vn2 = pt_model_buffer->vnids[p_i][1];
+                int vn3 = pt_model_buffer->vnids[p_i][2];
+
                 // use the same vertex indices to lookup RGB 
                 Vector3 rgb1 = pt_model_buffer->vtxrgb[tri1-1];
                 Vector3 rgb2 = pt_model_buffer->vtxrgb[tri2-1];
                 Vector3 rgb3 = pt_model_buffer->vtxrgb[tri3-1];
                 
 
+                //use one color for now
+                glColor3f(.5,.5,.5);   //use one color for now 
 
                 //std::cout << "plyidx " << tri1 << " " << tri2 << " " << tri3 << "\n";
 
                 //------------------------------//
-                glColor3f(rgb1.x,rgb1.y,rgb1.z);   
+                //glColor3f(rgb1.x,rgb1.y,rgb1.z); 
                 //Vector2 uv = pt_model_buffer->uvs[tri1];
                 // glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.5, 1.0);                
@@ -813,12 +819,12 @@ static void render_loop()
                 Vector3 pt1 = pt_model_buffer->points[tri1-1];
                 glVertex3f(pt1.x, pt1.y, pt1.z);
               
-                Vector3 nrm1 = pt_model_buffer->vnormals[tri1-1];
-                //glNormal3f( nrm1.x, nrm1.y, nrm1.z);
+                Vector3 nrm1 = pt_model_buffer->vnormals[vn1-1];
+                glNormal3f( nrm1.x, nrm1.y, nrm1.z);
                 //std::cout <<  " vtxnrm1 "<< nrm1.x << " "<< nrm1.y << " "<< nrm1.z << "\n";
 
                 //------------------------------//
-                glColor3f(rgb2.x,rgb2.y,rgb2.z); 
+                //glColor3f(rgb2.x,rgb2.y,rgb2.z); 
                 //Vector2 uv = pt_model_buffer->uvs[tri2];
                 //glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.0, 1.0); 
@@ -827,12 +833,12 @@ static void render_loop()
                 glVertex3f(pt2.x, pt2.y, pt2.z);
 
                 // calculated face normals 
-                Vector3 nrm2 = pt_model_buffer->vnormals[tri2-1];
-                //glNormal3f( nrm2.x, nrm2.y, nrm2.z);
+                Vector3 nrm2 = pt_model_buffer->vnormals[vn2-1];
+                glNormal3f( nrm2.x, nrm2.y, nrm2.z);
                 //std::cout <<  " vtxnrm2 "<< nrm2.x << " "<< nrm2.y << " "<< nrm2.z << "\n";
 
                 //------------------------------//
-                glColor3f(rgb3.x,rgb3.y,rgb3.z); 
+                //glColor3f(rgb3.x,rgb3.y,rgb3.z); 
                 //Vector2 uv = pt_model_buffer->uvs[tri3];
                 //glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(1.0, 0.0);       
@@ -841,8 +847,8 @@ static void render_loop()
                 glVertex3f(pt3.x, pt3.y, pt3.z);
 
                 // calculated face normals
-                Vector3 nrm3 = pt_model_buffer->vnormals[tri3-1];
-                //glNormal3f( nrm3.x, nrm3.y, nrm3.z);
+                Vector3 nrm3 = pt_model_buffer->vnormals[vn3-1];
+                glNormal3f( nrm3.x, nrm3.y, nrm3.z);
                 //std::cout <<  " vtxnrm3 "<< nrm3.x << " "<< nrm3.y << " "<< nrm3.z << "\n";
             }
 

@@ -177,7 +177,6 @@ void obj_model::load(char *filepath)
 
                         //--------------------------------//
                         //done looping vertex line, now process the data we found 
-                        
                         //std::cout << "VIDX IS "<< vidx <<"\n"; 
 
                         //if two points its a 2D coord ( not a standard obj file )  
@@ -189,21 +188,12 @@ void obj_model::load(char *filepath)
                         if (vidx>=3)
                         {
                             Vector3 vpt = Vector3( xc, yc, zc  );
-                            
                             //std::cout << "vtx 3d "<< vpt.x << " "<< vpt.y <<" "<<vpt.z<<"\n";
 
                             points[num_pts] = vpt;
                             num_pts = num_pts+1;
-                            
+                        
                             //std::cout << "numpts:" << num_pts <<" "<< vpt.x << " "<< vpt.y << " " << vpt.z <<"\n";                                             
-
-                            ////set color to white initially  ?? DEBUG 
-                            //vec3 color;
-                            //color.x=1.0;   
-                            //color.y=1.0;
-                            //color.z=1.0; 
-                            //loader->vtxrgb[loader->num_vtxrgb] = color;
-
                         }  
                     }//end vertex loader 
                     //std::cout << "NUM PTS LOADED "<< num_pts << "\n";
@@ -242,11 +232,10 @@ void obj_model::load(char *filepath)
                         
                         if (nidx==3)
                         {
-                            //DEBUG THIS IS SUSPICIOUS   
+                            //this fills storage but we still need lookup to render  
                             Vector3 vn = Vector3( xc, yc, zc  );
                             vnormals[num_vnrmls] = vn;
                             num_vnrmls++;
-
                         }    
                     
                     }//end vertex normal loader 
@@ -258,6 +247,7 @@ void obj_model::load(char *filepath)
                     {
                         int fidx = 0;
                         int pt1,pt2,pt3,pt4 = 0;
+                        int vn1,vn2,vn3,vn4 = 0;
 
                         //walk the space delineated tokens per each line
                         for (int a=1;a<tokenized.size();a++)
@@ -268,7 +258,7 @@ void obj_model::load(char *filepath)
 
                             if( tokenized.at(a).size())
                             {
-                                std::cout << " pofst " << pofst <<" line " << line_ct << " idx:" << a << " tokenized : " << tokenized.at(a) <<"\n"; // <- vertex line 
+                                //std::cout << " pofst " << pofst <<" line " << line_ct << " idx:" << a << " tokenized : " << tokenized.at(a) <<"\n"; // <- vertex line 
                                   
                                 //only supports 2,3,4 sided polygons  
                                 if(fidx==0){
@@ -278,14 +268,21 @@ void obj_model::load(char *filepath)
                                         std::vector<std::string>  sl1 = tokenizer(tokenized.at(a), *"/");
                                         //we need to know how many slashes .. ugh 
                                         if(!sl1.at(0).empty()){
-                                            std::cout <<"SL11!" << sl1.at(0) << "\n"; 
+                                            //std::cout <<"SL11! vid " << sl1.at(0) << "\n"; 
                                             pt1 = std::stoi( sl1.at(0) );                                           
                                         }
                                         if(!sl1.at(1).empty()){
-                                            std::cout <<"SL12!" << sl1.at(1) << "\n";                                            
+                                            //std::cout <<"SL12! uv " << sl1.at(1) << "\n";                                            
                                         }
                                         if(!sl1.at(2).empty()){
-                                            std::cout <<"SL13!" << sl1.at(2) << "\n";                                            
+                                            //std::cout <<"SL13! vn " << sl1.at(2) << "\n";
+                                            vn1 = std::stoi( sl1.at(2) );  
+
+                                            //vnids[]
+
+                                            // Vector3 vn = Vector3( xc, yc, zc  );
+                                            // vnormals[num_vnrmls] = vn;
+                                            // num_vnrmls++;                                                                                                                                    
                                         }                                        
 
                                     }else{
@@ -301,14 +298,15 @@ void obj_model::load(char *filepath)
                                         std::vector<std::string>  sl2 = tokenizer(tokenized.at(a), *"/");
                                         //we need to know how many slashes .. ugh 
                                         if(!sl2.at(0).empty()){
+                                            //std::cout <<"SL20! vid " << sl2.at(0) << "\n";
                                             pt2 = std::stoi( sl2.at(0) ); 
-                                            std::cout <<"SL20!" << sl2.at(0) << "\n";                                                                                       
                                         }
                                         if(!sl2.at(1).empty()){
-                                            std::cout <<"SL21!" << sl2.at(1) << "\n"; 
+                                            //std::cout <<"SL21! uv " << sl2.at(1) << "\n"; 
                                         }
                                         if(!sl2.at(2).empty()){
-                                            std::cout <<"SL22!" << sl2.at(2) << "\n"; 
+                                            //std::cout <<"SL22! vn " << sl2.at(2) << "\n"; 
+                                            vn2 = std::stoi( sl2.at(2) );                                              
                                         }  
                                     }else{                                         
                                         pt2 = std::stoi( tokenized.at(a));
@@ -323,14 +321,15 @@ void obj_model::load(char *filepath)
                                         std::vector<std::string>  sl3 = tokenizer(tokenized.at(a), *"/");
                                         //we need to know how many slashes .. ugh 
                                         if(!sl3.at(0).empty()){
-                                            std::cout <<"SL31!" << sl3.at(0) << "\n"; 
+                                            //std::cout <<"SL31! vid " << sl3.at(0) << "\n"; 
                                             pt3 = std::stoi( sl3.at(0) );                                           
                                         }
                                         if(!sl3.at(1).empty()){
-                                            std::cout <<"SL32!" << sl3.at(1) << "\n";                                            
+                                            //std::cout <<"SL32! uv " << sl3.at(1) << "\n";                                            
                                         }
                                         if(!sl3.at(2).empty()){
-                                            std::cout <<"SL33!" << sl3.at(2) << "\n";                                            
+                                            //std::cout <<"SL33! vn " << sl3.at(2) << "\n";  
+                                            vn3 = std::stoi( sl3.at(2) );                                                                                       
                                         }   
                                     }
                                     else{                                        
@@ -339,11 +338,24 @@ void obj_model::load(char *filepath)
                                     }
                                 }   
 
+                                //4th vertex is for 4 sided polys 
                                 if(fidx==3){
                                     //deal with "/" delineated files                                        
                                     if ( tokenized.at(a).find("/") != std::string::npos )
                                     {
-                                        std::cout << "we have slash 3\n";  
+                                        std::vector<std::string>  sl4 = tokenizer(tokenized.at(a), *"/");
+                                        //we need to know how many slashes .. ugh 
+                                        if(!sl4.at(0).empty()){
+                                            //std::cout <<"SL41! vid " << sl4.at(0) << "\n"; 
+                                            pt4 = std::stoi( sl4.at(0) );                                           
+                                        }
+                                        if(!sl4.at(1).empty()){
+                                            //std::cout <<"SL42! uv " << sl4.at(1) << "\n";                                            
+                                        }
+                                        if(!sl4.at(2).empty()){
+                                            //std::cout <<"SL43! vn " << sl4.at(2) << "\n";  
+                                            vn4 = std::stoi( sl4.at(2) );                                                                                       
+                                        }    
                                     }else{                                        
                                         pt4 = std::stoi( tokenized.at(a));
                                         if (pofst>0){ pt4 = pt4+pofst;};                                               
@@ -355,8 +367,6 @@ void obj_model::load(char *filepath)
  
 
                         }
-
-                        //std::cout << " num fids " << fidx << "\n";
 
                         //-------                  
                         //if two face indices - its a line  
@@ -372,24 +382,26 @@ void obj_model::load(char *filepath)
                         //-------
                         if (fidx==3)
                         {
-                            //DEBUG THIS IS BLOWING UP  
-                            //std::cout << " pt1 " << pt1 << " pt2 " << pt2 << " pt3 " << pt3 << "\n";
 
                             vector<int> newtri;
                             newtri.push_back(pt1);
                             newtri.push_back(pt2);
                             newtri.push_back(pt3);
-                            //std::cout << " newtri "<< newtri[0]<<' ' << newtri[1]<< ' '<< newtri[2]<< "\n";
-                            //this->insert(newtri);
-                        
                             tris[num_tris].push_back(pt1);
                             tris[num_tris].push_back(pt2);
                             tris[num_tris].push_back(pt3);
-                                                                                    
-                            num_tris++;
+                        
+                            //insert vertex normals if any
+                            //there will be the same num as triangles
+                            vector<int> new_vn;
+                            new_vn.push_back(vn1);
+                            new_vn.push_back(vn2);
+                            new_vn.push_back(vn3);
+                            vnids[num_tris].push_back(vn1);
+                            vnids[num_tris].push_back(vn2);
+                            vnids[num_tris].push_back(vn3);
 
-                            //add_triangle(pt1,pt2,pt3);
-   
+                            num_tris++;
 
                         }//end triangle loader
 

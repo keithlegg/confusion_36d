@@ -112,14 +112,17 @@ class obj_model: public polygon_ops {
         Vector3 points[MAX_NUM_VERTICES];      // vertices of model    
         Vector3 vtxrgb[MAX_NUM_VERTICES];      // vextex colors of model  
 
-        Vector2 uvs[MAX_NUM_VERTICES];         // UV coords 
-        Vector3 vnormals[MAX_NUM_VERTICES];    // veretx normals 
-        Vector3 fnormals[MAX_NUM_FACES];       // face normals
+        Vector2 uvs[MAX_NUM_VERTICES];         // UV coords      - storage for lookup  
+        
+        Vector3 vnormals[MAX_NUM_VERTICES];    // vertex normals - storage for lookup 
+        Vector3 fnormals[MAX_NUM_FACES];       // face normals   - common ID with faces
 
-        std::vector<int> lines[MAX_NUM_FACES]; // 2 sided faces 
-        std::vector<int> tris [MAX_NUM_FACES]; // 3 sided faces
-        std::vector<int> quads[MAX_NUM_FACES]; // 4 sided faces
-        std::vector<int> faces[MAX_NUM_FACES]; // >4, N sided faces 
+        //lists of ID tables for lookup 
+        std::vector<int> lines [MAX_NUM_FACES];     // 2 sided faces 
+        std::vector<int> tris  [MAX_NUM_FACES];     // 3 sided faces
+        std::vector<int> vnids [MAX_NUM_VERTICES];  // vertex normal ids
+        std::vector<int> quads [MAX_NUM_FACES];     // 4 sided faces
+        std::vector<int> faces [MAX_NUM_FACES];     // >4, N sided faces 
 
         // ---
         Vector3 bfr_pts[MAX_NUM_VERTICES];          // general point buffer   ( tmp work area )
