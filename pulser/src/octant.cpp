@@ -208,8 +208,8 @@ extern GLuint texture[3];
 
 
 float light_posx = 0; 
-float light_posy = 2;
-float light_posz = 0;
+float light_posy = .5;
+float light_posz = 1;
 
 
 float gridsquares = 10;
@@ -806,7 +806,7 @@ static void render_loop()
                 
 
                 //use one color for now
-                glColor3f(.5,.5,.5);   //use one color for now 
+                //glColor3f(.7,.7,.5);   //use one color for now 
 
                 //std::cout << "plyidx " << tri1 << " " << tri2 << " " << tri3 << "\n";
 
@@ -815,13 +815,13 @@ static void render_loop()
                 //Vector2 uv = pt_model_buffer->uvs[tri1];
                 // glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.5, 1.0);                
-
-                Vector3 pt1 = pt_model_buffer->points[tri1-1];
-                glVertex3f(pt1.x, pt1.y, pt1.z);
               
                 Vector3 nrm1 = pt_model_buffer->vnormals[vn1-1];
                 glNormal3f( nrm1.x, nrm1.y, nrm1.z);
                 //std::cout <<  " vtxnrm1 "<< nrm1.x << " "<< nrm1.y << " "<< nrm1.z << "\n";
+                
+                Vector3 pt1 = pt_model_buffer->points[tri1-1];
+                glVertex3f(pt1.x, pt1.y, pt1.z);
 
                 //------------------------------//
                 //glColor3f(rgb2.x,rgb2.y,rgb2.z); 
@@ -829,13 +829,13 @@ static void render_loop()
                 //glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(0.0, 1.0); 
 
-                Vector3 pt2 = pt_model_buffer->points[tri2-1];
-                glVertex3f(pt2.x, pt2.y, pt2.z);
-
                 // calculated face normals 
                 Vector3 nrm2 = pt_model_buffer->vnormals[vn2-1];
                 glNormal3f( nrm2.x, nrm2.y, nrm2.z);
                 //std::cout <<  " vtxnrm2 "<< nrm2.x << " "<< nrm2.y << " "<< nrm2.z << "\n";
+
+                Vector3 pt2 = pt_model_buffer->points[tri2-1];
+                glVertex3f(pt2.x, pt2.y, pt2.z);
 
                 //------------------------------//
                 //glColor3f(rgb3.x,rgb3.y,rgb3.z); 
@@ -843,13 +843,14 @@ static void render_loop()
                 //glTexCoord2f(uv.x, uv.y);
                 glTexCoord2f(1.0, 0.0);       
 
-                Vector3 pt3 = pt_model_buffer->points[tri3-1];
-                glVertex3f(pt3.x, pt3.y, pt3.z);
-
                 // calculated face normals
                 Vector3 nrm3 = pt_model_buffer->vnormals[vn3-1];
                 glNormal3f( nrm3.x, nrm3.y, nrm3.z);
                 //std::cout <<  " vtxnrm3 "<< nrm3.x << " "<< nrm3.y << " "<< nrm3.z << "\n";
+                
+                Vector3 pt3 = pt_model_buffer->points[tri3-1];
+                glVertex3f(pt3.x, pt3.y, pt3.z);
+
             }
 
         glEnd(); 
