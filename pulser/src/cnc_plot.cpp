@@ -151,21 +151,18 @@ void cnc_plot::rapid_move(void)
 {
     
     rapidmove_vecs.clear();
-    
     linebuffer2.clear();
 
 
     Vector3 up_vec   = Vector3(quill_pos.x, retract_height, quill_pos.z);
     Vector3 hover_e  = Vector3(prg_origin.x, retract_height, prg_origin.z);
-    //Vector3 trav_vec = quill_pos.operator-(prg_origin);
-    //Vector3 dwn_vec  = Vector3(prg_origin.x, work_height, prg_origin.z);        
-    
-    /*
+
+     
     rapidmove_vecs.push_back(quill_pos );
     rapidmove_vecs.push_back(up_vec );
     rapidmove_vecs.push_back(hover_e);
-    rapidmove_vecs.push_back(dwn_vec);
-    */
+    rapidmove_vecs.push_back(prg_origin);
+    
 
     //now we have them, add to the buffer to draw them 
     add_vec_lbuf2(&quill_pos);

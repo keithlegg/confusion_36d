@@ -14,7 +14,7 @@ class cnc_plot
     public:
         cnc_plot()
         {
-            timediv    = 1.0;
+            timediv    = 8.0; //speed == simtime divisions == 1 second/divs
             pidx       = 0;
             running    = false;
             finished   = true;

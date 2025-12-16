@@ -489,9 +489,9 @@ static void render_loop()
     if(mtime.running)
     {
         
-        //std::cout << mtime.getElapsedTime() << "\n";
-        std::cout << "local simtime is " << localsimtime << "\n";
-        std::cout << " pidx "<< motionplot.pidx          << "\n";
+        // //std::cout << mtime.getElapsedTime() << "\n";
+        // std::cout << "local simtime is " << localsimtime << "\n";
+        // std::cout << " pidx "<< motionplot.pidx          << "\n";
 
         //----
 
@@ -501,8 +501,8 @@ static void render_loop()
         if (localsimtime>=1.0)
         {
 
-            std::cout << "-----------------------------------\n";        
-            std::cout << "running index " << motionplot.pidx        << "\n";
+            //std::cout << "-----------------------------------\n";        
+            //std::cout << "running index " << motionplot.pidx        << "\n";
 
             //iterate the stack of vectors to process
             if (motionplot.pidx<motionplot.toolpath_vecs.size())
@@ -525,7 +525,7 @@ static void render_loop()
                 //update rebuilds the stack of vectors to process
                 //this is for rapid move, etc 
                 motionplot.pidx = 0;
-                
+
                 motionplot.update_cache();
 
             }
@@ -538,31 +538,17 @@ static void render_loop()
 
             //DEBUG - get the length of the vector/spatial divs to calc proper speed 
             //vectormag   motionplot.toolpath_vecs[motionplot.pidx]
-            Vector3 s_p;
-            Vector3 e_p;  
 
-
-            s_p = motionplot.toolpath_vecs[motionplot.pidx];
-            e_p = motionplot.toolpath_vecs[motionplot.pidx+1];  
- 
-
-            
-            std::cout << "$$$$$$$$$$$$$$$$$$$$\n";
-            std::cout << "start "<< s_p.x <<" "<< s_p.y << " "<< s_p.z << "\n";
-            std::cout << "end   "<< e_p.x <<" "<< e_p.y << " "<< e_p.z << "\n";                       
+            Vector3 s_p = motionplot.toolpath_vecs[motionplot.pidx];
+            Vector3 e_p = motionplot.toolpath_vecs[motionplot.pidx+1];  
+            // std::cout << "start "<< s_p.x <<" "<< s_p.y << " "<< s_p.z << "\n";
+            // std::cout << "end   "<< e_p.x <<" "<< e_p.y << " "<< e_p.z << "\n";                       
 
 
             PG.lerp_along(&motionplot.quill_pos, 
                            s_p, 
                            e_p, 
                            (float) localsimtime);
-
-
-            //DEBUG floating point error  
-            //motionplot.calc_3d_pulses(s_p, e_p, 10);
-                 
-
-                        
 
             glColor3d(1, .4, 1);
             draw_locator(&motionplot.quill_pos, .5);
