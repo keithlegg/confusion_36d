@@ -84,6 +84,7 @@
 
 /***************************************/
 cncglobals cg;
+//cncglobals new cg;
 
 
 
@@ -430,9 +431,8 @@ void reset_view(void){
 void test_bezier( Vector3 start, Vector3 ctrl1, Vector3 ctrl2, Vector3 end)
 {
 
-    vector<Vector3> * ptDrawvec = &scene_drawvec3;
-    vector<Vector3> * ptDrawClr = &scene_drawvecclr;
-    
+    //vector<Vector3> * ptDrawvec = &scene_drawvec3;
+    //vector<Vector3> * ptDrawClr = &scene_drawvecclr;
     //PG.cubic_bezier(ptDrawvec, ptDrawClr,  ptnum_drawvec3, 10, start, ctrl1, ctrl2, end);
 
 }
@@ -569,6 +569,7 @@ static void render_loop()
     //DEBUG - THE MAIN LOGIC OF MOTION SHOULD NOT BE IN THE RENDER LOOP!
     //THIS NEEDS TO BE INDEPENDANT - AND UPDATE OPENGL, NOT THE OTHER WAY AROUND 
     //MOVE AS MUCH AS POSSIBLE INTO CNC_PLOT 
+  
     if(mtime.running)
     {
         
@@ -630,7 +631,8 @@ static void render_loop()
                                e_p, 
                                (float) localsimtime);
 
-  
+
+                //DEBUG floating point error  
                 //motionplot.calc_3d_pulses(s_p, e_p, 10);
                  
 
@@ -649,14 +651,15 @@ static void render_loop()
         glColor3d(.7, .7, .7);
         draw_locator(&motionplot.quill_pos, .5);        
     }
-
+    
+    
     //------------ 
     //I clearly dont get the whole view matrix thing - moved out of text render
     //this is directly related and need to do homework
     setOrthographicProjection();
     glLoadIdentity();
     //glPushMatrix();
-
+    
     if (render_text)
     {
         if(on_click)
@@ -716,6 +719,7 @@ static void render_loop()
         //-----------------------------
 
     }
+   
     //I clearly dont get the whole view matrix thing - moved out of text render
     //this is directly related to text render and I need to do homework
     //glPopMatrix();
@@ -749,7 +753,7 @@ static void render_loop()
  
 
     //----------------------------------------------
-   
+    
     switch (VIEW_MODE) 
     { 
         // orthographic side 
@@ -767,12 +771,10 @@ static void render_loop()
                        cam_posx , 0.0   , cam_posz,  // look at the origin
                        0.0     , 0.0    , -1.0        // positive X (Y up when looking down)
             );   
-
         break; 
     
         // orthographic front  
         case 3:  
-
             gluLookAt( cam_posx , cam_posy  , 1.0,   // look from camera XYZ
                        cam_posx , cam_posy  , 0.0,   // look at the origin
                        0.0      , 1.0       , 0.0    // positive Y up vector
@@ -791,18 +793,17 @@ static void render_loop()
                        0.0     , 0.0      , 0.0,       // look at the origin
                        0.0     , 1.0      , 0.0        // positive Y up vector
             ); 
-
         break;   
     } 
- 
+  
     /******************************************/
     /******************************************/
-
     // display loaded normals as lines 
     if (draw_normals)
     {
         render_normals(pt_model_buffer);
     }//draw normals   
+   
 
     /******************************************/
     graticulate(&draw_grid, &draw_cntrgrid, pt_gridcolor, pt_gridcolor2);
@@ -816,27 +817,31 @@ static void render_loop()
     // render_m44(&foobar);
 
     /******************************************/
+     
     if (draw_points_vbo)
     {
       render_vbo(pt_model_buffer);
     }
-
+    
     /******************************************/
-
     // draw 3D line geometry 
+    
     if (draw_lines)
     {
         render_lines(pt_model_buffer);
-    }
-
+    } 
+    
+   
     //DEBUG - IF THERE IS A SPACE AT END OF FIDS, IT LOADS TRI AS QUAD
     if (draw_quads )
     {
         render_quads(pt_model_buffer);
     }
+ 
 
     /******************************************/
     // draw the polygon geometry 
+   
     if(draw_triangles)
     {
         //glMaterialfv(GL_FRONT, GL_EMISSION, emis_off);
@@ -956,10 +961,11 @@ static void render_loop()
             }
         }//draw normals (triangles)        
     }//draw triangles
+   
 
     // ----------------------
     // draw scene defined geom 
-
+    
     Vector3 sv  = Vector3();
     Vector3 ev  = Vector3();
     // Vector3 rgb = Vector3();  
@@ -975,7 +981,7 @@ static void render_loop()
         
         //intentionally start at 1 - skip the first point 
         //we need at least two points to indicate a line 
-        for (int p_i=1;p_i<scene_drawvec3.size();p_i++)
+        for (unsigned int p_i=1;p_i<scene_drawvec3.size();p_i++)
         {   
             //ignore the first vector/point - off for now 
             // if(p_i==0)
@@ -1007,11 +1013,8 @@ static void render_loop()
         glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_full); 
 
     }
-
+    
     //-----------------------
-
-
-
 
     // glPopMatrix();
 
@@ -1149,9 +1152,6 @@ void start_gui(int *argc, char** argv){
     //------------
 
     //load CNC cfg (including paths to .obj files) 
-    
-    //cncglobals new cg;
-
 
     //setup filepaths and paths to cut 
     cg.load_cfg_file(argv[1]);
@@ -1170,8 +1170,7 @@ void start_gui(int *argc, char** argv){
     //------------
     
     //warnings();
-    
-     
+         
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);  
     glutInitWindowSize(scr_size_x, scr_size_y);  //window size
     glutInitWindowPosition(0, 0);  
@@ -1180,29 +1179,21 @@ void start_gui(int *argc, char** argv){
  
     /////////////////////////////////////////////////
     reset_view();
-    //mtime.reset_sim();
 
     // Register GL callbacks       
     glutDisplayFunc(&render_loop); 
     glutIdleFunc(&animate);
-
     glutReshapeFunc(&reshape_window);  // register window resize callback 
 
-    //old keyboard callback - replaced with fancier parser
-    //glutKeyboardFunc(&keyPressed);     // register key pressed callback 
-
     InitGL(scr_size_x, scr_size_y); // Initialize window. 
-  
-    
-    //---
-    //glutMouseFunc(mouse_clk_cb);
-
-    // experimental draw polygon 
-    //glutMouseFunc (draw_poly_mousevent);
 
     glutMouseFunc (octant_mouse_button);
     glutMotionFunc (octant_mouse_motion);
+
     //---
+
+    // experimental draw polygon 
+    //glutMouseFunc (draw_poly_mousevent);
 
     //loadImage("textures/generated2.bmp" , imageloaded_bfr);
     //loadImage("textures/generated2.bmp" , imageloaded_bfr2);
@@ -1211,20 +1202,11 @@ void start_gui(int *argc, char** argv){
     // create and apply 2D texture   
     glGenTextures(4, &texture[0]);            //create 3 textures
 
-    //grid color
-    // glBindTexture(GL_TEXTURE_2D, texture[0]);  
-    // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); // scale linearly when image bigger than texture
-    // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); // scale linearly when image smalled than texture
-    
-    //glTexImage2D(GL_TEXTURE_2D, 0, 3, imageloaded_bfr->sizeX, imageloaded_bfr->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, imageloaded_bfr2->data);
-
-
     //general line color 
     glBindTexture(GL_TEXTURE_2D, texture[1]);  
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); // scale linearly when image bigger than texture
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); // scale linearly when image smalled than texture
     //glTexImage2D(GL_TEXTURE_2D, 0, 3, imageloaded_bfr2->sizeX, imageloaded_bfr2->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, imageloaded_bfr2->data);
-
 
     //polygon color 
     glBindTexture(GL_TEXTURE_2D, texture[2]);  
@@ -1239,15 +1221,10 @@ void start_gui(int *argc, char** argv){
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); // scale linearly when image smalled than texture
     //glTexImage2D(GL_TEXTURE_2D, 0, 3, imageloaded_bfr->sizeX, imageloaded_bfr->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, imageloaded_bfr->data);
 
-    ///////////
-    
-    //tb.start(); //test of timer 
-
     glutMainLoop();// Start Event Processing Engine   
    
     //DEBUG - polymorphic class type ‘obj_model’ which has non-virtual destructor might cause undefined behavior
-    delete pt_model_buffer;
-
+    //delete pt_model_buffer;
 
 }
 
@@ -1289,7 +1266,7 @@ void setlight0(void)
 
      
     //GLfloat lightpos[] = {1, light_posx, light_posy, light_posz}; // homogeneous coordinates
-    GLfloat lightpos[] = {0, 1, 0, 0}; // homogeneous coordinates
+    //GLfloat lightpos[] = {0, 1, 0, 0}; // homogeneous coordinates
     // glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 

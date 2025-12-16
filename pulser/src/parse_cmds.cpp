@@ -127,11 +127,27 @@ void parse_cmd_text(std::string *buffer)
 
     }    
 
-    //toggle grid
+    //run external tools 
     if (a1=="python")
     {
-        python_render();    
+        exe_python();    
     }
+
+
+    /*
+    //export internal vectors to obj file 
+    if (a1=="export")
+    {
+        if(a2=="rapid")
+        {
+        }   
+      
+        if(a2=="paths")
+        {
+        }             
+
+    }*/
+
 
 
     //--------------

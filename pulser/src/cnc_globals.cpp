@@ -238,19 +238,20 @@ void cncglobals::load_objects(void)
     //std::cout <<  "load_objects called \n";
     if(obj_filepaths.empty()) 
     {
-        active_filepath = "NO FILE LOADED";   
+        active_filepath = "";   
     }
 
     //----
     if(!obj_filepaths.empty()) 
     {
         char char_array[100];
-        int x = 0 ; 
             
-        //std::cout << "## DEBUG load_objfile resetting obj_file internals \n";
+        std::cout << "## DEBUG load_objfile resetting obj_file internals \n";
         pt_model_buffer->reset();
 
-        for(x=0;x<obj_filepaths.size();x++)
+        unsigned int x = 0;
+
+        for( x=0;x<obj_filepaths.size();x++)
         {
             //std::cout << "#### load_objects loading  " << (*this).obj_filepaths[x] <<"\n";
             strcpy(char_array, obj_filepaths[x].c_str()); 
@@ -258,9 +259,12 @@ void cncglobals::load_objects(void)
             pt_model_buffer->calc_normals();
         };
 
-            //store the name of the file we are working on 
-            //this is so python can work on it 
-            active_filepath = obj_filepaths[x];
+        //DEBUG - this assumes the last obj loaded (or just 1)
+        //probably a lousy way to do things 
+        
+        //store the name of the file we are working on 
+        //this is so python can work on it 
+        //active_filepath = obj_filepaths[x];
     };
 }
 

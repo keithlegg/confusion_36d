@@ -67,65 +67,60 @@ void render_normals(obj_model* pt_model_buffer)
 
 void render_quads(obj_model* pt_model_buffer)
 {
-        // if (toglr_flatshaded){
-        //     glColor3f(1.,1.,1.);
-        // }
+    // if (toglr_flatshaded){
+    //     glColor3f(1.,1.,1.);
+    // }
+    glBindTexture(GL_TEXTURE_2D, texture[3]);
+    glBegin(GL_QUADS);                      
+    for (int q_i=0;q_i<pt_model_buffer->num_quads;q_i++)
+    { 
 
-        glBindTexture(GL_TEXTURE_2D, texture[3]);
+        int qu1 = pt_model_buffer->quads[q_i][0];
+        int qu2 = pt_model_buffer->quads[q_i][1];
+        int qu3 = pt_model_buffer->quads[q_i][2];
+        int qu4 = pt_model_buffer->quads[q_i][3];
 
-        glBegin(GL_QUADS);                      
+        //DEBUG VTX COLORS ARE BROKEN - INDEXING ISSUES 
+        Vector3 rgb1 = pt_model_buffer->vtxrgb[qu1-1];
+        Vector3 rgb2 = pt_model_buffer->vtxrgb[qu2-1];
+        Vector3 rgb3 = pt_model_buffer->vtxrgb[qu3-1];
+        Vector3 rgb4 = pt_model_buffer->vtxrgb[qu4-1];
 
-            for (int q_i=0;q_i<pt_model_buffer->num_quads;q_i++)
-            { 
+        //DEBUG - not working or tested  
+        Vector3 nrm1 = pt_model_buffer->vnormals[qu1-1];
+        Vector3 nrm2 = pt_model_buffer->vnormals[qu2-1];
+        Vector3 nrm3 = pt_model_buffer->vnormals[qu3-1];
+        Vector3 nrm4 = pt_model_buffer->vnormals[qu4-1];
 
-                int qu1 = pt_model_buffer->quads[q_i][0];
-                int qu2 = pt_model_buffer->quads[q_i][1];
-                int qu3 = pt_model_buffer->quads[q_i][2];
-                int qu4 = pt_model_buffer->quads[q_i][3];
+        //---------------------------//
+        glColor3f(rgb1.x,rgb1.y,rgb1.z);                 
+        glTexCoord2f(0.5, 1.0);                
+        glNormal3f( nrm1.x, nrm1.y, nrm1.z);
+        Vector3 pt1 = pt_model_buffer->points[qu1-1];
+        glVertex3f(pt1.x, pt1.y, pt1.z);
 
-                //DEBUG VTX COLORS ARE BROKEN - INDEXING ISSUES 
-                Vector3 rgb1 = pt_model_buffer->vtxrgb[qu1-1];
-                Vector3 rgb2 = pt_model_buffer->vtxrgb[qu2-1];
-                Vector3 rgb3 = pt_model_buffer->vtxrgb[qu3-1];
-                Vector3 rgb4 = pt_model_buffer->vtxrgb[qu4-1];
+        //---------------------------//
+        glColor3f(rgb2.x,rgb2.y,rgb2.z); 
+        glTexCoord2f(0.0, 1.0); 
+        glNormal3f( nrm2.x, nrm2.y, nrm2.z);
+        Vector3 pt2 = pt_model_buffer->points[qu2-1];
+        glVertex3f(pt2.x, pt2.y, pt2.z);
 
-                //DEBUG - not working or tested  
-                Vector3 nrm1 = pt_model_buffer->vnormals[qu1-1];
-                Vector3 nrm2 = pt_model_buffer->vnormals[qu2-1];
-                Vector3 nrm3 = pt_model_buffer->vnormals[qu3-1];
-                Vector3 nrm4 = pt_model_buffer->vnormals[qu4-1];
-     
-                /***********************/
-                glColor3f(rgb1.x,rgb1.y,rgb1.z);                 
-                glTexCoord2f(0.5, 1.0);                
-                glNormal3f( nrm1.x, nrm1.y, nrm1.z);
-                Vector3 pt1 = pt_model_buffer->points[qu1-1];
-                glVertex3f(pt1.x, pt1.y, pt1.z);
+        //---------------------------//
+        glColor3f(rgb3.x,rgb3.y,rgb3.z);                 
+        glTexCoord2f(1.0, 0.0);   
+        glNormal3f( nrm3.x, nrm3.y, nrm3.z);                             
+        Vector3 pt3 = pt_model_buffer->points[qu3-1];
+        glVertex3f(pt3.x, pt3.y, pt3.z);
 
-                /***********************/
-                glColor3f(rgb2.x,rgb2.y,rgb2.z); 
-                glTexCoord2f(0.0, 1.0); 
-                glNormal3f( nrm2.x, nrm2.y, nrm2.z);
-                Vector3 pt2 = pt_model_buffer->points[qu2-1];
-                glVertex3f(pt2.x, pt2.y, pt2.z);
-
-                /***********************/
-                glColor3f(rgb3.x,rgb3.y,rgb3.z);                 
-                glTexCoord2f(1.0, 0.0);   
-                glNormal3f( nrm3.x, nrm3.y, nrm3.z);                             
-                Vector3 pt3 = pt_model_buffer->points[qu3-1];
-                glVertex3f(pt3.x, pt3.y, pt3.z);
-
-                /***********************/
-                glColor3f(rgb4.x,rgb4.y,rgb4.z);                 
-                glTexCoord2f(1.0, 0.0);      
-                glNormal3f( nrm4.x, nrm4.y, nrm4.z);
-                Vector3 pt4 = pt_model_buffer->points[qu4-1];
-                glVertex3f(pt4.x, pt4.y, pt4.z);
-
-
-            }
-        glEnd(); 
+        //---------------------------//
+        glColor3f(rgb4.x,rgb4.y,rgb4.z);                 
+        glTexCoord2f(1.0, 0.0);      
+        glNormal3f( nrm4.x, nrm4.y, nrm4.z);
+        Vector3 pt4 = pt_model_buffer->points[qu4-1];
+        glVertex3f(pt4.x, pt4.y, pt4.z);
+    }
+    glEnd(); 
  
 }
 
@@ -154,11 +149,7 @@ void render_vbo(obj_model* pt_model_buffer)
     // add in custom points loaded from scene.olm  
     //dump_points_GLfloat( pt_vert, pt_scene_drawpoints, num_drawpoints );
 
-
-
     //-------------------------
-
-
     GLuint VBO;
 
     glGenBuffers(1, &VBO);
@@ -200,9 +191,6 @@ void render_lines(obj_model* pt_model_buffer)
 {
     glBindTexture(GL_TEXTURE_2D, texture[0]);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_off);
-    
-    // glEnable(GL_COLOR_MATERIAL);  
-    // glColor3f(.5, 0, .5);
         
     for (int p_i=0;p_i<pt_model_buffer->num_lines;p_i++)
     {   

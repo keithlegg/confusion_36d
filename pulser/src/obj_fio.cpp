@@ -92,7 +92,7 @@ std::vector<std::string> tokenizer( const std::string& p_pcstStr, char delim )  
 void obj_model::load(char *filepath)
 {
 
-    std::cout << "## load_objfile loading file "<< filepath << "\n";
+    std::cout << "## obj_model::load loading file "<< filepath << "\n";
     
     int pofst   = 0; //DEBUG point offset indices to points if geom exists already 
     int line_ct = 0; //idx of text line we are parsing 

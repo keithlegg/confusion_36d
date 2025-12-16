@@ -5,7 +5,7 @@
 
 // void print_bytes( char * bytes, uint8_t num_bytes);
 
-void python_render(void);
+void exe_python(void);
 
 void sockettest(void) ;
 void sockettest2(void) ;

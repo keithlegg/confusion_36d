@@ -238,24 +238,6 @@ void octant_mouse_motion(int x, int y)
 /*************************************************************/
 /*************************************************************/
 
-/*
-
-
-void mouse_clk_cb(int button, int state, int x, int y) 
-{
-
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        on_click = 1;
-        clk_x_coord = x;
-        clk_y_coord = y;
-     }
-}
-*/
-
-
-/***************************************/
-
-
 
 /*
 

@@ -46,7 +46,7 @@ class cnc_plot
         
 
         //index to the current vector processed while running 
-        int pidx;
+        unsigned int pidx;
         double timediv;
         
         //calculated values - length of travel for vectors

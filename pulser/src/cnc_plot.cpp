@@ -293,7 +293,7 @@ void cnc_plot::calc_3d_pulses(Vector3 fr_pt,
     Vector3 between   = fr_pt.operator-(to_pt); //new vector lib 
     
     //calc the length of the path vector
-    float mag     = between.length();
+    //float mag     = between.length();
     
     int xp=0;int yp=0;int zp=0;
 
@@ -389,7 +389,6 @@ void cnc_plot::gen_pules(vector<int>* pt_pulsetrain, int size, int num)
     }
 
     float div = size/num;
-    float gran = div/num;
 
     int a;  
 

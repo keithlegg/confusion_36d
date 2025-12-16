@@ -18,7 +18,9 @@ class cncglobals
 {
 
     public: 
-        cncglobals(){
+        cncglobals()
+        {
+            active_filepath="";
         };
 
         ~cncglobals(){};
