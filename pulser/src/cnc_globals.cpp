@@ -62,6 +62,8 @@ using std::vector;
 #include "gl_setup.h"
 
 
+extern cnc_plot* pt_motionplot;
+
 
 char strbuffer[100][100];
 
@@ -77,9 +79,9 @@ std::vector<Vector3> linebuffer2_rgb;
 //linebuffer2.reserve(10000);
 
 //
-std::vector<Vector3> linebuffer3;
-std::vector<Vector3> linebuffer3_rgb;
-//linebuffer3.reserve(10000);
+//std::vector<Vector3> linebuffer3;
+//std::vector<Vector3> linebuffer3_rgb;
+// //linebuffer3.reserve(10000);
 
 //--------------------------
 std::vector<Vector3> scene_drawpoints;
@@ -102,8 +104,9 @@ const int MAX_TOKENS_PER_LINE = 20;
 
 
 
-
-
+/*******************************************************/
+//DEBUG this may be pointless 
+//trying to do memory housekeeping 
 void exit_program(void)
 {
     delete pt_model_buffer;
@@ -111,6 +114,23 @@ void exit_program(void)
 
 }
 
+/*******************************************************/
+
+//the data is loaded into cnc_plot - copy to the display buffer to render
+void cncglobals::copy_file_vecs_display(void)
+{
+    
+    std::cout << "called copy_prog_vecs_display " << pt_motionplot->loaded_file_vecs.size() << "\n";
+
+    for (unsigned int p=0;p<pt_motionplot->loaded_file_vecs.size();p++)
+    {   
+        std::cout << "moving poly " << p << "\n";
+
+        add_vec_lbuf1(&pt_motionplot->loaded_file_vecs.at(p)); 
+    }
+    
+    //pt_motionplot->add_prg_vec(&v);
+}
 
 
 /*******************************************************/
@@ -323,8 +343,9 @@ void cncglobals::load_cfg_file( char* filepath )
         exit (EXIT_FAILURE); // exit if file not found
     }
 
-    unsigned int local_vec_idx = 0;
+
     unsigned int line_ct = 0;
+    unsigned int local_vec_idx = 0;  
 
     while (!cfg_filein.eof())
     {   
@@ -386,7 +407,9 @@ void cncglobals::load_cfg_file( char* filepath )
                                 std::cout << "load_cfg_file - error - polygon load already closed. \n";
                             }else{
                                 active_polygon_load=false;
-                                new_ply_idx++;
+                                ply_count++;
+                                local_vec_idx=0;
+
                             };
 
                         } 
@@ -408,7 +431,14 @@ void cncglobals::load_cfg_file( char* filepath )
                                     c3 = std::stof(tokenized.at(3));
                                     
                                     Vector3 v = Vector3(c1,c2,c3); 
-                                    add_vec_lbuf1(&v);
+                                    
+                                    //add_vec_lbuf1(&v); //old way 
+                                    //pt_motionplot->loaded_file_vecs
+                                    
+                                    pt_motionplot->add_file_vec(&v);
+
+                                    
+                                    local_vec_idx++;
 
                                 } catch (const std::invalid_argument& e) {  
                                     //std::cerr << "Error: " << e.what() << std::endl; // Handling the error

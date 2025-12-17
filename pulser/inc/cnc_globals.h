@@ -26,14 +26,14 @@ class cncglobals
             ENABLE_LIMIT_SWITCHES  = false;
             ENABLE_MOTOR_DRIVE     = false;
 
-            new_ply_idx            = 0; 
+            ply_count              = 0; 
             active_polygon_load    = false; 
 
         };
 
         ~cncglobals(){};
         
-        unsigned int new_ply_idx;
+        unsigned int ply_count;
         bool active_polygon_load;
 
         bool GLOBAL_DEBUG;
@@ -42,7 +42,7 @@ class cncglobals
         bool ENABLE_MOTOR_DRIVE;
 
         //----------
-        std::vector<std::string> obj_vecpaths;
+        //std::vector<std::string> obj_vecpaths;
         std::vector<std::string> obj_filepaths;
 
         std::string active_filepath;
@@ -172,6 +172,8 @@ class cncglobals
         /*******************/
         std::vector<std::string> tokenizer( const std::string&, char);
         int cvt_int( const std::string&);
+
+        void copy_file_vecs_display(void);
 
         void load_objects(void);
         void load_cfg_file( char*);

@@ -36,6 +36,9 @@ class cnc_plot
         void pause(void);
         void stop(void);
         void run(void);
+        
+        void add_prg_vec(Vector3* nv); 
+        void add_file_vec(Vector3* nv);
 
         void rapid_move(void);
         void update_cache(void);
@@ -80,12 +83,16 @@ class cnc_plot
 
         //cache of toolpath component vectors 
         vector<Vector3> rapidmove_vecs;    
-        vector<Vector3> program_vecs; 
-
+        vector<Vector3> program_vecs;  
         //the final "baked" path that gets run
         vector<Vector3> toolpath_vecs;
-        
-        //tables of IDs to the vectors
+
+        //-----
+        //original vectors loaded from disk  
+        //keep these seeprate from the dynamically built paths 
+        vector<Vector3> loaded_file_vecs;
+
+        //tables of IDs to the disk vectors
         vector<int> tp_idxs;
 
     private:

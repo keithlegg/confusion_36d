@@ -1123,8 +1123,12 @@ void start_gui(int *argc, char** argv){
 
     //setup filepaths and paths to cut 
     cg.load_cfg_file(argv[1]);
+    cg.copy_file_vecs_display(); //copy from file vec buffer to display buffer
+
     //load the 3d models 
     cg.load_objects();
+
+
     //cg.show_obj();
     
     //cg.show();

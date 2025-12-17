@@ -75,6 +75,17 @@ extern timer mtime;
 extern vector<Vector3> linebuffer2; 
 extern vector<Vector3> linebuffer2_rgb; 
 
+/******************************************/
+void cnc_plot::add_prg_vec(Vector3* nv)
+{
+    program_vecs.push_back(*nv);
+}
+
+void cnc_plot::add_file_vec(Vector3* nv)
+{
+   loaded_file_vecs.push_back(*nv);
+}
+
 
 /******************************************/
 void cnc_plot::show_vecs(vector<Vector3>* pt_vec)
