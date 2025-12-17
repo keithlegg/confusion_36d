@@ -84,7 +84,9 @@ class cnc_plot
 
         //the final "baked" path that gets run
         vector<Vector3> toolpath_vecs;
-
+        
+        //tables of IDs to the vectors
+        vector<int> tp_idxs;
 
     private:
         void show_vecs(vector<Vector3> * pt_vec);

@@ -323,9 +323,9 @@ void cncglobals::load_cfg_file( char* filepath )
         exit (EXIT_FAILURE); // exit if file not found
     }
 
-    int n = 0;
+    unsigned int local_vec_idx = 0;
+    unsigned int line_ct = 0;
 
-    int line_ct = 0;
     while (!cfg_filein.eof())
     {   
 
@@ -369,58 +369,77 @@ void cncglobals::load_cfg_file( char* filepath )
                             //std::cout << "#ADDED OBJ " << (*this).num_loaded_obj << " "<< obj_filepaths.at((*this).num_loaded_obj) << "\n";
                         }
 
-
-                        // LOAD 3D VECTOR (3 floats for a vector display)
-                        // load a 3d or 2d object to display as vector lines
-                        if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
+                        //----- 
+                        //keep track of the polygon index - open a new poly  
+                        if (tokenized.at(0).find("op_polygon")!= std::string::npos)
+                        {
+                            if(active_polygon_load==true){
+                                std::cout << "load_cfg_file - error - polygon load already open \n";
+                            }else{                            
+                                active_polygon_load=true;
+                            };
+                        } 
+                        //keep track of the polygon index - close a new poly  
+                        if (tokenized.at(0).find("end_polygon")!= std::string::npos)
                         {   
+                            if(active_polygon_load==false){
+                                std::cout << "load_cfg_file - error - polygon load already closed. \n";
+                            }else{
+                                active_polygon_load=false;
+                                new_ply_idx++;
+                            };
 
-                            float c1,c2,c3;
-                            //DEBUG - file loader counts blank spaces - need to fix
-                            //if things are not spaced exactly right wont work with extras 
-                            try 
-                            {
-                                c1 = std::stof(tokenized.at(1));
-                                c2 = std::stof(tokenized.at(2));
-                                c3 = std::stof(tokenized.at(3));
-                                
-                                Vector3 v = Vector3(c1,c2,c3); 
-                                add_vec_lbuf1(&v);
+                        } 
+                        
+                        //----- 
+                        if(active_polygon_load)
+                        { 
+                            // LOAD 3D VECTOR (3 floats for a vector display)
+                            // load a 3d or 2d object to display as vector lines
+                            if (tokenized.at(0).find("op_scenevec")!= std::string::npos)
+                            {   
+                                float c1,c2,c3;
+                                //DEBUG - file loader counts blank spaces - need to fix
+                                //if things are not spaced exactly right wont work with extras 
+                                try 
+                                {
+                                    c1 = std::stof(tokenized.at(1));
+                                    c2 = std::stof(tokenized.at(2));
+                                    c3 = std::stof(tokenized.at(3));
+                                    
+                                    Vector3 v = Vector3(c1,c2,c3); 
+                                    add_vec_lbuf1(&v);
 
-                            } catch (const std::invalid_argument& e) {  
-                                //std::cerr << "Error: " << e.what() << std::endl; // Handling the error
-                            } catch (...) { // Catch-all for any other unexpected exceptions
-                                std::cerr << "Error loading vec3 geom from cfg" << std::endl;
-                            }                            
-                        }
+                                } catch (const std::invalid_argument& e) {  
+                                    //std::cerr << "Error: " << e.what() << std::endl; // Handling the error
+                                } catch (...) { // Catch-all for any other unexpected exceptions
+                                    std::cerr << "Error loading vec3 geom from cfg" << std::endl;
+                                }                            
+                            }//load a 3D vector 
+                        }//active polygon load 
 
                         //** MACHINE HARDWARE SETUP ************//
                         if (tokenized.at(0).find("LINEAR_UNIT") != std::string::npos )                            
                         {  
                             std::string buffer;
-                            std::cout << "DEBUG parsing LINEAR_UNIT " << tokenized.at(1) << "\n";
+                            //std::cout << "DEBUG parsing LINEAR_UNIT " << tokenized.at(1) << "\n";
                             buffer = tokenized.at(1);
-                             std::cout << "DEBUG parsing LINEAR_UNIT " << linear_unit << "\n";
+                            //std::cout << "DEBUG parsing LINEAR_UNIT " << linear_unit << "\n";
                         }
 
                         //***************************************/ 
                         if (tokenized.at(0).find("RETRACT_HEIGHT") != std::string::npos )                            
                         {  
                             std::string buffer;
-                            std::cout << "DEBUG parsing RETRACT_HEIGHT " << tokenized.at(1) << "\n";
- 
                             retract_height = std::stof( tokenized.at(1) );  
-  
                         }
 
                         //***************************************/ 
                         if (tokenized.at(0).find("WORK_HEIGHT") != std::string::npos )                            
                         {  
                             std::string buffer;
-                            std::cout << "DEBUG parsing WORK_HEIGHT " << tokenized.at(1) << "\n";
- 
+                            //std::cout << "DEBUG parsing WORK_HEIGHT " << tokenized.at(1) << "\n";
                             work_height = std::stof( tokenized.at(1) );  
-  
                         }
 
                         /***************************************/ 

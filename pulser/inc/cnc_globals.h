@@ -21,16 +21,25 @@ class cncglobals
         cncglobals()
         {
             active_filepath="";
+            GLOBAL_DEBUG           = false;
+            //DEBUG_PARAMS           = false;
+            ENABLE_LIMIT_SWITCHES  = false;
+            ENABLE_MOTOR_DRIVE     = false;
+
+            new_ply_idx            = 0; 
+            active_polygon_load    = false; 
+
         };
 
         ~cncglobals(){};
+        
+        unsigned int new_ply_idx;
+        bool active_polygon_load;
 
-
-        bool GLOBAL_DEBUG           = false;
-        bool DEBUG_PARAMS           = false;
-
-        bool ENABLE_LIMIT_SWITCHES  = false;
-        bool ENABLE_MOTOR_DRIVE     = false;
+        bool GLOBAL_DEBUG;
+        //bool DEBUG_PARAMS;
+        bool ENABLE_LIMIT_SWITCHES;
+        bool ENABLE_MOTOR_DRIVE;
 
         //----------
         std::vector<std::string> obj_vecpaths;
