@@ -259,30 +259,28 @@ void obj_model::load(char *filepath)
                             if( tokenized.at(a).size())
                             {
                                 //std::cout << " pofst " << pofst <<" line " << line_ct << " idx:" << a << " tokenized : " << tokenized.at(a) <<"\n"; // <- vertex line 
-                                  
+                                
+                                //------                                   
                                 //only supports 2,3,4 sided polygons  
-                                if(fidx==0){
+                                if(fidx==0)
+                                {
                                     //deal with "/" delineated files
                                     if ( tokenized.at(a).find("/") != std::string::npos )
                                     { 
                                         std::vector<std::string>  sl1 = tokenizer(tokenized.at(a), *"/");
-                                        //we need to know how many slashes .. ugh 
+                                        //Vertex id
                                         if(!sl1.at(0).empty()){
                                             //std::cout <<"SL11! vid " << sl1.at(0) << "\n"; 
                                             pt1 = std::stoi( sl1.at(0) );                                           
                                         }
+                                        //UV coord
                                         if(!sl1.at(1).empty()){
                                             //std::cout <<"SL12! uv " << sl1.at(1) << "\n";                                            
                                         }
+                                        //Vertex Normal
                                         if(!sl1.at(2).empty()){
                                             //std::cout <<"SL13! vn " << sl1.at(2) << "\n";
                                             vn1 = std::stoi( sl1.at(2) );  
-
-                                            //vnids[]
-
-                                            // Vector3 vn = Vector3( xc, yc, zc  );
-                                            // vnormals[num_vnrmls] = vn;
-                                            // num_vnrmls++;                                                                                                                                    
                                         }                                        
 
                                     }else{
@@ -291,7 +289,9 @@ void obj_model::load(char *filepath)
                                     }
                                 }
 
-                                if(fidx==1){
+                                //------ 
+                                if(fidx==1)
+                                {
                                     //deal with "/" delineated files                                        
                                     if ( tokenized.at(a).find("/") != std::string::npos )
                                     {
@@ -313,8 +313,10 @@ void obj_model::load(char *filepath)
                                         if (pofst>0){ pt2 = pt2+pofst;};   
                                     }                                             
                                 }  
-
-                                if(fidx==2){
+                                 
+                                //------ 
+                                if(fidx==2)
+                                {
                                     //deal with "/" delineated files                                        
                                     if ( tokenized.at(a).find("/") != std::string::npos )
                                     {
@@ -383,20 +385,12 @@ void obj_model::load(char *filepath)
                         if (fidx==3)
                         {
 
-                            vector<int> newtri;
-                            newtri.push_back(pt1);
-                            newtri.push_back(pt2);
-                            newtri.push_back(pt3);
                             tris[num_tris].push_back(pt1);
                             tris[num_tris].push_back(pt2);
                             tris[num_tris].push_back(pt3);
                         
                             //insert vertex normals if any
                             //there will be the same num as triangles
-                            vector<int> new_vn;
-                            new_vn.push_back(vn1);
-                            new_vn.push_back(vn2);
-                            new_vn.push_back(vn3);
                             vnids[num_tris].push_back(vn1);
                             vnids[num_tris].push_back(vn2);
                             vnids[num_tris].push_back(vn3);

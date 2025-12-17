@@ -104,7 +104,17 @@ void cnc_plot::show(void)
     std::cout << " #" << toolpath_vecs.size() <<" path vecs \n";    
 }
 
+/******************************************/
+void cnc_plot::showpthids(void)
+{
+    for(unsigned int x=0;x<num_plys;x++)
+    {
+        std::cout << " ply " << x <<" "<< tp_idxs[x].size() << " \n";        
+    }
 
+}
+
+/******************************************/
 void cnc_plot::showgeom(void)
 {
     std::cout << "\n #"<< rapidmove_vecs.size() <<" rapid vecs \n";
@@ -168,30 +178,42 @@ void cnc_plot::run(void)
 */
 void cnc_plot::rapid_move(void)
 {
-    
     rapidmove_vecs.clear();
     linebuffer2.clear();
 
-
     Vector3 up_vec   = Vector3(quill_pos.x, retract_height, quill_pos.z);
     Vector3 hover_e  = Vector3(prg_origin.x, retract_height, prg_origin.z);
-
      
     rapidmove_vecs.push_back(quill_pos );
     rapidmove_vecs.push_back(up_vec );
     rapidmove_vecs.push_back(hover_e);
     rapidmove_vecs.push_back(prg_origin);
     
-
     //now we have them, add to the buffer to draw them 
     add_vec_lbuf2(&quill_pos);
     add_vec_lbuf2(&up_vec);
     add_vec_lbuf2(&hover_e);
     add_vec_lbuf2(&prg_origin);
-     
+}
+
+ 
+/******************************************/
+//the idea is to add an entry for a new polygon in the index table
+//because the polygon is CCW/CW contigous, all we need is to know how many ids to add
+void cnc_plot::newply_contiguous_idx(int numply, int numids)
+{
+    std::cout << "add ply cont called # "<< numids << "\n";
+
+    //dynamically add more indices 
+    //we can cheat since the ids are contiguous. sequential, etc
+    for (unsigned int i = 0;i<numids;i++)
+    {   
+        tp_idxs[numply].push_back(i);
+    }
+    num_plys++;
 
 }
- 
+
 
 /******************************************/
 /*

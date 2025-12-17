@@ -131,7 +131,7 @@ void parse_cmd_text(std::string *buffer)
         std::cout << "dm : display mode                         \n";
         std::cout << "    solid, wire, persp, otop, oside, etc  \n";
         std::cout << "show                                      \n";
-        std::cout << "    obj, path, pathgeom, objgeom          \n";
+        std::cout << "    obj, path, pathids, pathgeom, objgeom          \n";
 
     }    
 
@@ -216,6 +216,11 @@ void parse_cmd_text(std::string *buffer)
         if(a2=="pathgeom")
         { 
             pt_motionplot->showgeom();
+        }
+
+        if(a2=="pathids")
+        { 
+            pt_motionplot->showpthids();
         }
 
     }

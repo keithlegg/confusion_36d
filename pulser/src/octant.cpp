@@ -909,6 +909,8 @@ static void render_loop()
         //DEBUG vertex color is off until I fix it
         //DEBUG - size() does not catch new vectors added with the GUI?
         
+        /*
+        //OLD CODE THAT DRAWS EVERYTHING AS A SINGLE POLY 
         //intentionally start at 1 - skip the first point 
         //we need at least two points to indicate a line 
         for (unsigned int p_i=1;p_i<linebuffer1.size();p_i++)
@@ -937,7 +939,34 @@ static void render_loop()
         
             glEnd();
              
-        }
+        }*/
+
+
+        //----
+       
+        //NEW CODE - USED INDEXED LOOKUP 
+        for (unsigned int p_i=0;p_i<pt_motionplot->num_plys;p_i++)
+        {   
+
+            for (unsigned int ii=1;ii<pt_motionplot->tp_idxs[p_i].size();ii++)
+            {
+                glBegin(GL_LINES);
+                    sv  = pt_motionplot->program_vecs[ii-1];
+                    ev  = pt_motionplot->program_vecs[ii];
+                    //rgb = linebuffer1_rgb[p_i];            
+                
+                    glColor3f(1.,0,0); //hack for now
+                    glVertex3f(sv.x, sv.y, sv.z);
+                    
+                    glColor3f(1.,0,0); //hack for now
+                    glVertex3f(ev.x, ev.y, ev.z);
+
+                glEnd();
+            }
+           
+        } 
+        
+        //----       
         
         glMaterialfv(GL_FRONT, GL_EMISSION, emis_off);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, emis_full); 

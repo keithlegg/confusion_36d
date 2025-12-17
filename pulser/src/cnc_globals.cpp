@@ -402,6 +402,11 @@ void cncglobals::load_cfg_file( char* filepath )
                                 std::cout << "load_cfg_file - error - polygon load already closed. \n";
                             }else{
                                 active_polygon_load=false;
+                                
+                                std::cout << "load_cfg_file - adding new polygon  "<<ply_count<<"\n";                            
+                                // build an idx lup for each loaded polygon 
+                                pt_motionplot->newply_contiguous_idx(ply_count,local_vec_idx);
+                                
                                 ply_count++;
                                 local_vec_idx=0;
 
@@ -425,14 +430,7 @@ void cncglobals::load_cfg_file( char* filepath )
                                     c3 = std::stof(tokenized.at(3));
                                     
                                     Vector3 v = Vector3(c1,c2,c3); 
-                                    
-                                    //add_vec_lbuf1(&v); //old way 
-                                    //pt_motionplot->loaded_file_vecs
-                                    
-                                    // vector<Vector3> loaded_file_vecs;
-                                    // vector<int> tp_idxs;
-
-                                    std::cout << "adding polygon ct "<< ply_count << " vec idx " << local_vec_idx << "\n"; 
+                                    //std::cout << "adding polygon ct "<< ply_count << " vec idx " << local_vec_idx << "\n"; 
 
                                     pt_motionplot->add_file_vec(&v);
                                     local_vec_idx++;

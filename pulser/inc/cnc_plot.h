@@ -6,6 +6,7 @@
 
 #include "Vectors.h"
 
+#define MAX_NUM_PLY 100000
 
 
 class cnc_plot
@@ -15,6 +16,8 @@ class cnc_plot
         {
             timediv    = 8.0; //speed == simtime divisions == 1 second/divs
             pidx       = 0;
+            num_plys   = 0;
+
             running    = false;
             finished   = true;
             
@@ -31,6 +34,7 @@ class cnc_plot
 
         void show(void);
         void showgeom(void);
+        void showpthids(void);
 
         void pause(void);
         void stop(void);
@@ -38,6 +42,9 @@ class cnc_plot
         
         void add_prg_vec(Vector3* nv); 
         void add_file_vec(Vector3* nv);
+        
+        void newply_contiguous_idx(int numply, int numids);
+        
 
         void rapid_move(void);
         void update_cache(void);
@@ -48,14 +55,18 @@ class cnc_plot
                             Vector3,
                             int);
         
+        //keep track of number of polygons 
+        //a ploygon is an indexed array of path vectors 
+        //similar to an .OBJ file face, etc
+        unsigned int num_plys;
 
         //index to the current vector processed while running 
         unsigned int pidx;
         double timediv;
         
         //calculated values - length of travel for vectors
-        float rapid_dist   = 0;
-        float program_dist = 0;     
+        float rapid_dist;
+        float program_dist;     
 
 
         //-----
@@ -90,7 +101,7 @@ class cnc_plot
         //original vectors loaded from disk  
         //keep these seeprate from the dynamically built paths 
         std::vector<Vector3> loaded_file_vecs;
-        std::vector<int> tp_idxs;
+        std::vector<int> tp_idxs[MAX_NUM_PLY];
 
     private:
         void show_vecs(std::vector<Vector3> * pt_vec);
