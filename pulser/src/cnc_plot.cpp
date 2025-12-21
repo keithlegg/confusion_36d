@@ -59,6 +59,7 @@
 
 #include "Vectors.h"
 #include "cnc_globals.h"
+#include "cnc_parport.h"
 #include "timer.h"
 #include "gl_setup.h"
 #include "point_op.h"
@@ -70,9 +71,9 @@
 point_ops PG;
 
 extern cnc_plot* pt_motionplot;
+extern cnc_parport* pt_parport;
 
-//extern cncglobals cg;
-// extern cnc_parport parport;
+
 
 
 
@@ -86,41 +87,41 @@ extern std::vector<Vector3> linebuffer2_rgb;
 
 
 
- 
-
- 
-
-//send_pulses
 
 
- 
+/******************************************/
 void cnc_plot::run_send_pulses(cncglobals* pt_cg,
                      float f_x, float f_y, float f_z,
                      float s_x, float s_y, float s_z,
                      int divs)  
 {
+    
+    //dummy progress
+    float prog = .0;
 
     Vector3 s_p = Vector3(f_x , f_y ,f_z );
     Vector3 e_p = Vector3(s_x , s_y ,s_z );
 
     pt_motionplot->calc_3d_pulses(s_p, e_p, divs);
 
-    //if(pt_cg->GLOBAL_DEBUG==true)
-    for(int x=0;x<pt_motionplot->pulsetrain.size();x++)
+    if(pt_cg->GLOBAL_DEBUG==true)
     {
-        std::cout<<pt_motionplot->pulsetrain[x].x  <<" "
-                 <<pt_motionplot->pulsetrain[x].y  <<" "
-                 <<pt_motionplot->pulsetrain[x].z  <<"\n";        
-    } 
-    
+        for(int x=0;x<pt_motionplot->pulsetrain.size();x++)
+        {
+            std::cout<<pt_motionplot->pulsetrain[x].x  <<" "
+                     <<pt_motionplot->pulsetrain[x].y  <<" "
+                     <<pt_motionplot->pulsetrain[x].z  <<"\n";        
+        } 
+    }//if debug
 
-    //if(pt_cg->GLOBAL_DEBUG==false)
-    //{
-    
-    // motionplot.send_pulses(pt_pulsetrain);
-    //void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_plot )
 
-    //}
+    if(pt_cg->GLOBAL_DEBUG==false)
+    {
+        pt_parport->send_pulses(&prog, pt_cg, pt_motionplot);
+
+        //void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_plot )
+
+    }//no debug, run it!
 
  }   
  

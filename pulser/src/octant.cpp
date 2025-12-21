@@ -88,6 +88,7 @@ cncglobals cg;
 //cncglobals new cg;
 
 cnc_parport parport;
+cnc_parport* pt_parport;
 
 
 /***************************************/
