@@ -60,9 +60,8 @@
 
 extern bool tog_testport; 
 
-// µs (microsecond) duration between pulses 
-// gecko docs say minimun pulse with is 2.5µs per pulse - seems way too fast for me 
-//int pulse_del = 1000;
+
+
 
 /***************************************/
 /***************************************/
@@ -210,6 +209,8 @@ void cnc_parport::test_inputs(cncglobals* cg, unsigned char* data)
 
 
 /***************************************/
+//turn auxillary device on  (extruder, spindle motor, etc)
+
 void cnc_parport::aux_on(cncglobals* cg, unsigned int pin)
 {
     if(ioperm(cg->parport1_addr,1,1))
@@ -218,17 +219,19 @@ void cnc_parport::aux_on(cncglobals* cg, unsigned int pin)
     
     }
 
+    //read the byte to get the current state, 
+    //then twiddle the pins accordingly 
     unsigned char data_read;
     data_read = inb(cg->parport1_addr);
     data_read = data_read |= (1 << pin);
     outb(data_read, cg->parport1_addr);            
-
-
 }
 
 
 
 /***************************************/
+//turn auxillary device off  (extruder, spindle motor, etc)
+
 void cnc_parport::aux_off(cncglobals* cg, unsigned int pin)
 {
     if(ioperm(cg->parport1_addr,1,1))
@@ -237,6 +240,8 @@ void cnc_parport::aux_off(cncglobals* cg, unsigned int pin)
     
     }
 
+    //read the byte to get the current state, 
+    //then twiddle the pins accordingly 
     unsigned char data_read;
     data_read = inb(cg->parport1_addr);
     data_read = data_read &= ~(1 << pin);
@@ -249,10 +254,9 @@ void cnc_parport::aux_off(cncglobals* cg, unsigned int pin)
 
 
 /***************************************/
-
-//extern bool tog_testport - is a bool to read inputs
-//test_port here is a function to flash the pins 
-//yes its confusing 
+/*
+    test that port is working 
+*/
 
 void cnc_parport::test_port_output(cncglobals* cg)
 {
@@ -292,6 +296,8 @@ void cnc_parport::test_port_output(cncglobals* cg)
 /***************************************/
 /*
        Read the parallel port inputs to make sure we didnt crash the machine 
+
+       DEBUG - need to wire up pin assignments from configuration file
 
        Data State: 
 
@@ -354,8 +360,10 @@ void cnc_parport::read_limits(cncglobals* cg, Vector3* pt_limit_switch_data)
     
     The first elemtent of the array denotes direction pulses
     
+    DEBUG - need to add a file configurable pin assignment 
 
-    DB25 PINOUT (using the CNC4PC/LinuxCNC board as my "default")
+
+    OLD DB25 PINOUT (using the CNC4PC/LinuxCNC board as my "default")
 
     db25 pin #2 - X pulse  -  address 0x01  -  bitshift (1<<0) 
     db25 pin #3 - X dir    -  address 0x02  -  bitshift (1<<1)
@@ -386,11 +394,12 @@ void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_p
     //unsigned char send_byte = 0x00;
     unsigned int send_byte = 0;
 
-    int send_it = 1; 
+    bool enable_send   = true; 
+    bool enable_limits = false; 
 
     std::cout << "# we have pulses! count: " << pt_plot->pulsetrain.size() << "\n";
 
-    if(send_it==1)
+    if(enable_send==1)
     {
         if(ioperm(cg->parport1_addr,1,1))
         { 
@@ -402,15 +411,15 @@ void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_p
     //**************************//
     Vector3 dirpulses = pt_plot->pulsetrain.at(0);
     
-    Vector3 limit_switches;
+    Vector3 limit_switches = Vector3(0,0,0);
 
 
-    if(send_it==0)
+    if(enable_send==0)
     {
         std::cout <<"# debug - direction "<< dirpulses.x<<" " << dirpulses.y<<" " << dirpulses.z <<"\n";
     }
 
-    if(send_it==1)
+    if(enable_send==1)
     {   
         //x direction high 
         if (dirpulses.x>1){
@@ -474,19 +483,23 @@ void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_p
         *pt_progress = (int) pt_plot->pulsetrain.size()/x;
 
 
-        if(send_it==0)
+        if(enable_send==0)
         {
             std::cout<< pt_plot->pulsetrain.at(x).x<<" " 
                      << pt_plot->pulsetrain.at(x).y<<" " 
                      << pt_plot->pulsetrain.at(x).z <<"\n";
         }
 
-        if(send_it==1)
+        if(enable_send==1)
         {
             
             // watch the limit switches - if triggered, switch off motors NOW!
-            (*this).read_limits(cg, &limit_switches);
-            
+            if(enable_limits)
+            {
+                read_limits(cg, &limit_switches);
+            }
+
+            //if limits are good (or disabled) - run it 
             if(limit_switches.x==1 || limit_switches.y==1 || limit_switches.z==1){
                 std::cout << "machine has crashed. Condolences. pulsing aborted. ";
             }
@@ -537,7 +550,7 @@ void cnc_parport::send_pulses(float* pt_progress, cncglobals* cg, cnc_plot* pt_p
 
     }
 
-    if(send_it==1)
+    if(enable_send==1)
     {
         std::cout << "finished transmitting pulses.\n";
     }

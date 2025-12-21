@@ -139,8 +139,8 @@ void cncglobals::show_params( void )
     
     //print some neato 16 bit hex addresses 
     std::cout << std::hex;
-    std::cout << " parport1_addr : " << (*this).parport1_addr << "\n";
-    std::cout << " parport2_addr : " << (*this).parport2_addr << "\n";
+    std::cout << " parport1_addr : " << parport1_addr << "\n";
+    std::cout << " parport2_addr : " << parport2_addr << "\n";
 
     //set it back when we are done 
     std::cout.flags( f );
@@ -151,12 +151,12 @@ void cncglobals::show_params( void )
 
     std::cout << " ## machine travel size in 3D  " << "\n";  
     
-    std::cout << " retract height : " << (*this).retract_height<< "\n";
-    std::cout << " work height    : " << (*this).work_height   << "\n";
+    std::cout << " retract height : " << retract_height<< "\n";
+    std::cout << " work height    : " << work_height   << "\n";
 
-    std::cout << " x_xtntx        : " << (*this).x_xtntx<< "\n";
-    std::cout << " y_xtntx        : " << (*this).y_xtntx<< "\n";
-    std::cout << " z_xtntx        : " << (*this).z_xtntx<< "\n";
+    std::cout << " x_xtntx        : " << x_xtntx<< "\n";
+    std::cout << " y_xtntx        : " << y_xtntx<< "\n";
+    std::cout << " z_xtntx        : " << z_xtntx<< "\n";
     std::cout <<"\n";
 
     std::cout << " ## waveform generation parameters " << "\n";  
@@ -164,38 +164,38 @@ void cncglobals::show_params( void )
     std::cout <<"\n";
 
     std::cout << " ## pulses per linear unit (x,y,z)" << "\n";        
-    std::cout << " pp1u_x : " << (*this).pp1u_x << "\n";
-    std::cout << " pp1u_y : " << (*this).pp1u_y << "\n";
-    std::cout << " pp1u_z : " << (*this).pp1u_z << "\n";
+    std::cout << " pp1u_x : " << pp1u_x << "\n";
+    std::cout << " pp1u_y : " << pp1u_y << "\n";
+    std::cout << " pp1u_z : " << pp1u_z << "\n";
     std::cout <<"\n";
 
     //std::cout << std::boolalpha;
     std::cout << " ## DB25 pin assignments " << "\n";  
-    std::cout << " parprt1_dir_x  : " << (*this).parprt1_dir_x  << " inverted: "<< (*this).parprt1_dir_x_inv  << "\n";
-    std::cout << " parprt1_step_x : " << (*this).parprt1_step_x << " inverted: "<< (*this).parprt1_step_x_inv << "\n";
-    std::cout << " parprt1_dir_y  : " << (*this).parprt1_dir_y  << " inverted: "<< (*this).parprt1_dir_y_inv  << "\n";
-    std::cout << " parprt1_step_y : " << (*this).parprt1_step_y << " inverted: "<< (*this).parprt1_step_y_inv << "\n";
-    std::cout << " parprt1_dir_z  : " << (*this).parprt1_dir_z  << " inverted: "<< (*this).parprt1_dir_z_inv  << "\n";
-    std::cout << " parprt1_step_z : " << (*this).parprt1_step_z << " inverted: "<< (*this).parprt1_step_z_inv << "\n";
-    std::cout << " parprt1_dir_a  : " << (*this).parprt1_dir_a  << " inverted: "<< (*this).parprt1_dir_a_inv  << "\n";
-    std::cout << " parprt1_step_a : " << (*this).parprt1_step_a << " inverted: "<< (*this).parprt1_step_a_inv << "\n";
+    std::cout << " parprt1_dir_x  : " << parprt1_dir_x  << " inverted: "<< parprt1_dir_x_inv  << "\n";
+    std::cout << " parprt1_step_x : " << parprt1_step_x << " inverted: "<< parprt1_step_x_inv << "\n";
+    std::cout << " parprt1_dir_y  : " << parprt1_dir_y  << " inverted: "<< parprt1_dir_y_inv  << "\n";
+    std::cout << " parprt1_step_y : " << parprt1_step_y << " inverted: "<< parprt1_step_y_inv << "\n";
+    std::cout << " parprt1_dir_z  : " << parprt1_dir_z  << " inverted: "<< parprt1_dir_z_inv  << "\n";
+    std::cout << " parprt1_step_z : " << parprt1_step_z << " inverted: "<< parprt1_step_z_inv << "\n";
+    std::cout << " parprt1_dir_a  : " << parprt1_dir_a  << " inverted: "<< parprt1_dir_a_inv  << "\n";
+    std::cout << " parprt1_step_a : " << parprt1_step_a << " inverted: "<< parprt1_step_a_inv << "\n";
 
     std::cout << "\n"; 
     /*
-    std::cout << " parprt2_dir_x  : " << (*this).parprt2_dir_x  << " inverted: "<< (*this).parprt2_dir_x_inv  << "\n";
-    std::cout << " parprt2_step_x : " << (*this).parprt2_step_x << " inverted: "<< (*this).parprt2_step_x_inv << "\n";
-    std::cout << " parprt2_dir_y  : " << (*this).parprt2_dir_y  << " inverted: "<< (*this).parprt2_dir_y_inv  << "\n";
-    std::cout << " parprt2_step_y : " << (*this).parprt2_step_y << " inverted: "<< (*this).parprt2_step_y_inv << "\n";
-    std::cout << " parprt2_dir_z  : " << (*this).parprt2_dir_z  << " inverted: "<< (*this).parprt2_dir_z_inv  << "\n";
-    std::cout << " parprt2_step_z : " << (*this).parprt2_step_z << " inverted: "<< (*this).parprt2_step_z_inv << "\n";
-    std::cout << " parprt2_dir_a  : " << (*this).parprt2_dir_a  << " inverted: "<< (*this).parprt2_dir_a_inv  << "\n";
-    std::cout << " parprt2_step_a : " << (*this).parprt2_step_a << " inverted: "<< (*this).parprt2_step_a_inv << "\n";
+    std::cout << " parprt2_dir_x  : " << parprt2_dir_x  << " inverted: "<< parprt2_dir_x_inv  << "\n";
+    std::cout << " parprt2_step_x : " << parprt2_step_x << " inverted: "<< parprt2_step_x_inv << "\n";
+    std::cout << " parprt2_dir_y  : " << parprt2_dir_y  << " inverted: "<< parprt2_dir_y_inv  << "\n";
+    std::cout << " parprt2_step_y : " << parprt2_step_y << " inverted: "<< parprt2_step_y_inv << "\n";
+    std::cout << " parprt2_dir_z  : " << parprt2_dir_z  << " inverted: "<< parprt2_dir_z_inv  << "\n";
+    std::cout << " parprt2_step_z : " << parprt2_step_z << " inverted: "<< parprt2_step_z_inv << "\n";
+    std::cout << " parprt2_dir_a  : " << parprt2_dir_a  << " inverted: "<< parprt2_dir_a_inv  << "\n";
+    std::cout << " parprt2_step_a : " << parprt2_step_a << " inverted: "<< parprt2_step_a_inv << "\n";
     */
 
     std::cout << "\n"; 
-    std::cout << " x_limit_pin    : " << (*this).x_limitsw_pin << " inverted: "<< (*this).x_limitsw_pin_inv << "\n";
-    std::cout << " y_limit_pin    : " << (*this).y_limitsw_pin << " inverted: "<< (*this).y_limitsw_pin_inv << "\n";
-    std::cout << " z_limit_pin    : " << (*this).z_limitsw_pin << " inverted: "<< (*this).z_limitsw_pin_inv << "\n";
+    std::cout << " x_limit_pin    : " << x_limitsw_pin << " inverted: "<< x_limitsw_pin_inv << "\n";
+    std::cout << " y_limit_pin    : " << y_limitsw_pin << " inverted: "<< y_limitsw_pin_inv << "\n";
+    std::cout << " z_limit_pin    : " << z_limitsw_pin << " inverted: "<< z_limitsw_pin_inv << "\n";
     
     //std::cout << " : " << (*this). << "\n";
     //std::cout << " : " << (*this). << "\n";    

@@ -6,8 +6,13 @@
     This stores the cursor state, parses both single key and text input
     and redirectes program execution to the right callbacks. 
 
-    Some of the odler, single key callbacks are called with the legacy function  
-    key_cb()
+    Some of the older, single key callbacks are called with the legacy function  
+      --> key_cb()
+
+
+    DEBUG - we need a way to call commands from the headless, CLI only. 
+    Need to rethink and rebuild the whole command structure. 
+
 
        
     ------------------------------------------- 
