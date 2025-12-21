@@ -101,45 +101,68 @@ extern bool tog_testport;
 /***************************************/
 unsigned char last_byte;
 unsigned char data_read;
-int step = 0;
-int dir = 0;
 
+int sampa = -99;
+int sampb = -99;
+int lstep = 0;
+int ldir = 0;
 
 void cnc_parport::decode_quadrature(cncglobals* cg, 
-                                    unsigned char* data,
+                                    int* step,
+                                    int* dir,
                                     unsigned char* a_sigmask,
-                                    unsigned char* b_sigmask)
+                                    unsigned char* b_sigmask,
+                                    bool* stale)
 {
-
     if(ioperm(cg->parport1_addr+1,1,1))
     { 
         fprintf(stderr, "# Couldn't open parallel port \n"), exit(1);
     }    
-    
 
-    last_byte = inb(cg->parport1_addr+1); 
-    
-    if(last_byte!=last_byte)
+    //sample the data from parallel port input register
+    data_read = inb(cg->parport1_addr+1); 
+
+    //poll the samples - probably not the best way 
+    //I know of no way to use interrupts, sadly 
+    int newa = ((data_read & *a_sigmask) == *a_sigmask);
+    int newb = ((data_read & *b_sigmask) == *b_sigmask);
+     
+    //detect direction change and determine which changed first, A or B
+    if (newa != sampa || newb != sampb) 
     {
-        if ((data_read & *a_sigmask) == *a_sigmask)
-        {
-            //std::cout << "A positive \n";  
-            dir++;
-        };
-        
-        if ((data_read & *b_sigmask) == *b_sigmask)
-        {
-            //std::cout << "B positive \n";  
-            dir--;
-        };
-
-        step++;
+        //detect changes on A
+        if(newa!=sampa && newb==sampb){
+            if(newa==newb){ldir = !newa;}
+        //detect changes on B            
+        }else if(newa==sampa && newb!=sampb){
+            if(newa==newb){ldir = !newa;}
+        } 
+    }; 
+    
+    //dont update if nothing to update  
+    if(data_read==last_byte)
+    {  
+        *stale=true;
     }
 
-
-    std::cout << " step "<< step << " dir " << dir << "\n";  
-
+    //only "decide" the data state when things change 
+    if(data_read!=last_byte)
+    {  
+        sampa = newa;
+        sampb = newb;  
+        lstep++; 
+        
+        //only set new data when asked for it
+        if(stale)
+        {
+            *step=lstep;
+            *dir=ldir;
+            *stale=false;
+        }
+    }    
+ 
     last_byte = data_read;
+ 
 } 
 
 

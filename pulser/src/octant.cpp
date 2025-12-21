@@ -471,11 +471,13 @@ char s[100];
 
 //test of quadrature input 
 unsigned char portdata;
-unsigned char am;
-unsigned char bm;
-
-
 double localsimtime;
+
+unsigned char am = 0b10000000;
+unsigned char bm = 0b01000000;
+int step = 0;
+int dir = 0;
+bool stale = true;
 
 static void render_loop()
 {
@@ -624,15 +626,10 @@ static void render_loop()
             //unsigned char   // pin13 - 0b00010000 - 0x10
             //unsigned char   // pin15 - 0b00001000 - 0x08
 
-            unsigned char am = 0b10000000;
-            unsigned char bm = 0b01000000;
-            parport.decode_quadrature(&cg, &portdata, &am, &bm);
-           
-
-            // parport.decode_quadrature(cncglobals* cg, 
-            //                           unsigned char* data,
-            //                           unsigned char* a_sigmask,
-            //                           unsigned char* b_sigmask);
+            parport.decode_quadrature(&cg, &step, &dir, &am, &bm, &stale);
+            if(!stale){
+                std::cout <<  " step  " << step << " dir " << dir << "\n"; 
+            }           
 
             glColor3d(0, 1.0, 0);        
             sprintf(cs, ""BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(portdata)  );

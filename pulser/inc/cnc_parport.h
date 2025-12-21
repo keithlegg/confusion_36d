@@ -61,9 +61,12 @@ class cnc_parport
                      unsigned char* data);
 
     void decode_quadrature(cncglobals* cg, 
-                           unsigned char* data,
-                           unsigned char* a_sigmask,
-                           unsigned char* b_sigmask);
+                            int* step,
+                            int* dir,
+                            unsigned char* a_sigmask,
+                            unsigned char* b_sigmask,
+                            bool* stale);
+
 
     void send_pulses(float* pt_progress, 
                      cncglobals* cg, 
