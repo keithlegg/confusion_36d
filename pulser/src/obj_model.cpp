@@ -147,7 +147,7 @@ void obj_model::show_geom(void)
     for (i=0;i<num_tris;i++)
     {
         std::cout << " tri idx "<< i  << " is :";
-        std::cout << tris[i][0] << " " << tris[i][1] << tris[i][2];
+        std::cout << tris[i][0] << " " << tris[i][1] << " "<< tris[i][2];
         std::cout << "\n";
 
 

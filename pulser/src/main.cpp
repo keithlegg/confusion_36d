@@ -112,10 +112,10 @@ int main(int argc, char **argv)
 {  
 
 
-    parse_args(argc, argv); 
+    //parse_args(argc, argv); 
 
     /*------------------*/  
-    /*
+    
     if( argc == 2 ) {
         obj_filepath = argv[1] ;
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
             printf("# file %s does not exist.\n", obj_filepath);
             exit(0);
         }
-    }*/
+    }
 
 
     /*------------------*/

@@ -557,10 +557,11 @@ static void render_loop()
             Vector3 s_p = motionplot.toolpath_vecs[motionplot.pidx];
             Vector3 e_p = motionplot.toolpath_vecs[motionplot.pidx+1];  
 
-            std::cout << "running vector \n";
+               
+            std::cout << "running vector "<< motionplot.pidx << "\n";
             std::cout << "start "<< s_p.x <<" "<< s_p.y << " "<< s_p.z << "\n";
             std::cout << "end   "<< e_p.x <<" "<< e_p.y << " "<< e_p.z << "\n";                       
-        
+            
 
             //DEBUG - get the length of the vector/spatial divs to calc proper speed 
             //vectormag   motionplot.toolpath_vecs[motionplot.pidx]
