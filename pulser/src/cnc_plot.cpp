@@ -76,8 +76,9 @@ point_ops PG;
 
 //Timer related 
 timer mtime = timer();
+timer* pt_mtime = &mtime;
 
-double localsimtime;
+
 
 
 /***************************************/
@@ -250,6 +251,8 @@ void cnc_plot::stop(void)
         mtime.stop();
         //mtime.step_sim();        
     }
+
+    finished = true;
 }
 
 
@@ -265,19 +268,27 @@ void cnc_plot::run(void)
     //this is a fresh run from the beginning 
     if(running==false && finished==true)
     {
+        mtime.reset_sim(); //0-1 time only
         mtime.start();
-        running = true;
+        running  = true;
         finished = false;
     }
-    ///////////////////////////////////
-    if(mtime.running)
+
+    //-------------------------------//
+    while (mtime.tm_running)
     {
-        localsimtime = mtime.get_elapsed_simtime() * timediv;
+        //localsimtime = mtime.get_elapsed_simtime() * timediv;
+        localsimtime = mtime.get_elapsed_simtime();        
+
+
+        //std::cout << "--------------------------\n";
+        //std::cout << "cnc_plot -> local simtime " << localsimtime <<"\n";
+        // std::cout << "real time " << mtime.getElapsedTimeInSec() << "\n";
 
         //simtime runs between 0-1 - it resets each time another vector in the stack has been processed
         if (localsimtime>=1.0)
         {
-
+             
             //std::cout << "-----------------------------------\n";        
             //std::cout << "running index " << pidx        << "\n";
 
@@ -285,29 +296,31 @@ void cnc_plot::run(void)
             if (pidx<toolpath_vecs.size())
             {
                 pidx++;        
+
                 // start the (sim) clock over at the end of each vector segment 
-                // 0.0 - 1.0 is the range - which feeds the 3D `lerp           
-                mtime.step_sim();
+                // 0.0 - 1.0 is the range - which feeds the 3D `lerp  
+                mtime.reset_sim();
+                localsimtime=0;
             }
-
             //program finished here
-            if (pidx>=toolpath_vecs.size()-1)
+            else if (pidx>=toolpath_vecs.size()-1)
             {
-                mtime.running = false;
                 stop();
-                finished = true;
 
-                //update rebuilds the stack of vectors to process
-                //this is for rapid move, etc 
+                //std::cout << "-----------------------------------\n";        
+                //std::cout << "mtime stopped  "  << "\n";
                 pidx = 0;
-                update_cache();
+                //update_toolpaths();
 
             }
+           
         }
+        //-----------------
+        std::cout<< localsimtime << "\n";
         
         //----------------- 
         //the main loop where we update display and pulse the ports.
-        if (pidx<=toolpath_vecs.size()-1 && mtime.running)
+        if (pidx<=toolpath_vecs.size()-1 && mtime.tm_running)
         {
             Vector3 s_p = toolpath_vecs[pidx];
             Vector3 e_p = toolpath_vecs[pidx+1];  
@@ -338,7 +351,7 @@ void cnc_plot::run(void)
 
 */
 
-void cnc_plot::update_cache(void)
+void cnc_plot::update_toolpaths(void)
 {
     if(finished==true && running==false)
     {
@@ -394,7 +407,7 @@ void cnc_plot::update_cache(void)
         /*     
         //(re)calculate the length of all vectors
         //program_dist = 0;  
-        //std::cout << "DEBUG - update_cache ADDING prog vecs \n";            
+        //std::cout << "DEBUG - update_toolpaths ADDING prog vecs \n";            
         for (int v=0;v<program_vecs.size();v++)
         {
             toolpath_vecs.push_back( program_vecs.at(v) );
@@ -494,7 +507,7 @@ void cnc_plot::loadpath( std::vector<Vector3>* pt_drawvecs)
         
     } 
     
-    update_cache();
+    update_toolpaths();
 }
 
 

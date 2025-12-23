@@ -62,7 +62,7 @@ class cnc_plot
         //void old_rapid_move(void);
         void rapid_move(void);
         
-        void update_cache(void);
+        void update_toolpaths(void);
         void loadpath( std::vector<Vector3>* pt_drawvecs);
         
         void calc_3d_pulses(Vector3, 
@@ -73,6 +73,9 @@ class cnc_plot
                              float f_x, float f_y, float f_z,
                              float s_x, float s_y, float s_z,
                              int divs);          
+
+        
+        double localsimtime;
 
         // keep track of number of polygons 
         // a ploygon is an indexed array of path vectors 

@@ -155,8 +155,11 @@ extern point_ops PG;
 char cs[100];
 char s[100];
 
-extern timer mtime;
-extern double localsimtime;
+
+//extern timer mtime;
+extern timer* pt_mtime;
+
+
 
 extern cnc_plot motionplot;
 extern cnc_plot* pt_motionplot;
@@ -927,76 +930,35 @@ void render_loop(void)
     glutKeyboardFunc(parser_cb);
 
     //------------ 
-    //DEBUG - THE MAIN LOGIC OF MOTION SHOULD NOT BE IN THE RENDER LOOP!
-    //THIS NEEDS TO BE INDEPENDANT - AND UPDATE OPENGL, NOT THE OTHER WAY AROUND 
-    //MOVE AS MUCH AS POSSIBLE INTO CNC_PLOT 
-    /* 
-    if(mtime.running)
+ 
+    if(pt_mtime->tm_running)
     {
+
+        std::cout << "-----------------------------------\n";        
+        std::cout << " renderloop tm_running "  << "\n";
         
-        // //std::cout << mtime.getElapsedTime() << "\n";
-        // std::cout << "local simtime is " << localsimtime << "\n";
-        // std::cout << " pidx "<< motionplot.pidx          << "\n";
+        //std::cout << pt_mtime->getElapsedTimeInSec();
 
-        //----
-
-        localsimtime = mtime.get_elapsed_simtime() * motionplot.timediv;
 
         //simtime runs between 0-1 - it resets each time another vector in the stack has been processed
-        if (localsimtime>=1.0)
+        if (motionplot.localsimtime>=1.0)
         {
 
-            //std::cout << "-----------------------------------\n";        
-            //std::cout << "running index " << motionplot.pidx        << "\n";
+
 
             //iterate the stack of vectors to process
-            if (motionplot.pidx<motionplot.toolpath_vecs.size())
-            {
-                //---------------------
-                std::cout << "running vector "<< motionplot.pidx << "\n";
-                Vector3 s_p = motionplot.toolpath_vecs[motionplot.pidx];
-                Vector3 e_p = motionplot.toolpath_vecs[motionplot.pidx+1]; 
-
-                std::cout << "start "<< s_p.x <<" "<< s_p.y << " "<< s_p.z << "\n";
-                std::cout << "end   "<< e_p.x <<" "<< e_p.y << " "<< e_p.z << "\n";                       
-                //-----------------------
-                // first test of pulsing from GUI 
-                
-                //DEBUG - get the length of the vector/spatial divs to calc proper speed 
-                //vectormag   motionplot.toolpath_vecs[motionplot.pidx]
-                
-                // unsigned int divs = 10;
-                // pt_motionplot->calc_3d_pulses(s_p, e_p, divs);
-                // //data should now be updated and ready in pt_motionplot->pulsetrain 
-                // //pt_motionplot->pulsetrain ;
-                // parport.send_pulses(&dummy, &cg, pt_motionplot);
-
-                //---------------------
-                motionplot.pidx++;        
-                // start the (sim) clock over at the end of each vector segment 
-                // 0.0 - 1.0 is the range - which feeds the 3D `lerp           
-                mtime.step_sim();
-            }
+            //if (motionplot.pidx<motionplot.toolpath_vecs.size())
+ 
 
             //program finished here
-            if (motionplot.pidx>=motionplot.toolpath_vecs.size()-1)
-            {
-                mtime.running = false;
-                motionplot.stop();
-                motionplot.finished = true;
-
-                //update rebuilds the stack of vectors to process
-                //this is for rapid move, etc 
-                motionplot.pidx = 0;
-
-                motionplot.update_cache();
-
-            }
+            //if (motionplot.pidx>=motionplot.toolpath_vecs.size()-1)
+ 
         }
         
         //----------------- 
+        /*
         //the main loop where we update display and pulse the ports.
-        if (motionplot.pidx<=motionplot.toolpath_vecs.size()-1 && mtime.running)
+        if (motionplot.pidx<=motionplot.toolpath_vecs.size()-1 && mtime.tm_running)
         {
             Vector3 s_p = motionplot.toolpath_vecs[motionplot.pidx];
             Vector3 e_p = motionplot.toolpath_vecs[motionplot.pidx+1];  
@@ -1008,15 +970,15 @@ void render_loop(void)
 
             glColor3d(1, .4, 1);
             draw_locator(&motionplot.quill_pos, .5);
-        }
+        }*/
 
     }//end program cycle running  
     
-    */
+   
 
     //------------ 
     //draw locator when idle 
-    if(!mtime.running)
+    if(!pt_mtime->tm_running)
     {
         glColor3d(.7, .7, .7);
         draw_locator(&motionplot.quill_pos, .5);        
@@ -1103,7 +1065,7 @@ void render_loop(void)
 
         //DEBUG USING THE TIMER AS INDICATOR OF MACHINE RUNNING 
         //PROBABLY NOT WHAT YOU WANT - CONSIDER THREADS AND A MORE COMPLEX SEMAPHORE 
-        if(!mtime.running)
+        if(!pt_mtime->tm_running)
         {
             glColor3d(1.0, 0, 0);
             renderBitmapString( ((int)(scr_size_x/2)-300) , 30  ,(void *)font, "ESTOP" ); 

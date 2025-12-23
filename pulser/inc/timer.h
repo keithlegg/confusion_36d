@@ -34,47 +34,51 @@ class timer
             endCount.tv_sec = endCount.tv_usec = 0;
 
             startTimeInMicroSec = 0;
-            endTimeInMicroSec = 0;
-    
+            endTimeInMicroSec   = 0;
+            
+            start_simtime = 0;
+            end_simtime   = 0;    
+
             sim_time_us = 0;
 
-            running = false;
-            stopped = 0;//yes this is a contradiction to running = false, roill with it 
+            tm_running = false;
+            tm_stopped = 0;//yes this is a contradiction to running = false, roill with it 
 
         }
 
         ~timer(){};
 
-
         void   start();                             // start timer
         void   stop();                              // stop the timer
 
-        double getElapsedTime();                    // get elapsed time in second
-        double getElapsedTimeInSec();               // get elapsed time in second (same as getElapsedTime)
-        double getElapsedTimeInMilliSec();          // get elapsed time in milli-second
-        double getElapsedTimeInMicroSec();          // get elapsed time in micro-second
+        double getElapsedTime(void);                    // get elapsed time in second
+        double getElapsedTimeInSec(void);               // get elapsed time in second (same as getElapsedTime)
+        double getElapsedTimeInMilliSec(void);          // get elapsed time in milli-second
+        double getElapsedTimeInMicroSec(void);          // get elapsed time in micro-second
 
-        double get_elapsed_simtime_ms();
-        double get_elapsed_simtime_sec();
-        double get_elapsed_simtime();
+        double get_elapsed_simtime_us(void);            // get elapsed (sim)time in micro-second
+        double get_elapsed_simtime_ms(void);
+        double get_elapsed_simtime_sec(void);
+        double get_elapsed_simtime(void);
 
         //keith added these
-        void step_sim(void);
+        void reset_sim(void);
 
-        bool    running; // public property 
+        bool   tm_running;   // public property 
         double sim_time_us; //us == microsecond 
         //double time_offset = 0;
 
-
-        
-
-
     protected:
 
+
     private:
-        double startTimeInMicroSec;                 // starting time in micro-second
-        double endTimeInMicroSec;                   // ending time in micro-second
-        int    stopped;                             // stop flag 
+        double startTimeInMicroSec;   // starting time in micro-second
+        double endTimeInMicroSec;     // ending time in micro-second
+
+        double start_simtime;         // starting time in micro-second
+        double end_simtime;           // ending time in micro-second
+
+        int    tm_stopped;               // stop flag 
 
         timeval startCount;                         
         timeval endCount;                            
