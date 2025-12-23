@@ -1,20 +1,12 @@
-
 # Octant - Multi axis motion control   
-
-
-THIS IS VERY MUCH A WORK IN PROGRESS!!
-
-Not ready to run any machines yet. 
-
-
-From Reddit:
-
-"If you're thinking of writing your own controller software and hoping it's more reliable than open source or commercially available products, you're truly out to lunch."
-
-
 ![alt text](https://github.com/keithlegg/octant_cnc/blob/main/images/screen.jpg) 
+![alt text](https://github.com/keithlegg/octant_cnc/blob/main/images/head_normals.jpg) 
+![alt text](https://github.com/keithlegg/octant_cnc/blob/main/images/droid.jpg) 
 
-
+THIS IS VERY MUCH A WORK IN PROGRESS!! 
+   
+"If you're thinking of writing your own controller software and hoping it's more reliable than open source or commercially available products, you're truly out to lunch."
+ 
 
 <br>
 ## DISCLAIMER
@@ -73,14 +65,11 @@ pylink.cpp
 obj_model.h - consists of 3 seperate C files
    -
    obj_fio.cpp 
-   -   
-         loads and saves data from disk   
+   - loads and saves data from disk   
    obj_geom.cpp 
-   -   
-         structure of 3d model geometry 
+   - structure of 3d model geometry 
    obj_model.cpp 
-   -
-         structure of 3d model - everything else, utility, etc     
+   - structure of 3d model - everything else, utility, etc     
 
 cnc_globals.cpp
    -

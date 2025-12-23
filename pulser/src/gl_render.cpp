@@ -1314,7 +1314,7 @@ void render_loop(void)
                 {                
                     glColor3f(rgb2.x,rgb2.y,rgb2.z); 
                 }else{
-                    glColor3f(.3,.3,.6);
+                    glColor3f(1,.3,.6);
                 };
 
                 //Vector2 uv = pt_model_buffer->uvs[tri2];
@@ -1335,7 +1335,7 @@ void render_loop(void)
                 {
                     glColor3f(rgb3.x,rgb3.y,rgb3.z); 
                 }else{
-                    glColor3f(.3,.3,.6);
+                    //glColor3f(.3,.3,.6);
                 };                
                 //Vector2 uv = pt_model_buffer->uvs[tri3];
                 //glTexCoord2f(uv.x, uv.y);
