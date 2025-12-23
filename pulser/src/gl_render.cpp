@@ -97,6 +97,8 @@ bool draw_points_vbo = false;
 
 //bool draw_bbox       = true;
 
+bool disp_ply_solo            = false;
+unsigned int disp_ply_solo_id = 0;
 
 /***************************************/
 //I think this was from a test of the VBO 
@@ -1452,29 +1454,48 @@ void render_loop(void)
 
         //NEW CODE - USED INDEXED LOOKUP 
        
-        for (unsigned int p_i=0;p_i<pt_motionplot->num_plys;p_i++)
-        {   
 
-            for (unsigned int ii=1;ii<pt_motionplot->tp_idxs[p_i].size();ii++)
+        // disp_ply_solo  
+        // disp_ply_solo_id = pidx;
+        if (disp_ply_solo)
+        {
+  
+            for (unsigned int ii=1;ii<pt_motionplot->tp_idxs[disp_ply_solo_id].size();ii++)
             {
                 glBegin(GL_LINES);
-                    unsigned int si= pt_motionplot->tp_idxs[p_i][ii-1];
-                    unsigned int ei= pt_motionplot->tp_idxs[p_i][ii];
-                    
+                    unsigned int si= pt_motionplot->tp_idxs[disp_ply_solo_id][ii-1];
+                    unsigned int ei= pt_motionplot->tp_idxs[disp_ply_solo_id][ii];
                     sv  = pt_motionplot->program_vecs[si];
                     ev  = pt_motionplot->program_vecs[ei];
-                    //rgb = linebuffer1_rgb[p_i];            
-                
                     glColor3f(0,1.,0); //hack for now
                     glVertex3f(sv.x, sv.y, sv.z);
-                    
                     glColor3f(1.,0,0); //hack for now
                     glVertex3f(ev.x, ev.y, ev.z);
-
                 glEnd();
-            }
+           }//iterate all ids in single polygon
+                   
+        }//single poly display 
+        else
+        {
+            for (unsigned int p_i=0;p_i<pt_motionplot->num_plys;p_i++)
+            {   
+                for (unsigned int ii=1;ii<pt_motionplot->tp_idxs[p_i].size();ii++)
+                {
+                    glBegin(GL_LINES);
+                        unsigned int si= pt_motionplot->tp_idxs[p_i][ii-1];
+                        unsigned int ei= pt_motionplot->tp_idxs[p_i][ii];
+                        sv  = pt_motionplot->program_vecs[si];
+                        ev  = pt_motionplot->program_vecs[ei];
+                        //rgb = linebuffer1_rgb[p_i];            
+                        glColor3f(0,1.,0); //hack for now
+                        glVertex3f(sv.x, sv.y, sv.z);
+                        glColor3f(1.,0,0); //hack for now
+                        glVertex3f(ev.x, ev.y, ev.z);
+                    glEnd();
+               }//iterate all ids in each polygon
+            }//iterate all polygons
            
-        } 
+        }//display all polygons 
      
 
         //std::cout << "foo " << pt_motionplot->tp_idxs[0].size() << "\n";

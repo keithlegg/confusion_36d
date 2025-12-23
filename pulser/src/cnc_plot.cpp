@@ -352,9 +352,10 @@ void cnc_plot::update_cache(void)
 
     Polygons (line polygons, not to be confused with 3D object faces ) are stored in 
     
-    Polyugon verticies/vectors are:
-        stored  -  this.program_vecs  
-        indexed -  this.tp_idxs
+    Polygon vertices/vectors are:
+        stored    in -  this.program_vecs  
+        indexed   in -  this.tp_idxs
+        displayed in -  lbuffer1, lbuffer2, etc  
 
     move from temp file buffer and clear file buffer for next incoming polygon 
     because the polygon is CCW/CW contigous, all we need is to know how many ids to add

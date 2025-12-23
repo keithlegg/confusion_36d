@@ -76,6 +76,10 @@
 int cursor = 0;
 
 extern bool tog_testport; 
+ 
+extern bool disp_ply_solo;
+extern unsigned int disp_ply_solo_id;
+
 
 //position of extruder/quill/etc
 extern cncglobals cg;
@@ -212,13 +216,6 @@ void parse_cmd_text(std::string *buffer)
     }
 
     //peek at internals 
-    if (a1=="showcfg")
-    { 
-        cg.show_params();
- 
-    }
-
-    //peek at internals 
     if (a1=="lup")
     { 
         if(a2=="pathid")
@@ -233,6 +230,8 @@ void parse_cmd_text(std::string *buffer)
     //peek at internals 
     if (a1=="show")
     { 
+        std::cout << "------------------------------------------        \n";
+
         if(a2=="cfg")
         { 
             cg.show_params();         
@@ -268,11 +267,21 @@ void parse_cmd_text(std::string *buffer)
 
         if(a2=="ply")
         { 
-            if(a3!="")
+            if(a3=="all")
+            {
+                std::cout << "display single off\n";
+                disp_ply_solo = false;
+            }
+            else if(a3!="")
             {
                 unsigned int pidx = std::stoi(a3);
+                
+                disp_ply_solo = true;
+                disp_ply_solo_id = pidx;
+
                 pt_motionplot->showply(pidx); 
             }
+
         }        
 
     }
@@ -281,11 +290,11 @@ void parse_cmd_text(std::string *buffer)
     // gle grid
     if (a1=="tog")
     {
-        if(a2=="tris"){key_cb(100);};
-        if(a2=="grid"){key_cb(103);};
-        if(a2=="gnomon"){key_cb(71);};
+        if(a2=="tris")   {key_cb(100);};
+        if(a2=="grid")   {key_cb(103);};
+        if(a2=="gnomon") {key_cb(71);};
         if(a2=="normals"){key_cb(110);};
-        if(a2=="vtxrgb"){key_cb(56);};
+        if(a2=="vtxrgb") {key_cb(56);};
 
     }
 
