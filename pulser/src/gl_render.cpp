@@ -953,9 +953,9 @@ void render_loop(void)
             Vector3 s_p = motionplot.toolpath_vecs[motionplot.pidx];
             Vector3 e_p = motionplot.toolpath_vecs[motionplot.pidx+1];  
             
-            std::cout<<"#######------#######\n";
-            std::cout<<" "<< s_p.x << " " << s_p.y<< " " << " "<< s_p.z << "\n";
-            std::cout<<" "<< e_p.x << " " << e_p.y<< " " << " "<< e_p.z << "\n"; 
+            // std::cout<<"#######------#######\n";
+            // std::cout<<" "<< s_p.x << " " << s_p.y<< " " << " "<< s_p.z << "\n";
+            // std::cout<<" "<< e_p.x << " " << e_p.y<< " " << " "<< e_p.z << "\n"; 
 
 
             PG.lerp_along(&motionplot.quill_pos, 

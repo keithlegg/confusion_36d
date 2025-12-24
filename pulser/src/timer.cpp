@@ -47,8 +47,6 @@
 double trav_speed ; //linear unit per sec 
 
 
-/***************************************/
-//void timer::reset_sim(void)
 
 
 /***************************************/

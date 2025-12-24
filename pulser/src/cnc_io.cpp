@@ -2,7 +2,11 @@
 /*
     cnc_io.cpp 
     
-    interface to a parallel port (and hopefully someday a Mesa5i25 card)
+    general IO utilities. Deal with all electrical signals going in or out.
+    The specific interfaces (Mesa, Parallel) get thier own files. 
+
+
+
 
 
     MIT License
