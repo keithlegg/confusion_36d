@@ -285,42 +285,28 @@ void cnc_plot::update(void)
         //localsimtime = mtime.get_elapsed_simtime() * timediv;
         localsimtime = mtime.get_elapsed_simtime();        
 
-        //std::cout << "--------------------------\n";
-        //std::cout << "cnc_plot -> local simtime " << localsimtime <<"\n";
-        // std::cout << "real time " << mtime.getElapsedTimeInSec() << "\n";
-
         //simtime runs between 0-1 - it resets each time another vector in the stack has been processed
         if (localsimtime>=1.0)
         {
-             
-            //std::cout << "-----------------------------------\n";        
-            //std::cout << "running index " << pidx        << "\n";
 
+            //DEBUG - WHY -2? IDK, IM DRUNK  
             //iterate the stack of vectors to process
-            if (pidx<toolpath_vecs.size())
+            if (pidx<toolpath_vecs.size()-2)
             {
                 pidx++;        
-
-                // start the (sim) clock over at the end of each vector segment 
-                // 0.0 - 1.0 is the range - which feeds the 3D `lerp  
                 mtime.reset_sim();
                 localsimtime=0;
             }
             //program finished here
-            else if (pidx>=toolpath_vecs.size()-1)
+            else if (pidx>=toolpath_vecs.size()-2)
             {
                 stop();
-
-                //std::cout << "-----------------------------------\n";        
-                //std::cout << "mtime stopped  "  << "\n";
                 pidx = 0;
-                //update_toolpaths();
-
             }
            
         }
         //-----------------
-        std::cout<< localsimtime << "\n";
+        // std::cout<< localsimtime << "\n";
 
         //----------------- 
         //the main loop where we update display and pulse the ports.
@@ -455,10 +441,9 @@ void cnc_plot::update_toolpaths(void)
         toolpath_vecs.clear();
         rapidmove_vecs.clear();
         
-        //linebuffer2.clear();
+        clear_linebuffers();
 
         //---- 
-
         //std::cout << tp_idxs.size() << "\n";
         if(program_vecs.size()>0)
         {
@@ -480,19 +465,27 @@ void cnc_plot::update_toolpaths(void)
 
                 //add_vec_lbuf2(&hover);
                 toolpath_vecs.push_back(hover);
-                
+                add_vec_lbuf2(&hover);//add to display buffer  
+
                 //add_vec_lbuf2(&this_st);
                 toolpath_vecs.push_back(this_st);
+                add_vec_lbuf2(&this_st);//add to display buffer  
 
-                //---
-                // Vector3 this_end = program_vecs[tp_idxs[pl].size()];
-                // Vector3 hov_end = Vector3(this_end.x, retract_height, this_end.z);
-                // add_vec_lbuf2(&this_end);
-                // toolpath_vecs.push_back(this_end);
-                // add_vec_lbuf2(&hov_end);
-                // toolpath_vecs.push_back(hov_end);
+
+                //add each vec3 for the polygon 
+                for (unsigned int vid=0;vid<tp_idxs[pl].size();vid++)
+                {
+                    Vector3 seg = program_vecs[tp_idxs[pl][vid]];
+
+                    //add_vec_lbuf2(    );
+                    toolpath_vecs.push_back(seg);  
+                };
 
             }//iterate polygons 
+
+
+
+
 
             //----------------------
             // //now we have them, add to the buffer to draw them 

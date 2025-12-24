@@ -73,7 +73,7 @@ void dump_points_GLfloat( GLfloat* , obj_model* , int );
 void dump_points_GLfloat( GLfloat* , std::vector<Vector3>* , int );
 
  
-void clear_scn_geom( void );
+void clear_linebuffers( void);
 
 
 void add_vec_lbuf1( Vector3* insert);

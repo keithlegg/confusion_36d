@@ -469,7 +469,7 @@ void dump_points_GLfloat( GLfloat* verts, std::vector<Vector3>* pt_vecarray, int
 
 
 /******************************************/
-void clear_scn_geom( void)
+void clear_linebuffers( void)
 {
 
     linebuffer1.clear();

@@ -308,7 +308,7 @@ void parse_cmd_text(std::string *buffer)
         pt_motionplot->quill_pos.x = 0;
         pt_motionplot->quill_pos.y = 0;
         pt_motionplot->quill_pos.z = 0; 
-        clear_scn_geom();
+        clear_linebuffers();
     }
 
     //--------------
