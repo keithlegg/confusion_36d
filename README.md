@@ -1,6 +1,4 @@
 # Octant - Multi axis motion control   
-
-THIS IS VERY MUCH A WORK IN PROGRESS!! 
    
 "If you're thinking of writing your own controller software and hoping it's more reliable than open source or commercially available products, you're truly out to lunch."
 
@@ -14,8 +12,8 @@ THIS IS VERY MUCH A WORK IN PROGRESS!!
 <br>
 
 ```
-  
-To Quote the Linuxcnc people:
+
+WORDS OF WISDOM FROM LINUXCNC: 
 
 Ｔｈｅ ａｕｔｈｏｒｓ ｏｆ ｔｈｉｓ ｓｏｆｔｗａｒｅ ａｃｃｅｐｔ
 ａｂｓｏｌｕｔｅｌｙ ｎｏ ｌｉａｂｉｌｉｔｙ ｆｏｒ ａｎｙ
