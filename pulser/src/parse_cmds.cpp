@@ -90,7 +90,7 @@ extern obj_model* pt_model_buffer;
 
 void run_machine(void)
 {
-    pt_motionplot->run();
+    pt_motionplot->run_sim();
 }
 
 
@@ -144,8 +144,11 @@ void parse_cmd_text(std::string *buffer)
         std::cout << "dm : display mode                                 \n";
         std::cout << "  wire, persp, otop, oside, etc                   \n";
         std::cout << "                                                  \n";
+        //std::cout << "cachepulses   -build a pulsetrain cache           \n";
+        std::cout << "                                                  \n";
         std::cout << "show                                              \n";
-        std::cout << "  cfg                                             \n";
+        std::cout << "  pt       -pulsetrain info                       \n";
+        std::cout << "  cfg      - view important globals               \n";
         std::cout << "  obj      - stats about loaded 3d object         \n";
         std::cout << "  path     - stats about toolpath                 \n";
         std::cout << "  pathids  -                                      \n";
@@ -232,16 +235,25 @@ void parse_cmd_text(std::string *buffer)
     { 
         std::cout << "------------------------------------------        \n";
 
+        //view globals   
+        if(a2=="pt")
+        { 
+            pt_motionplot->show_pt(); 
+        }
+
+        //view globals   
         if(a2=="cfg")
         { 
             cg.show_params();         
         }
-
+        
+        //stats about plotter 
         if(a2=="path")
         { 
             pt_motionplot->show();             
         }
         
+        //stats about 3D object  (not path polygons)
         if(a2=="obj")
         { 
             pt_model_buffer->show();
@@ -259,12 +271,14 @@ void parse_cmd_text(std::string *buffer)
         { 
             pt_motionplot->showgeom();
         }
-
+        
+        //show ID and size of each paths polygon  
         if(a2=="pathids")
         { 
             pt_motionplot->showpthids();
         }
-
+        
+        //path polygon "SOLO" view and dump verts in console 
         if(a2=="ply")
         { 
             if(a3=="all")

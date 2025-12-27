@@ -936,7 +936,7 @@ void render_loop(void)
 
         //I tried to make this sepereate from the GUI but then we need threads. Sigh. 
         //this seems like a good compromise
-        pt_motionplot->update();
+        pt_motionplot->update_sim();
             
         glColor3d(1, .4, 1);
         draw_locator(&motionplot.quill_pos, .5);

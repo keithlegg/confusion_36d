@@ -46,12 +46,14 @@ class cnc_plot
         void showgeom(void);
         void showpthids(void);
         void showply(unsigned int pidx);
+        void show_pt(void);
+
 
         void pause(void);
         void stop(void);
         
-        void run(void);
-        void update(void);
+        void run_sim(void);
+        void update_sim(void);
 
         void timer_init(void);
         //void timer_reset(void)
@@ -124,7 +126,13 @@ class cnc_plot
         // original vectors loaded from disk  
         // these get copied to program_vecs and linebuffer1 vecs (for display)
         std::vector<Vector3> loaded_file_vecs;
+        
+        //tool path indeces
         std::vector<unsigned int> tp_idxs[MAX_NUM_PLY];
+
+        //pulse train indeces 
+        std::vector<unsigned int> pt_idxs[MAX_NUM_PLY];
+
 
     private:
         void show_vecs(std::vector<Vector3> * pt_vec);

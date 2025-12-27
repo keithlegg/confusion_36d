@@ -172,6 +172,18 @@ void cnc_plot::showpthids(void)
     {
         std::cout << " ply id:" << x <<" size:"<< tp_idxs[x].size() << " \n";        
     }
+}
+
+/******************************************/
+void cnc_plot::show_pt(void)
+{
+
+    std::cout << " pulsetrain size "<< pulsetrain.size() << "\n";
+
+    // for(unsigned int x=0;x<pulsetrain.size();x++)
+    // {
+    //     std::cout <<         
+    // }
 
 }
 
@@ -200,6 +212,8 @@ void cnc_plot::showply(unsigned int pidx)
     }
 
 }
+
+
 
 
 /******************************************/
@@ -247,7 +261,7 @@ void cnc_plot::stop(void)
 //the problem is the while(running) loop locks up the GUI
 //until I learn threads, just cnc_plot::run() and cnc_plot::update() from render_loop 
 
-void cnc_plot::run(void)
+void cnc_plot::run_sim(void)
 {
     //this is for cases where we are paused but still running  
     if(running==true && finished==false)
@@ -270,7 +284,7 @@ void cnc_plot::run(void)
 //this gets called at semi-random intervals from render_loop()  (or whoever, really) 
 //until I learn threads, just cnc_plot::run() and cnc_plot::update() from render_loop 
 
-void cnc_plot::update(void)
+void cnc_plot::update_sim(void)
 {
     if (mtime.tm_running)
     {
@@ -293,6 +307,7 @@ void cnc_plot::update(void)
             if (localsimtime>0.0 && localsimtime<1.0 )
             {
                
+                /*
                 //just calc it on the fly for now 
                 calc_3d_pulses(s_p,e_p, 10);
                 double scale = (double)pulsetrain.size()/1;
@@ -302,7 +317,7 @@ void cnc_plot::update(void)
                 //std::cout << "#vidx:"<< pidx << " tim:" << localsimtime<<" data:"<< now.x <<" "<<now.y<<" "<<now.z << "\n";
  
                 parport.send_pulses(&istep, &cg, (this) );
-
+                */ 
 
             }
 
